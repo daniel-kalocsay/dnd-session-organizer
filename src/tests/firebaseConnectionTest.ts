@@ -1,7 +1,10 @@
+import { QuerySnapshot, DocumentSnapshot } from '@firebase/firestore-types';
+
+//TODO resolve warnings for import
+
 const firebaseConnectionTest = () => {
 
     const firebase = require("firebase");
-
     // Required for side-effects
     require("firebase/firestore");
 
@@ -9,18 +12,17 @@ const firebaseConnectionTest = () => {
     let db = firebase.firestore();
     let testCollectionRef = db.collection("test");
 
-    //TODO use QuerySnapshot and DocumentSnapshot for type instead of any
     testCollectionRef
-        .onSnapshot((snapshot: any) => {
+        .onSnapshot((snapshot: QuerySnapshot) => {
 
             //snapshot of the db collection's current state
             if (snapshot) {
                 let snapDate = new Date();
-                let timestamp = snapDate.getHours() + ":" + snapDate.getMinutes() + ":" +snapDate.getSeconds();
+                let timestamp = snapDate.getHours() + ":" + snapDate.getMinutes() + ":" + snapDate.getSeconds();
 
                 console.log(`Entries in Test collection snapshot at ${timestamp}:`);
 
-                snapshot.forEach((entry: any) => {
+                snapshot.forEach((entry: DocumentSnapshot) => {
                     console.log(entry.data());
                 });
             }
