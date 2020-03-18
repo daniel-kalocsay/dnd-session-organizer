@@ -1,30 +1,22 @@
-//TODO resolve warnings for import
+import { DataSnapshot } from '@firebase/database-types'
+
 const firebaseConnectionTest = () => {
 
     const firebase = require("firebase");
-    // Required for side-effects
-    require("firebase/firestore");
 
     let db = firebase.database().ref();
-    console.log(db);
-    
-    // firebase listener
 
-    // testCollectionRef
-    //     .onSnapshot((snapshot: QuerySnapshot) => {
-    //
-    //         //snapshot of the db collection's current state
-    //         if (snapshot) {
-    //             let snapDate = new Date();
-    //             let timestamp = snapDate.getHours() + ":" + snapDate.getMinutes() + ":" + snapDate.getSeconds();
-    //
-    //             console.log(`Entries in Test collection snapshot at ${timestamp}:`);
-    //
-    //             snapshot.forEach((entry: DocumentSnapshot) => {
-    //                 console.log(entry.data());
-    //             });
-    //         }
-    //     });
+    //TODO import and use proper types instead of any
+    db.on("value", (snapshot: DataSnapshot) => {
+        if (snapshot) {
+            let snapDate = new Date();
+            let timestamp = snapDate.getHours() + ":" + snapDate.getMinutes() + ":" + snapDate.getSeconds();
+
+            console.log(`Realtime db snapshot at ${timestamp}:`);
+            console.log(snapshot.val());
+        }
+    });
+
 };
 
 export default firebaseConnectionTest;
