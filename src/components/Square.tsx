@@ -4,7 +4,9 @@ const Square = (props: any) => {
   const [active, setActive] = useState(false);
 
   const handleClick = () => {
-    //setActive(active);
+    console.log("clicked2");
+    props.onClicked(props.key);
+    setActive(true);
   };
 
   return (

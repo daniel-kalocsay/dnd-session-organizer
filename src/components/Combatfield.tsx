@@ -13,7 +13,13 @@ const Combatfield = () => {
     .ref()
     .child("grid");
 
-  const movePlayer = () => {};
+  const movePlayer = (id: any) => {
+    console.log("clicked");
+    squares.forEach(square => (square.active = false));
+
+    let currentPosition = squares.find(square => square.id === id);
+    currentPosition.active = true;
+  };
 
   useEffect(() => {
     const newSquares: any = [
@@ -40,7 +46,9 @@ const Combatfield = () => {
   return (
     <div>
       {squares
-        ? squares.map(square => <Square key={square.id} onClick={movePlayer} />)
+        ? squares.map(square => (
+            <Square key={square.id} onClicked={movePlayer} />
+          ))
         : null}
     </div>
   );
