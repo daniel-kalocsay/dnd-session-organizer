@@ -1,7 +1,7 @@
 import React from 'react';
-import './App.css';
 import firebaseConnectionTest from "./tests/firebaseConnectionTest";
 import ColorTest from "./components/ColorTest";
+import Combatfield from './components/Combatfield';
 
 function App() {
 
@@ -11,6 +11,7 @@ function App() {
         <div className="App">
             <p>Hello world!</p>
             <ColorTest />
+            <Combatfield />
         </div>
     );
 }

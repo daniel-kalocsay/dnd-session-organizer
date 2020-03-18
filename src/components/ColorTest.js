@@ -1,34 +1,37 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 const ColorTest = () => {
-    const [active, setActive] = useState(false);
+  const [active, setActive] = useState(false);
 
-    const firebase = require("firebase");
-    const status = firebase.database().ref().child("button");
+  const firebase = require("firebase");
+  const buttonColor = firebase
+    .database()
+    .ref()
+    .child("button");
 
-    const handleClick = () => {
-        status.set({
-            blue: !active
-        });
+  const handleClick = () => {
+    buttonColor.set({
+      blue: !active
+    });
+  };
 
-        setActive(!active);
-    };
+  useEffect(() => {
+    buttonColor.on("value", snapshot => {
+      let buttonState = snapshot.val();
+      setActive(buttonState.blue);
+    });
+  }, []);
 
-
-    useEffect( () => {
-        status.on("value", (snapshot) => {
-            let state = snapshot.val();
-            console.log(`current value of blue: ${state.blue}`);
-        });
-    }, []);
-
-
-
-    return (
-        <div>
-            <button style={ {color: active ? "blue" : "green"} } onClick={handleClick} >button</button>
-        </div>
-    )
+  return (
+    <div>
+      <button
+        style={{ color: active ? "blue" : "green" }}
+        onClick={handleClick}
+      >
+        button
+      </button>
+    </div>
+  );
 };
 
 export default ColorTest;
