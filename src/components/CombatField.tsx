@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import Square from "./Square";
 //import uuid from "react-uuid";
 
-const Combatfield = () => {
+const CombatField = () => {
     const [squares, setSquares] = useState([] as any[]);
 
     const firebase = require("firebase");
@@ -13,21 +13,16 @@ const Combatfield = () => {
         .child("grid");
 
     const movePlayer = (id: any) => {
-        console.log(squares);
 
-        squares.forEach(square => {
-            square.active = square.id === id;
+        let newSquares = squares.map(square => {
+            return {id: square.id, active: square.id === id};
         });
 
-        console.log(squares);
-
-
-        setSquares(squares);
+        setSquares(newSquares);
     };
 
-    useEffect(() => {
-        //TODO use proper TS classes
-        const newSquares: any = [
+    const initSquares = () => {
+        return [
             {
                 id: 1,
                 active: false
@@ -45,17 +40,20 @@ const Combatfield = () => {
                 active: false
             }
         ];
-        setSquares(squares => [...newSquares]);
+    };
+
+    useEffect( () => {
+        setSquares(initSquares);
     }, []);
 
     return (
         <div>
             {squares ?
                 squares.map(square => (
-                    <Square id={square.id} onMove={movePlayer} active={square.active} />
+                    <Square square={square} onMove={movePlayer} />
                 )) : null}
         </div>
     );
 };
 
-export default Combatfield;
+export default CombatField;

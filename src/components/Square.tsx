@@ -1,17 +1,20 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 const Square = (props: any) => {
-    const [active, setActive] = useState(props.active);
+
+    const [square, setSquare] = useState(props.square);
 
     const handleClick = () => {
-        console.log(`clicked in square ${props.id}`);
-        props.onMove(props.id);
-        setActive(true);
+        props.onMove(square.id);
     };
+
+    useEffect(() => {
+        setSquare(props.square)
+    }, [props.square]);
 
     return (
         <div style={style.square}>
-            <div style={active ? style.active : style.inactive} onClick={handleClick}>asd</div>
+            <div style={square.active ? style.active : style.inactive} onClick={handleClick}>asd</div>
         </div>
     )
 };
