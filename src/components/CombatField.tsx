@@ -1,50 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Square from "./Square";
-//import uuid from "react-uuid";
+import {DataSnapshot} from "@firebase/database-types";
 
 const CombatField = () => {
-  const [squares, setSquares] = useState([] as any[]);
+    const [squares, setSquares] = useState([] as any[]);
 
-  const firebase = require("firebase");
+    const firebase = require("firebase");
 
-  const grid = firebase
-    .database()
-    .ref()
-    .child("grids");
+    const grids = firebase
+        .database()
+        .ref()
+        .child("grids");
 
-  const movePlayer = (id: any) => {
-    let newSquares = squares.map(square => {
-      return { id: square.id, active: square.id === id };
-    });
+    const tiles = grids.child("grid1").child("tiles");
 
-    setSquares(newSquares);
-  };
+    const movePlayer = (id: any) => {
+        let newSquares = squares.map(square => {
+            return {active: square.id === id};
+        });
 
-  const initSquares = () => {
-    grid
-      .child("grid1")
-      .child("tiles")
-      .on("value", (snapshot: any) => {
-        let startingSquares = []
+        tiles.set(newSquares)
+    };
 
-        for (let tile in snapshot.val()) {
-            startingSquares.push(snapshot.val()[tile])
-        }
-        setSquares(startingSquares);
-      });
-  };
+    const updateSquares = () => {
+        tiles.on("value", (snapshot: DataSnapshot) => {
 
-  useEffect(() => {
-    initSquares();
-  }, []);
+            let tiles = snapshot.val();
+            let updatedSquares = [];
 
-  return (
-    <div>
-      {squares
-        ? squares.map(square => <Square square={square} onMove={movePlayer} />)
-        : null}
-    </div>
-  );
+            for (let id in tiles) {
+
+                let active = tiles[id].active;
+                let square = {id: Number(id), active: active};
+
+                updatedSquares.push(square)
+            }
+
+            setSquares(updatedSquares);
+        });
+    };
+
+    useEffect(() => {
+        updateSquares();
+    }, []);
+
+    return (
+        <div>
+            {squares
+                ? squares.map(square => <Square square={square} onMove={movePlayer}/>)
+                : null}
+        </div>
+    );
 };
 
 export default CombatField;
