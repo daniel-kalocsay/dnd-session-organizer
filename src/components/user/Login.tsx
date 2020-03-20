@@ -1,53 +1,92 @@
-import React from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from "mdbreact";
+import React, { useState } from "react";
+import {
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBInput,
+  MDBBtn,
+  MDBModal,
+  MDBModalHeader,
+  MDBModalBody,
+  MDBModalFooter
+} from "mdbreact";
 
 const Login = () => {
   const firebase = require("firebase");
   const auth = firebase.auth();
 
-  const handleChange = () => {
+  const [modal, setModal] = useState(false);
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: ""
+  });
 
-  }
+  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setLoginData({
+      ...loginData,
+      [event.currentTarget.name]: event.currentTarget.value
+    });
+  };
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-  }
+    auth
+      .signInWithEmailAndPassword(loginData.email, loginData.password)
+      .then((cred: any) => {
+        console.log(cred.user);
+      });
+    setModal(false);
+  };
+
+  const toggle = () => {
+    setModal(!modal);
+  };
 
   return (
     <div>
       <MDBContainer>
-        <MDBRow center true>
-          <MDBCol md="6">
-            <form>
-              <p className="h5 text-center mb-4">Login</p>
-              <div className="grey-text">
-                <MDBInput
-                  label="Type your email address"
-                  icon="envelope"
-                  group
-                  type="email"
-                  validate
-                  error="wrong"
-                  success="right"
-                  onInput={handleChange}
-                  name="email"
-                />
-                <MDBInput
-                  label="Type your password"
-                  icon="lock"
-                  group
-                  type="password"
-                  validate
-                  onInput={handleChange}
-                  name="password"
-                />
-              </div>
-              <div className="text-center">
-                <MDBBtn onClick={handleSubmit}>Login</MDBBtn>
-              </div>
-            </form>
-          </MDBCol>
-        </MDBRow>
+        <MDBBtn onClick={toggle}>Login</MDBBtn>
+        <MDBModal isOpen={modal} toggle={toggle}>
+          <MDBModalHeader>Login</MDBModalHeader>
+          <MDBModalBody>
+            <MDBRow center true>
+              <MDBCol>
+                <form>
+                  <div className="grey-text">
+                    <MDBInput
+                      label="Your email"
+                      icon="envelope"
+                      group
+                      type="email"
+                      validate
+                      error="wrong"
+                      success="right"
+                      onInput={handleChange}
+                      name="email"
+                    />
+                    <MDBInput
+                      label="Your password"
+                      icon="lock"
+                      group
+                      type="password"
+                      validate
+                      onInput={handleChange}
+                      name="password"
+                    />
+                  </div>
+                </form>
+              </MDBCol>
+            </MDBRow>
+          </MDBModalBody>
+          <MDBModalFooter>
+            <MDBBtn color="secondary" onClick={toggle}>
+              Close
+            </MDBBtn>
+            <MDBBtn onClick={handleSubmit} color="primary">
+              Login
+            </MDBBtn>
+          </MDBModalFooter>
+        </MDBModal>
       </MDBContainer>
     </div>
   );

@@ -9,6 +9,7 @@ import {
 import HomePage from "./components/HomePage";
 import Registration from "./components/user/Registration";
 import Logout from "./components/user/Logout";
+import Login from "./components/user/Login";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path={"/home"}>
           <HomePage />
           <Registration/>
+          <Login/>
           <Logout/>
         </Route>
 

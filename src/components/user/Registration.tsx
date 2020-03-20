@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import {
   MDBContainer,
@@ -19,7 +20,7 @@ const Registration: React.FC = () => {
   const firebase = require("firebase");
   const auth = firebase.auth();
   
-  const [userRegistrationData, setUserRegistrationData] = useState({
+  const [registrationData, setRegistrationData] = useState({
     email: "",
     password: ""
   });
@@ -27,8 +28,8 @@ const Registration: React.FC = () => {
   const [modal, setModal] = useState(false);
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    setUserRegistrationData({
-      ...userRegistrationData,
+    setRegistrationData({
+      ...registrationData,
       [event.currentTarget.name]: event.currentTarget.value
     });
   };
@@ -37,8 +38,8 @@ const Registration: React.FC = () => {
     event.preventDefault();
     auth
       .createUserWithEmailAndPassword(
-        userRegistrationData.email,
-        userRegistrationData.password
+        registrationData.email,
+        registrationData.password
       )
       .then((cred: any) => {
         console.log(cred);
