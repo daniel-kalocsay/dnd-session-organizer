@@ -1,6 +1,6 @@
 import React from 'react';
 import CombatView from "./components/CombatView";
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import HomePage from "./components/HomePage";
 
 
@@ -10,13 +10,18 @@ function App() {
         <div className="App" style={styles.appWrapper}>
 
             <Router>
+                <Redirect to={"/home"} />
+
                 <Route path={"/home"}>
                     <HomePage />
                 </Route>
 
-                <Route path={"/combat"}>
-                    <CombatView/>
-                </Route>
+                <Switch>
+                    <Route exact path={"/combat"}>
+                        <CombatView/>
+                    </Route>
+                </Switch>
+
             </Router>
 
         </div>
