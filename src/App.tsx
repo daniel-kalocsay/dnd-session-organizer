@@ -20,6 +20,7 @@ function App() {
 
         <Route path={"/home"}>
           <HomePage />
+          <Registration/>
         </Route>
 
         <Switch>
@@ -27,8 +28,6 @@ function App() {
             <CombatView />
           </Route>
         </Switch>
-
-        <Route path={"/registration"} component={Registration}></Route>
       </Router>
     </div>
   );
