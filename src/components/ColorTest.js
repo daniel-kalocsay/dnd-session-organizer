@@ -28,7 +28,7 @@ const ColorTest = () => {
                 style={{color: active ? "blue" : "green"}}
                 onClick={handleClick}
             >
-                button
+                Change my color using our realtime db!
             </button>
         </div>
     );

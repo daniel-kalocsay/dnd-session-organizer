@@ -42,20 +42,23 @@ const styles = {
         gridTemplateColumns: "repeat(5, 1fr)",
         gridTemplateRows: "repeat(5, 1fr)",
         gridGap: "1em",
-        margin: "1em",
-        gridAutoRows: "minmax(100px, auto)",
-        gridAutoColumns: "minmax(100px, auto)"
+        // gridAutoRows: "minmax(100px, auto)",
+        // gridAutoColumns: "minmax(100px, auto)",
+        width: "95vw",
+        height: "95vh"
     },
     header: {
         gridArea: "header",
         gridColumn: "1/6",
         gridRow: "1/2",
-        border: "2px solid gray"
+        border: "2px solid gray",
+        background: "#eee"
     },
     playersContainer: {
         gridColumn: "1/2",
         gridRows: "2/5",
-        border: "2px solid gray"
+        border: "2px solid gray",
+        background: "#eee"
     },
     gridContainer: {
         gridColumn: "2/5",
@@ -63,17 +66,20 @@ const styles = {
         // display: "grid",
         // gridTemplateColumns: "1fr 1fr 1fr",
         // gridTemplateRows: "1fr 1fr 1fr",
-        border: "2px solid gray"
+        border: "2px solid gray",
+        background: "#eee"
     },
     sideBar: {
         gridColumn: "5/6",
         gridRow: "2/5",
-        border: "2px solid gray"
+        border: "2px solid gray",
+        background: "#eee"
     },
     menuContainer: {
         gridColumn: "1/6",
         gridRow: "5/6",
         border: "2px solid gray",
+        background: "#eee",
         display: "grid",
     },
     player: {
