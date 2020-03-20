@@ -5,7 +5,7 @@ import CombatField from './components/CombatField';
 function App() {
 
     return (
-        <div className="App">
+        <div className="App" style={styles.appWrapper}>
             <p>Hello world!</p>
             <ColorTest />
             <CombatField />
@@ -14,3 +14,15 @@ function App() {
 }
 
 export default App;
+
+const styles = {
+    appWrapper: {
+        display: "grid"
+    },
+    header: {
+
+    },
+    grid: {
+
+    }
+};

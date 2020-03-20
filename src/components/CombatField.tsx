@@ -45,7 +45,7 @@ const CombatField = () => {
     }, []);
 
     return (
-        <div>
+        <div style={styles.gridContainer}>
             {squares
                 ? squares.map(square => <Square square={square} onMove={movePlayer}/>)
                 : null}
@@ -54,3 +54,11 @@ const CombatField = () => {
 };
 
 export default CombatField;
+
+const styles = {
+    gridContainer: {
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr 1fr",
+        gridTemplateRows: "1fr 1fr 1fr"
+    }
+};
