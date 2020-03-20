@@ -1,5 +1,5 @@
 import React from 'react';
-import CombatView from "./components/CombatView";
+import CombatView from "./components/combat/CombatView";
 import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import HomePage from "./components/HomePage";
 
@@ -10,7 +10,9 @@ function App() {
         <div className="App" style={styles.appWrapper}>
 
             <Router>
-                <Redirect to={"/home"} />
+                <Route exact path={"/"}>
+                    <Redirect to={"/home"} />
+                </Route>
 
                 <Route path={"/home"}>
                     <HomePage />
