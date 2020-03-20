@@ -1,5 +1,5 @@
 import React from "react";
-import CombatView from "./components/CombatView";
+import CombatView from "./components/combat/CombatView";
 import {
   BrowserRouter as Router,
   Route,
@@ -40,10 +40,10 @@ function App() {
 export default App;
 
 const styles = {
-  appWrapper: {
-    display: "grid",
-    // width: "95vw",
-    // height: "95vh",
-    margin: "1em"
-  }
+    appWrapper: {
+        display: "grid",
+        width: "95vw",
+        height: "95vh",
+        margin: "1em"
+    }
 };

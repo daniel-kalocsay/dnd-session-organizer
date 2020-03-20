@@ -4,26 +4,23 @@ const Square = (props: any) => {
 
     const [square, setSquare] = useState(props.square);
 
-    const handleClick = () => {
-        props.onMove(square.id);
-    };
-
     useEffect(() => {
         setSquare(props.square)
     }, [props.square]);
 
     return (
-        <div style={style.square}>
-            <div style={square.active ? style.active : style.inactive} onClick={handleClick}>tile</div>
+        <div style={styles.square}>
+            <div style={square.active ? styles.active : styles.inactive} ></div>
         </div>
     )
 };
 
 export default Square;
 
-const style = {
+const styles = {
     square: {
-        border: "2px solid black"
+        // overflow: "auto",
+        // height: "100%",
     },
     active: {
         backgroundColor: "red"

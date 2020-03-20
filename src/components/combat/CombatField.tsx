@@ -12,6 +12,9 @@ const CombatField = () => {
         .ref()
         .child("grids");
 
+    const grid1 = grids.child("grid1");
+    const myGrid = grids.child("-M2sG9eGGqRaBHZAHDnl");
+
     const tiles = grids.child("grid1").child("tiles");
 
     const movePlayer = (id: any) => {
@@ -19,7 +22,12 @@ const CombatField = () => {
             return {active: square.id === id};
         });
 
-        tiles.set(newSquares)
+        tiles.set(newSquares);
+
+        //TODO use these to store individual grids in db
+
+        // grids.push({tiles: newSquares}) // saves grid in db under "grids" node and generates key for it
+        // myGrid.set({tiles: newSquares}); // sets data in a node
     };
 
     const updateSquares = () => {
@@ -47,7 +55,11 @@ const CombatField = () => {
     return (
         <div style={styles.grid}>
             {squares
-                ? squares.map(square => <Square square={square} onMove={movePlayer}/>)
+                ? squares.map(square =>
+                    <div style={square.active ? styles.active : styles.inactive} onClick={ () => movePlayer(square.id) }>
+                        <Square square={square} />
+                    </div>
+                    )
                 : null}
         </div>
     );
@@ -58,7 +70,21 @@ export default CombatField;
 const styles = {
     grid: {
         display: "grid",
-        gridTemplateColumns: "1fr 1fr 1fr",
-        gridTemplateRows: "1fr 1fr 1fr"
+        gridTemplateRows: "repeat(auto-fill, 1fr)",
+        gridTemplateColumns: "repeat(5, 1fr)",
+        backgroundColor: "lightgreen",
+        //TODO don't use this magic number
+        height: "30em"
+    },
+    tile: {
+        //TODO resolve styling of tyles, use active/inactive to change color
+    },
+    active: {
+        border: "2px solid black",
+        backgroundColor: "red"
+    },
+    inactive: {
+        border: "2px solid black",
+        backgroundColor: "lightgreen"
     }
 };
