@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import 'mdbreact/dist/css/mdb.css'
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from "mdbreact";
 
 const Registration = () => {
@@ -17,7 +18,7 @@ const Registration = () => {
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    
+
   };
 
   return (

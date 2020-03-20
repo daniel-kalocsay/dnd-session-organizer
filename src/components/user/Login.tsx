@@ -6,6 +6,10 @@ const Login = () => {
   const auth = firebase.auth();
   const userDatabase = firebase.database();
 
+  const handleChange = () => {
+      
+  }
+
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
   }
@@ -26,7 +30,7 @@ const Login = () => {
                   validate
                   error="wrong"
                   success="right"
-                  onInput={this.handleChange}
+                  onInput={handleChange}
                   name="username"
                 />
                 <MDBInput
@@ -35,7 +39,7 @@ const Login = () => {
                   group
                   type="password"
                   validate
-                  onInput={this.handleChange}
+                  onInput={handleChange}
                   name="password"
                 />
               </div>
