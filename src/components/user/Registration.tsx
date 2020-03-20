@@ -1,24 +1,34 @@
 import React, { useState } from "react";
-import 'mdbreact/dist/css/mdb.css'
+import "mdbreact/dist/css/mdb.css";
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from "mdbreact";
 
-const Registration = () => {
+const Registration: React.FC = () => {
   const firebase = require("firebase");
   const auth = firebase.auth();
   const userDatabase = firebase.database();
 
-  const [userRegistrationData, setUserRegistrationData] = useState({});
+  const [userRegistrationData, setUserRegistrationData] = useState({
+    email: "",
+    password: ""
+  });
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     setUserRegistrationData({
+      ...userRegistrationData,
       [event.currentTarget.name]: event.currentTarget.value
     });
-    console.log(userRegistrationData);
   };
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-
+    auth
+      .createUserWithEmailAndPassword(
+        userRegistrationData.email,
+        userRegistrationData.password
+      )
+      .then((cred: any) => {
+          console.log(cred)
+      });
   };
 
   return (
