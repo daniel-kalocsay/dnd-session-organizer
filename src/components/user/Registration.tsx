@@ -1,7 +1,18 @@
 import React, { useState } from "react";
-import "mdbreact/dist/css/mdb.css";
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from "mdbreact";
 
+import {
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBInput,
+  MDBBtn,
+  MDBModal,
+  MDBModalHeader,
+  MDBModalBody,
+  MDBModalFooter
+} from "mdbreact";
+
+//TODO modal
 const Registration: React.FC = () => {
   const firebase = require("firebase");
   const auth = firebase.auth();
@@ -11,6 +22,8 @@ const Registration: React.FC = () => {
     email: "",
     password: ""
   });
+
+  const [modal, setModal] = useState(false);
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     setUserRegistrationData({
@@ -27,88 +40,75 @@ const Registration: React.FC = () => {
         userRegistrationData.password
       )
       .then((cred: any) => {
-          console.log(cred)
+        console.log(cred);
       });
+    setModal(false);
+  };
+
+  const toggle = () => {
+    setModal(!modal);
   };
 
   return (
     <MDBContainer>
-      <MDBRow center true>
-        <MDBCol md="6">
-          <form>
-            <p className="h5 text-center mb-4">Sign up</p>
-            <div className="grey-text">
-              <MDBInput
-                label="First name"
-                icon="user"
-                group
-                type="text"
-                validate
-                error="wrong"
-                success="right"
-                onInput={handleChange}
-                name="firstName"
-              />
-              <MDBInput
-                label="Last name"
-                icon="user"
-                group
-                type="text"
-                validate
-                error="wrong"
-                success="right"
-                onInput={handleChange}
-                name="lastName"
-              />
-              <MDBInput
-                label="Username"
-                icon="user"
-                group
-                type="text"
-                validate
-                error="wrong"
-                success="right"
-                onInput={handleChange}
-                name="userName"
-              />
-              <MDBInput
-                label="Your email"
-                icon="envelope"
-                group
-                type="email"
-                validate
-                error="wrong"
-                success="right"
-                onInput={handleChange}
-                name="email"
-              />
-              <MDBInput
-                label="Your password"
-                icon="lock"
-                group
-                type="password"
-                validate
-                onInput={handleChange}
-                name="password"
-              />
-              <MDBInput
-                label="Confirm password"
-                icon="lock"
-                group
-                type="password"
-                validate
-                onInput={handleChange}
-                name="confirmedPassword"
-              />
-            </div>
-            <div className="text-center">
-              <MDBBtn onClick={handleSubmit} color="primary">
-                Sign up
-              </MDBBtn>
-            </div>
-          </form>
-        </MDBCol>
-      </MDBRow>
+      <MDBBtn onClick={toggle}>Sign Up</MDBBtn>
+      <MDBModal isOpen={modal} toggle={toggle} >
+        <MDBModalHeader>Sign Up</MDBModalHeader>
+        <MDBModalBody>
+          <MDBRow center true>
+            <MDBCol >
+              <form>
+                <div className="grey-text">
+                  <MDBInput
+                    label="Username"
+                    icon="user"
+                    group
+                    type="text"
+                    validate
+                    error="wrong"
+                    success="right"
+                    onInput={handleChange}
+                    name="userName"
+                  />
+                  <MDBInput
+                    label="Your email"
+                    icon="envelope"
+                    group
+                    type="email"
+                    validate
+                    error="wrong"
+                    success="right"
+                    onInput={handleChange}
+                    name="email"
+                  />
+                  <MDBInput
+                    label="Your password"
+                    icon="lock"
+                    group
+                    type="password"
+                    validate
+                    onInput={handleChange}
+                    name="password"
+                  />
+                  <MDBInput
+                    label="Confirm password"
+                    icon="lock"
+                    group
+                    type="password"
+                    validate
+                    onInput={handleChange}
+                    name="confirmedPassword"
+                  />
+                </div>
+              </form>
+            </MDBCol>
+          </MDBRow>
+        </MDBModalBody>
+        <MDBModalFooter>
+          <MDBBtn color="secondary" onClick={toggle}>Close</MDBBtn>
+          <MDBBtn onClick={handleSubmit} color="primary">Sign Up</MDBBtn>
+        </MDBModalFooter>
+      </MDBModal>
     </MDBContainer>
   );
 };

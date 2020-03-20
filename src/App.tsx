@@ -9,6 +9,7 @@ import {
 import HomePage from "./components/HomePage";
 import Registration from "./components/user/Registration";
 
+
 function App() {
   return (
     <div className="App" style={styles.appWrapper}>
