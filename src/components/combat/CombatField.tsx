@@ -22,10 +22,10 @@ const CombatField = () => {
             return {active: square.id === id};
         });
 
-        tiles.set(newSquares)
+        tiles.set(newSquares);
 
         //TODO use these to store individual grids in db
-        
+
         // grids.push({tiles: newSquares}) // saves grid in db under "grids" node and generates key for it
         // myGrid.set({tiles: newSquares}); // sets data in a node
     };
@@ -55,7 +55,11 @@ const CombatField = () => {
     return (
         <div style={styles.grid}>
             {squares
-                ? squares.map(square => <Square square={square} onMove={movePlayer}/>)
+                ? squares.map(square =>
+                    <div style={styles.tile} onClick={ () => movePlayer(square.id)}>
+                        <Square square={square} />
+                    </div>
+                    )
                 : null}
         </div>
     );
@@ -66,7 +70,17 @@ export default CombatField;
 const styles = {
     grid: {
         display: "grid",
-        gridTemplateColumns: "repeat(20, 1fr)",
-        gridTemplateRows: "repeat(20, 1fr)",
+        gridTemplateRows: "repeat(4, 1fr)",
+        gridTemplateColumns: "repeat(4, 1fr)",
+        backgroundColor: "lightgreen",
+        //TODO don't use this magic number
+        height: "35em"
+    },
+    tile: {
+        gridRow: "1fr",
+        gridColumn: "1fr",
+        border: "2px solid black",
+        // overflow: "auto",
+        // height: "100%",
     }
 };
