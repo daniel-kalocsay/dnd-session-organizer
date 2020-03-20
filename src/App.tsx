@@ -35,8 +35,8 @@ export default App;
 const styles = {
     appWrapper: {
         display: "grid",
-        // width: "95vw",
-        // height: "95vh",
+        width: "95vw",
+        height: "95vh",
         margin: "1em"
     }
 };

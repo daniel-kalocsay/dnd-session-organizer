@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
 
 const Participants = () => {
-    const [players, setPlayers] = useState([] as any[]);
+    const [players, setPlayers] = useState<[]>([]);
+    const [DM, setDM] = useState<[]>([]);
 
-    let playersStub: any;
+    let participantsStub: any;
 
-    const initPlayers = () => {
+    const initParticipants = () => {
         return [
             {
                 id: 0,
@@ -32,21 +33,25 @@ const Participants = () => {
                 name: "Ginso",
                 status: "dead"
             },
-        ];
+            {
+                id: 5,
+                name: "hope this fits",
+                status: "it does now"
+            },
+
+        ]
     };
 
     useEffect( () => {
-        playersStub = initPlayers();
-        setPlayers(playersStub);
+        participantsStub = initParticipants();
+        setPlayers(participantsStub);
     }, []);
 
     return (
         <div style={styles.container}>
 
-            {/*<div>Players:</div>*/}
-
-            <div style={styles.players}>{
-                players ? players.map((player: any) => {
+            <div style={styles.players}>
+                {players ? players.map((player: any) => {
                     return (
                         <div style={styles.player}>
                             <div style={styles.name}>{player.name}</div>
@@ -67,17 +72,17 @@ const styles = {
     container: {
         display: "grid",
         gridTemplateColumns: "1fr",
-        margin: "0.5em"
+        margin: "0.5em",
     },
     players: {
         display: "grid",
-        gridTemplateRows: "repeat(5, 1fr)",
+        gridTemplate: "repeat(auto-fit, 1fr)",
         gridGap: "1em"
     },
     player: {
         display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gridTemplateRows: "1fr",
+        gridTemplate: "repeat(2, 1fr)",
+        // gridTemplateColumns: "repeat(2, 1fr)",
         border: "2px solid gray",
         alignItems: "center"
     },

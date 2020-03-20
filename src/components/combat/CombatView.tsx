@@ -1,8 +1,8 @@
 import CombatField from "./CombatField";
-import ColorTest from "../ColorTest";
 import React from "react";
 import {Link} from "react-router-dom";
 import Participants from "./Participants";
+import Menu from "./Menu";
 
 const CombatView = () => {
     return (
@@ -20,13 +20,12 @@ const CombatView = () => {
                 <CombatField />
             </div>
 
-            <div style={styles.sideBar}>This is the sidebar</div>
+            <div style={styles.sideBar}>
+                <div>This is the sidebar</div>
+            </div>
 
             <div style={styles.menuContainer}>
-                <div>menuitem 1</div>
-                <div>menuitem 2</div>
-                <ColorTest />
-                <div>menu item 4</div>
+                <Menu />
             </div>
         </div>
     )
@@ -37,45 +36,41 @@ export default CombatView;
 const styles = {
     combatViewWrapper: {
         display: "grid",
-        gridTemplateColumns: "repeat(5, 1fr)",
-        gridTemplateRows: "repeat(5, 1fr)",
+        gridTemplate: "repeat(auto-fit, 1fr)",
         gridGap: "1em",
         // margin: "1em",
-        // gridAutoRows: "minmax(100px, auto)",
-        // gridAutoColumns: "minmax(100px, auto)",
-        width: "95vw",
-        height: "95vh"
+        // width: "95vw",
+        // height: "95vh",
     },
     header: {
         gridArea: "header",
-        gridColumn: "1/6",
+        gridColumn: "1/10",
         gridRow: "1/2",
         border: "2px solid gray",
         background: "#eee"
     },
     participantsContainer: {
         gridColumn: "1/2",
-        gridRows: "2/5",
+        gridRow: "2/8",
         border: "2px solid gray",
-        background: "#eee"
+        background: "#eee",
     },
     gridContainer: {
-        gridColumn: "2/5",
-        gridRow: "2/5",
+        gridColumn: "2/8",
+        gridRow: "2/8",
         border: "2px solid gray",
         background: "#eee"
     },
     sideBar: {
-        gridColumn: "5/6",
-        gridRow: "2/5",
+        gridColumn: "8/10",
+        gridRow: "2/8",
         border: "2px solid gray",
         background: "#eee"
     },
     menuContainer: {
-        gridColumn: "1/6",
-        gridRow: "5/6",
+        gridColumn: "1/10",
+        gridRow: "8/10",
         border: "2px solid gray",
         background: "#eee",
-        display: "grid",
     },
 };
