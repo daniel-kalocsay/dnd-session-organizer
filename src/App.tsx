@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import Registration from "./components/user/Registration";
+import Logout from "./components/user/Logout";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path={"/home"}>
           <HomePage />
           <Registration/>
+          <Logout/>
         </Route>
 
         <Switch>

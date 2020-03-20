@@ -4,10 +4,9 @@ import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from "mdbreact";
 const Login = () => {
   const firebase = require("firebase");
   const auth = firebase.auth();
-  const userDatabase = firebase.database();
 
   const handleChange = () => {
-      
+
   }
 
   const handleSubmit = (event: React.SyntheticEvent) => {
@@ -23,7 +22,7 @@ const Login = () => {
               <p className="h5 text-center mb-4">Login</p>
               <div className="grey-text">
                 <MDBInput
-                  label="Type your username"
+                  label="Type your email address"
                   icon="envelope"
                   group
                   type="email"
@@ -31,7 +30,7 @@ const Login = () => {
                   error="wrong"
                   success="right"
                   onInput={handleChange}
-                  name="username"
+                  name="email"
                 />
                 <MDBInput
                   label="Type your password"

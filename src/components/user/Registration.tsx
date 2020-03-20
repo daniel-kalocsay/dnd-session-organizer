@@ -14,12 +14,11 @@ import {
   MDBModalFooter
 } from "mdbreact";
 
-//TODO modal
+
 const Registration: React.FC = () => {
   const firebase = require("firebase");
   const auth = firebase.auth();
-  const userDatabase = firebase.database();
-
+  
   const [userRegistrationData, setUserRegistrationData] = useState({
     email: "",
     password: ""
