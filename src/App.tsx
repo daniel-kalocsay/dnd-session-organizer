@@ -1,6 +1,7 @@
 import React from 'react';
 import ColorTest from "./components/ColorTest";
 import CombatField from './components/CombatField';
+import {BrowserRouter as Router, Route, Redirect} from "react-router-dom";
 
 function App() {
 
