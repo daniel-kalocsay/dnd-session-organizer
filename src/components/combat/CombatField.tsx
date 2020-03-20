@@ -12,6 +12,9 @@ const CombatField = () => {
         .ref()
         .child("grids");
 
+    const grid1 = grids.child("grid1");
+    const myGrid = grids.child("-M2sG9eGGqRaBHZAHDnl");
+
     const tiles = grids.child("grid1").child("tiles");
 
     const movePlayer = (id: any) => {
@@ -20,6 +23,11 @@ const CombatField = () => {
         });
 
         tiles.set(newSquares)
+
+        //TODO use these to store individual grids in db
+        
+        // grids.push({tiles: newSquares}) // saves grid in db under "grids" node and generates key for it
+        // myGrid.set({tiles: newSquares}); // sets data in a node
     };
 
     const updateSquares = () => {
@@ -58,7 +66,7 @@ export default CombatField;
 const styles = {
     grid: {
         display: "grid",
-        gridTemplateColumns: "1fr 1fr 1fr",
-        gridTemplateRows: "1fr 1fr 1fr"
+        gridTemplateColumns: "repeat(20, 1fr)",
+        gridTemplateRows: "repeat(20, 1fr)",
     }
 };
