@@ -54,6 +54,7 @@ const styles = {
         gridRow: "2/8",
         border: "2px solid gray",
         background: "#eee",
+        // resize: "horizontal",
     },
     gridContainer: {
         gridColumn: "2/8",

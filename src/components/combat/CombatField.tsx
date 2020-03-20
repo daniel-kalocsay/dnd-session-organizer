@@ -56,7 +56,7 @@ const CombatField = () => {
         <div style={styles.grid}>
             {squares
                 ? squares.map(square =>
-                    <div style={styles.tile} onClick={ () => movePlayer(square.id)}>
+                    <div style={square.active ? styles.active : styles.inactive} onClick={ () => movePlayer(square.id) }>
                         <Square square={square} />
                     </div>
                     )
@@ -70,17 +70,21 @@ export default CombatField;
 const styles = {
     grid: {
         display: "grid",
-        gridTemplateRows: "repeat(4, 1fr)",
-        gridTemplateColumns: "repeat(4, 1fr)",
+        gridTemplateRows: "repeat(auto-fill, 1fr)",
+        gridTemplateColumns: "repeat(5, 1fr)",
         backgroundColor: "lightgreen",
         //TODO don't use this magic number
-        height: "35em"
+        height: "30em"
     },
     tile: {
-        gridRow: "1fr",
-        gridColumn: "1fr",
+        //TODO resolve styling of tyles, use active/inactive to change color
+    },
+    active: {
         border: "2px solid black",
-        // overflow: "auto",
-        // height: "100%",
+        backgroundColor: "red"
+    },
+    inactive: {
+        border: "2px solid black",
+        backgroundColor: "lightgreen"
     }
 };
