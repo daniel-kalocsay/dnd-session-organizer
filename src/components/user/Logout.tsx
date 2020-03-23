@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { MDBBtn } from "mdbreact";
 import { FirebaseContext } from "../contexts/FirebaseContext";
+import { UserContext } from "../contexts/UserContext";
 
 const Logout: React.FC = () => {
-  const [isUserLoggedIn, setUserStatus] = useState(false);
-
   const auth = useContext(FirebaseContext)!.auth();
+  const userInfo = useContext(UserContext);
 
   const userStatusListener = () => {
     auth.onAuthStateChanged((user: any) => {
-      setUserStatus(user);
+      userInfo!.setUserStatus(user ? true : false);
     });
   };
 
@@ -26,7 +26,7 @@ const Logout: React.FC = () => {
 
   return (
     <div>
-      {isUserLoggedIn ? <MDBBtn onClick={handleClick}>Log Out</MDBBtn> : ""}
+      {userInfo!.isUserLoggedIn ? <MDBBtn onClick={handleClick}>Log Out</MDBBtn> : ""}
     </div>
   );
 };

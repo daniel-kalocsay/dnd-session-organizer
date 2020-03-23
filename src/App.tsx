@@ -11,29 +11,32 @@ import Registration from "./components/user/Registration";
 import Logout from "./components/user/Logout";
 import Login from "./components/user/Login";
 import { FirebaseProvider } from "./components/contexts/FirebaseContext";
+import { UserProvider } from "./components/contexts/UserContext";
 
 function App() {
   return (
     <div className="App" style={styles.appWrapper}>
       <FirebaseProvider>
-        <Router>
-          <Route exact path={"/"}>
-            <Redirect to={"/home"} />
-          </Route>
-
-          <Route path={"/home"}>
-            <HomePage />
-            <Registration />
-            <Login />
-            <Logout />
-          </Route>
-
-          <Switch>
-            <Route exact path={"/combat"}>
-              <CombatView />
+        <UserProvider>
+          <Router>
+            <Route exact path={"/"}>
+              <Redirect to={"/home"} />
             </Route>
-          </Switch>
-        </Router>
+
+            <Route path={"/home"}>
+              <HomePage />
+              <Registration />
+              <Login />
+              <Logout />
+            </Route>
+
+            <Switch>
+              <Route exact path={"/combat"}>
+                <CombatView />
+              </Route>
+            </Switch>
+          </Router>
+        </UserProvider>
       </FirebaseProvider>
     </div>
   );
