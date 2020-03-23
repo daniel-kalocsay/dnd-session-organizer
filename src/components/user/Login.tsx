@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   MDBContainer,
   MDBRow,
@@ -10,10 +10,10 @@ import {
   MDBModalBody,
   MDBModalFooter
 } from "mdbreact";
+import { FirebaseContext } from "../contexts/FirebaseContext";
 
 const Login = () => {
-  const firebase = require("firebase");
-  const auth = firebase.auth();
+  const auth = useContext(FirebaseContext)!.auth();
 
   const [modal, setModal] = useState(false);
   const [loginData, setLoginData] = useState({
