@@ -1,15 +1,12 @@
 import React from "react";
-import CombatView from "./components/combat/CombatView";
+import CombatView from "./components/ui/CombatView";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect
 } from "react-router-dom";
-import HomePage from "./components/HomePage";
-import Registration from "./components/user/Registration";
-import Logout from "./components/user/Logout";
-import Login from "./components/user/Login";
+import Navbar from "./components/ui/Navbar";
 import { FirebaseProvider } from "./components/contexts/FirebaseContext";
 import { UserProvider } from "./components/contexts/UserContext";
 
@@ -19,15 +16,14 @@ function App() {
       <FirebaseProvider>
         <UserProvider>
           <Router>
+            <Navbar />
+
             <Route exact path={"/"}>
               <Redirect to={"/home"} />
             </Route>
 
             <Route path={"/home"}>
-              <HomePage />
-              <Registration />
-              <Login />
-              <Logout />
+              <div>home</div>
             </Route>
 
             <Switch>

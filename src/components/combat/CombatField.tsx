@@ -27,7 +27,9 @@ const CombatField = () => {
         });
 
         grid1.update({tiles: newSquares})
-            .then( () => console.log("Update successful") );
+            .then( () => {
+                // console.log("Update successful")
+            } );
 
         // same as: tiles.set(newSquares);
 

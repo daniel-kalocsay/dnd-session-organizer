@@ -11,8 +11,8 @@ export const UserProvider = (props: any) => {
   const [isUserLoggedIn, setUserStatus] = useState(false);
 
   const userHandler: UserContextInterface = {
-    isUserLoggedIn: isUserLoggedIn,
-    setUserStatus: setUserStatus
+    isUserLoggedIn,
+    setUserStatus
   };
 
   return (
