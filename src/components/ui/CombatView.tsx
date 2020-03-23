@@ -1,15 +1,15 @@
 import CombatField from "../combat/CombatField";
 import React from "react";
 import {Link} from "react-router-dom";
-import Participants from "../combat/Participants";
+import Players from "../combat/Players";
 import Menu from "../combat/Menu";
 
 const CombatView = () => {
     return (
         <div style={styles.combatViewWrapper}>
 
-            <div style={styles.participantsContainer}>
-                <Participants />
+            <div style={styles.playersContainer}>
+                <Players />
             </div>
 
             <div style={styles.gridContainer}>
@@ -38,7 +38,7 @@ const styles = {
         // width: "95vw",
         // height: "95vh",
     },
-    participantsContainer: {
+    playersContainer: {
         gridColumn: "1/2",
         gridRow: "1/8",
         border: "2px solid gray",

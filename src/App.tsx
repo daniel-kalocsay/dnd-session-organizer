@@ -9,6 +9,7 @@ import {
 import Navbar from "./components/ui/Navbar";
 import { FirebaseProvider } from "./components/contexts/FirebaseContext";
 import { UserProvider } from "./components/contexts/UserContext";
+import HomePage from "./components/HomePage";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
             </Route>
 
             <Route path={"/home"}>
-              <div>home</div>
+              <HomePage />
             </Route>
 
             <Switch>
