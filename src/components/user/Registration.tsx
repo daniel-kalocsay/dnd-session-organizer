@@ -16,13 +16,20 @@ import {
 } from "mdbreact";
 import { UserContext } from "../contexts/UserContext";
 
+interface firebaseUserObject {
+  user: {uid: string}
+}
+
+
 const Registration: React.FC = () => {
   const auth = useContext(FirebaseContext)!.auth();
   const userInfo = useContext(UserContext);
+  const db = useContext(FirebaseContext)!.database;
 
   const [registrationData, setRegistrationData] = useState({
     email: "",
-    password: ""
+    password: "",
+    userName: ""
   });
 
   const [modal, setModal] = useState(false);
@@ -41,8 +48,9 @@ const Registration: React.FC = () => {
         registrationData.email,
         registrationData.password
       )
-      .then((cred: any) => {
-        console.log(cred);
+      .then((cred: firebaseUserObject) => {
+        let id = cred.user.uid
+        db.child('users').child(id).set({username: registrationData.userName});
       });
     setModal(false);
   };
