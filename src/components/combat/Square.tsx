@@ -5,7 +5,7 @@ const Square = (props: any) => {
     const [square, setSquare] = useState(props.square);
 
     useEffect(() => {
-        setSquare(props.square)
+        setSquare(props.square.val())
     }, [props.square]);
 
     return (
