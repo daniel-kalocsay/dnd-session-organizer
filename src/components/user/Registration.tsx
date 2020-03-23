@@ -14,11 +14,12 @@ import {
   MDBModalBody,
   MDBModalFooter
 } from "mdbreact";
-
+import { UserContext } from "../contexts/UserContext";
 
 const Registration: React.FC = () => {
   const auth = useContext(FirebaseContext)!.auth();
-  
+  const userInfo = useContext(UserContext);
+
   const [registrationData, setRegistrationData] = useState({
     email: "",
     password: ""
@@ -51,66 +52,74 @@ const Registration: React.FC = () => {
   };
 
   return (
-    <MDBContainer>
-      <MDBBtn onClick={toggle}>Sign Up</MDBBtn>
-      <MDBModal isOpen={modal} toggle={toggle} >
-        <MDBModalHeader>Sign Up</MDBModalHeader>
-        <MDBModalBody>
-          <MDBRow center true>
-            <MDBCol >
-              <form>
-                <div className="grey-text">
-                  <MDBInput
-                    label="Username"
-                    icon="user"
-                    group
-                    type="text"
-                    validate
-                    error="wrong"
-                    success="right"
-                    onInput={handleChange}
-                    name="userName"
-                  />
-                  <MDBInput
-                    label="Your email"
-                    icon="envelope"
-                    group
-                    type="email"
-                    validate
-                    error="wrong"
-                    success="right"
-                    onInput={handleChange}
-                    name="email"
-                  />
-                  <MDBInput
-                    label="Your password"
-                    icon="lock"
-                    group
-                    type="password"
-                    validate
-                    onInput={handleChange}
-                    name="password"
-                  />
-                  <MDBInput
-                    label="Confirm password"
-                    icon="lock"
-                    group
-                    type="password"
-                    validate
-                    onInput={handleChange}
-                    name="confirmedPassword"
-                  />
-                </div>
-              </form>
-            </MDBCol>
-          </MDBRow>
-        </MDBModalBody>
-        <MDBModalFooter>
-          <MDBBtn color="secondary" onClick={toggle}>Close</MDBBtn>
-          <MDBBtn onClick={handleSubmit} color="primary">Sign Up</MDBBtn>
-        </MDBModalFooter>
-      </MDBModal>
-    </MDBContainer>
+    <div>
+      {userInfo!.isUserLoggedIn ? "" : (
+        <MDBContainer>
+          <MDBBtn onClick={toggle}>Sign Up</MDBBtn>
+          <MDBModal isOpen={modal} toggle={toggle}>
+            <MDBModalHeader>Sign Up</MDBModalHeader>
+            <MDBModalBody>
+              <MDBRow center true>
+                <MDBCol>
+                  <form>
+                    <div className="grey-text">
+                      <MDBInput
+                        label="Username"
+                        icon="user"
+                        group
+                        type="text"
+                        validate
+                        error="wrong"
+                        success="right"
+                        onInput={handleChange}
+                        name="userName"
+                      />
+                      <MDBInput
+                        label="Your email"
+                        icon="envelope"
+                        group
+                        type="email"
+                        validate
+                        error="wrong"
+                        success="right"
+                        onInput={handleChange}
+                        name="email"
+                      />
+                      <MDBInput
+                        label="Your password"
+                        icon="lock"
+                        group
+                        type="password"
+                        validate
+                        onInput={handleChange}
+                        name="password"
+                      />
+                      <MDBInput
+                        label="Confirm password"
+                        icon="lock"
+                        group
+                        type="password"
+                        validate
+                        onInput={handleChange}
+                        name="confirmedPassword"
+                      />
+                    </div>
+                  </form>
+                </MDBCol>
+              </MDBRow>
+            </MDBModalBody>
+            <MDBModalFooter>
+              <MDBBtn color="secondary" onClick={toggle}>
+                Close
+              </MDBBtn>
+              <MDBBtn onClick={handleSubmit} color="primary">
+                Sign Up
+              </MDBBtn>
+            </MDBModalFooter>
+          </MDBModal>
+        </MDBContainer>
+      )}
+    </div>
   );
 };
 

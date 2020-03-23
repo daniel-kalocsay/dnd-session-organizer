@@ -11,9 +11,11 @@ import {
   MDBModalFooter
 } from "mdbreact";
 import { FirebaseContext } from "../contexts/FirebaseContext";
+import { UserContext } from "../contexts/UserContext";
 
 const Login = () => {
   const auth = useContext(FirebaseContext)!.auth();
+  const userInfo = useContext(UserContext);
 
   const [modal, setModal] = useState(false);
   const [loginData, setLoginData] = useState({
@@ -44,50 +46,52 @@ const Login = () => {
 
   return (
     <div>
-      <MDBContainer>
-        <MDBBtn onClick={toggle}>Login</MDBBtn>
-        <MDBModal isOpen={modal} toggle={toggle}>
-          <MDBModalHeader>Login</MDBModalHeader>
-          <MDBModalBody>
-            <MDBRow center true>
-              <MDBCol>
-                <form>
-                  <div className="grey-text">
-                    <MDBInput
-                      label="Your email"
-                      icon="envelope"
-                      group
-                      type="email"
-                      validate
-                      error="wrong"
-                      success="right"
-                      onInput={handleChange}
-                      name="email"
-                    />
-                    <MDBInput
-                      label="Your password"
-                      icon="lock"
-                      group
-                      type="password"
-                      validate
-                      onInput={handleChange}
-                      name="password"
-                    />
-                  </div>
-                </form>
-              </MDBCol>
-            </MDBRow>
-          </MDBModalBody>
-          <MDBModalFooter>
-            <MDBBtn color="secondary" onClick={toggle}>
-              Close
-            </MDBBtn>
-            <MDBBtn onClick={handleSubmit} color="primary">
-              Login
-            </MDBBtn>
-          </MDBModalFooter>
-        </MDBModal>
-      </MDBContainer>
+      {userInfo!.isUserLoggedIn ? "" : (
+        <MDBContainer>
+          <MDBBtn onClick={toggle}>Login</MDBBtn>
+          <MDBModal isOpen={modal} toggle={toggle}>
+            <MDBModalHeader>Login</MDBModalHeader>
+            <MDBModalBody>
+              <MDBRow center true>
+                <MDBCol>
+                  <form>
+                    <div className="grey-text">
+                      <MDBInput
+                        label="Your email"
+                        icon="envelope"
+                        group
+                        type="email"
+                        validate
+                        error="wrong"
+                        success="right"
+                        onInput={handleChange}
+                        name="email"
+                      />
+                      <MDBInput
+                        label="Your password"
+                        icon="lock"
+                        group
+                        type="password"
+                        validate
+                        onInput={handleChange}
+                        name="password"
+                      />
+                    </div>
+                  </form>
+                </MDBCol>
+              </MDBRow>
+            </MDBModalBody>
+            <MDBModalFooter>
+              <MDBBtn color="secondary" onClick={toggle}>
+                Close
+              </MDBBtn>
+              <MDBBtn onClick={handleSubmit} color="primary">
+                Login
+              </MDBBtn>
+            </MDBModalFooter>
+          </MDBModal>
+        </MDBContainer>
+      )}
     </div>
   );
 };

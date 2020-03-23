@@ -7,6 +7,7 @@ const Logout: React.FC = () => {
   const auth = useContext(FirebaseContext)!.auth();
   const userInfo = useContext(UserContext);
 
+  //TODO where to put this listener function?
   const userStatusListener = () => {
     auth.onAuthStateChanged((user: any) => {
       userInfo!.setUserStatus(user ? true : false);
