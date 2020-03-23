@@ -10,29 +10,31 @@ import HomePage from "./components/HomePage";
 import Registration from "./components/user/Registration";
 import Logout from "./components/user/Logout";
 import Login from "./components/user/Login";
-
+import { FirebaseProvider } from "./components/contexts/FirebaseContext";
 
 function App() {
   return (
     <div className="App" style={styles.appWrapper}>
-      <Router>
-        <Route exact path={"/"}>
-          <Redirect to={"/home"} />
-        </Route>
-
-        <Route path={"/home"}>
-          <HomePage />
-          <Registration/>
-          <Login/>
-          <Logout/>
-        </Route>
-
-        <Switch>
-          <Route exact path={"/combat"}>
-            <CombatView />
+      <FirebaseProvider>
+        <Router>
+          <Route exact path={"/"}>
+            <Redirect to={"/home"} />
           </Route>
-        </Switch>
-      </Router>
+
+          <Route path={"/home"}>
+            <HomePage />
+            <Registration />
+            <Login />
+            <Logout />
+          </Route>
+
+          <Switch>
+            <Route exact path={"/combat"}>
+              <CombatView />
+            </Route>
+          </Switch>
+        </Router>
+      </FirebaseProvider>
     </div>
   );
 }
@@ -40,10 +42,10 @@ function App() {
 export default App;
 
 const styles = {
-    appWrapper: {
-        display: "grid",
-        width: "95vw",
-        height: "95vh",
-        margin: "1em"
-    }
+  appWrapper: {
+    display: "grid",
+    width: "95vw",
+    height: "95vh",
+    margin: "1em"
+  }
 };

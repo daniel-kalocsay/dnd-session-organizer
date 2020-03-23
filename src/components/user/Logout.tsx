@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {MDBBtn} from "mdbreact";
+import { FirebaseContext } from "../contexts/FirebaseContext";
 
 const Logout: React.FC = () => {
-    const firebase = require("firebase");
-    const auth = firebase.auth();
+    const auth = useContext(FirebaseContext)!.auth();
 
     const handleClick = (event: React.SyntheticEvent) => {
         event.preventDefault();
