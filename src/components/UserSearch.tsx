@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { FirebaseContext } from "./contexts/FirebaseContext";
-import { DataSnapshot } from "@firebase/database-types";
+type DataSnapshot = firebase.database.DataSnapshot
 
 export const UserSearch = () => {
-  const db = useContext(FirebaseContext)!.database;
+  const db = useContext(FirebaseContext)!.database.ref();
   const [users, setUsers] = useState([] as any[]);
 
   const searchUser = (event: React.FormEvent<HTMLInputElement>) => {

@@ -1,14 +1,16 @@
 import React, {useState, useEffect, useContext} from "react";
 import Square from "./Square";
-import {DataSnapshot} from "@firebase/database-types";
+//import {DataSnapshot} from "@firebase/database-types";
 import { FirebaseContext } from "../contexts/FirebaseContext";
+type DataSnapshot = firebase.database.DataSnapshot
 
 const CombatField = () => {
     const [squares, setSquares] = useState<DataSnapshot[]>([]);
 
-    const firebase = useContext(FirebaseContext);
+    const database = useContext(FirebaseContext)!.database.ref();
+    
 
-    const grids = firebase?.database
+    const grids = database
         .child("grids");
 
     const grid1 = grids.child("grid1");

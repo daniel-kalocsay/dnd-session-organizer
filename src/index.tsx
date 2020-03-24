@@ -16,6 +16,8 @@ let firebaseConfig = {
     measurementId: "G-24RB0Q38DL"
 };
 
+//TODO put firebase app to context from here
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();

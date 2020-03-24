@@ -21,9 +21,9 @@ interface firebaseUserObject {
 }
 
 const Registration: React.FC = () => {
-  const auth = useContext(FirebaseContext)!.auth();
+  const auth = useContext(FirebaseContext)!.auth;
   const userInfo = useContext(UserContext);
-  const db = useContext(FirebaseContext)!.database;
+  const db = useContext(FirebaseContext)!.database.ref();
 
   const [registrationData, setRegistrationData] = useState({
     email: "",
@@ -47,8 +47,8 @@ const Registration: React.FC = () => {
         registrationData.email,
         registrationData.password
       )
-      .then((cred: firebaseUserObject) => {
-        let id = cred.user.uid;
+      .then((cred: firebase.auth.UserCredential) => {
+        let id = cred.user!.uid;
         db.child("users")
           .child(id)
           .set({ username: registrationData.userName });
