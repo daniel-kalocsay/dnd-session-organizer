@@ -7,7 +7,7 @@ export const UserSearch = () => {
   const [users, setUsers] = useState([] as any[]);
 
   const searchUser = (event: React.FormEvent<HTMLInputElement>) => {
-    setUsers([]);
+    let usersFound = [] as any[];
     db.child("users")
       .orderByChild("username")
       .startAt([event.currentTarget.value].toString())
@@ -15,11 +15,9 @@ export const UserSearch = () => {
       .once("value", (snapshot: DataSnapshot) => {
         snapshot.forEach((user: DataSnapshot) => {
           let username = user.val().username.toString();
-          console.log(username)
-          //setUsers([...users, username]);
+          usersFound.push(username);
         });
-        // let dunno = snapshot.val()
-        // console.log('kereses');
+        setUsers(usersFound);
       });
   };
 
