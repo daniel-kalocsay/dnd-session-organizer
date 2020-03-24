@@ -4,15 +4,16 @@ import Registration from "../user/Registration";
 import Login from "../user/Login";
 import Logout from "../user/Logout";
 import {Link, Route} from "react-router-dom";
-import {MDBNavbar} from "mdbreact";
+import {MDBContainer, MDBNavbar} from "mdbreact";
 
 const Navbar = () => {
     return (
         <MDBNavbar>
             <Link to={"/"}>Home</Link>
-            <Registration />
-            <Login />
-            <Logout />
+            <Link to={"/combat"}>Combat grid</Link>
+            <Registration/>
+            <Login/>
+            <Logout/>
         </MDBNavbar>
     )
 };
