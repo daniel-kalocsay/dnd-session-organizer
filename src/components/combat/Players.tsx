@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
 
-const Participants = () => {
+const Players = () => {
     const [players, setPlayers] = useState<[]>([]);
     const [DM, setDM] = useState<[]>([]);
 
     let participantsStub: any;
 
-    const initParticipants = () => {
+    const initPlayers = () => {
         return [
             {
                 id: 0,
@@ -43,7 +43,7 @@ const Participants = () => {
     };
 
     useEffect( () => {
-        participantsStub = initParticipants();
+        participantsStub = initPlayers();
         setPlayers(participantsStub);
     }, []);
 
@@ -66,7 +66,7 @@ const Participants = () => {
     )
 };
 
-export default Participants;
+export default Players;
 
 const styles = {
     container: {

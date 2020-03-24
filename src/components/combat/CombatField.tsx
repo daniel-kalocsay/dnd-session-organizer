@@ -27,7 +27,9 @@ const CombatField = () => {
         });
 
         grid1.update({tiles: newSquares})
-            .then( () => console.log("Update successful") );
+            .then( () => {
+                // console.log("Update successful")
+            } );
 
         // same as: tiles.set(newSquares);
 
@@ -76,7 +78,7 @@ const styles = {
         height: "30em"
     },
     tile: {
-        //TODO resolve styling of tyles, use active/inactive to change color
+        //TODO resolve styling of tiles, use active/inactive to change color
     },
     active: {
         border: "2px solid black",

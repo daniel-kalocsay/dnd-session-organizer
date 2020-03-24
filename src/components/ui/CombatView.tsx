@@ -1,19 +1,14 @@
-import CombatField from "./CombatField";
+import CombatField from "../combat/CombatField";
 import React from "react";
-import {Link} from "react-router-dom";
-import Participants from "./Participants";
-import Menu from "./Menu";
+import Players from "../combat/Players";
+import Menu from "../combat/Menu";
 
 const CombatView = () => {
     return (
         <div style={styles.combatViewWrapper}>
-            <div style={styles.header}>
-                <h3>This is the header</h3>
-                <Link to={"/home"}>Back to home</Link>
-            </div>
 
-            <div style={styles.participantsContainer}>
-                <Participants />
+            <div style={styles.playersContainer}>
+                <Players />
             </div>
 
             <div style={styles.gridContainer}>
@@ -27,6 +22,7 @@ const CombatView = () => {
             <div style={styles.menuContainer}>
                 <Menu />
             </div>
+
         </div>
     )
 };
@@ -42,29 +38,22 @@ const styles = {
         // width: "95vw",
         // height: "95vh",
     },
-    header: {
-        gridArea: "header",
-        gridColumn: "1/10",
-        gridRow: "1/2",
-        border: "2px solid gray",
-        background: "#eee"
-    },
-    participantsContainer: {
+    playersContainer: {
         gridColumn: "1/2",
-        gridRow: "2/8",
+        gridRow: "1/8",
         border: "2px solid gray",
         background: "#eee",
         // resize: "horizontal",
     },
     gridContainer: {
         gridColumn: "2/8",
-        gridRow: "2/8",
+        gridRow: "1/8",
         border: "2px solid gray",
         background: "#eee"
     },
     sideBar: {
         gridColumn: "8/10",
-        gridRow: "2/8",
+        gridRow: "1/8",
         border: "2px solid gray",
         background: "#eee"
     },
