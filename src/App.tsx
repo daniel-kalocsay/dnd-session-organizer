@@ -1,6 +1,6 @@
 import React from "react";
 import Layout from "./Layout";
-import AppWrapper from "./components/AppWrapper";
+import AppWrapper from "./AppWrapper";
 
 function App() {
     return (

@@ -1,6 +1,5 @@
 import CombatField from "../combat/CombatField";
 import React from "react";
-import {Link} from "react-router-dom";
 import Players from "../combat/Players";
 import Menu from "../combat/Menu";
 
@@ -23,6 +22,7 @@ const CombatView = () => {
             <div style={styles.menuContainer}>
                 <Menu />
             </div>
+
         </div>
     )
 };

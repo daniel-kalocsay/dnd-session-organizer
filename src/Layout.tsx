@@ -1,10 +1,14 @@
-import React from "react";
+import React, {useContext} from "react";
 import Navbar from "./components/ui/Navbar";
 import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
 import HomePage from "./components/HomePage";
 import CombatView from "./components/ui/CombatView";
+import {UserContext} from "./components/contexts/UserContext";
 
 const Layout = () => {
+
+    const userInfo = useContext(UserContext);
+
     return (
         <Router>
             <div style={styles.appWrapper}>
@@ -22,7 +26,7 @@ const Layout = () => {
                     </Route>
 
                     <Route exact path={"/combat"}>
-                        <CombatView/>
+                        {userInfo!.isUserLoggedIn ? <CombatView/> : "Please log in!"}
                     </Route>
                 </div>
             </div>
