@@ -4,7 +4,7 @@ import {DataSnapshot} from "@firebase/database-types";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 
 const CombatField = () => {
-    const [squares, setSquares] = useState([] as any[]);
+    const [squares, setSquares] = useState<DataSnapshot[]>([]);
 
     const firebase = useContext(FirebaseContext);
 
@@ -13,35 +13,36 @@ const CombatField = () => {
 
     const grid1 = grids.child("grid1");
     const myGrid = grids.child("-M2sG9eGGqRaBHZAHDnl");
-
     const tiles = grids.child("grid1").child("tiles");
+
+
+    //TODO use these to store individual grids in db
+
+    // grids.push({tiles: newSquares}) // saves grid in db under "grids" node and generates key for it
+    // myGrid.set({tiles: newSquares}); // sets data in a node
 
     const movePlayer = (id: any) => {
         let newSquares = squares.map(square => {
-            return {active: square.id === id};
+            return {active: square.key === id};
         });
 
-        tiles.set(newSquares);
+        grid1.update({tiles: newSquares})
+            .then( () => {
+                // console.log("Update successful")
+            } );
 
-        //TODO use these to store individual grids in db
+        // same as: tiles.set(newSquares);
 
-        // grids.push({tiles: newSquares}) // saves grid in db under "grids" node and generates key for it
-        // myGrid.set({tiles: newSquares}); // sets data in a node
     };
 
     const updateSquares = () => {
         tiles.on("value", (snapshot: DataSnapshot) => {
 
-            let tiles = snapshot.val();
-            let updatedSquares = [];
+            let updatedSquares = [] as DataSnapshot[];
 
-            for (let id in tiles) {
-
-                let active = tiles[id].active;
-                let square = {id: Number(id), active: active};
-
-                updatedSquares.push(square)
-            }
+            snapshot.forEach( (child: DataSnapshot) => {
+                updatedSquares.push(child);
+            });
 
             setSquares(updatedSquares);
         });
@@ -55,7 +56,8 @@ const CombatField = () => {
         <div style={styles.grid}>
             {squares
                 ? squares.map(square =>
-                    <div style={square.active ? styles.active : styles.inactive} onClick={ () => movePlayer(square.id) }>
+                    <div style={square.val().active ? styles.active : styles.inactive}
+                         onClick={ () => movePlayer(square.key) }>
                         <Square square={square} />
                     </div>
                     )
@@ -76,7 +78,7 @@ const styles = {
         height: "30em"
     },
     tile: {
-        //TODO resolve styling of tyles, use active/inactive to change color
+        //TODO resolve styling of tiles, use active/inactive to change color
     },
     active: {
         border: "2px solid black",

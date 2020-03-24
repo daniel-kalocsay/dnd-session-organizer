@@ -17,9 +17,8 @@ import {
 import { UserContext } from "../contexts/UserContext";
 
 interface firebaseUserObject {
-  user: {uid: string}
+  user: { uid: string };
 }
-
 
 const Registration: React.FC = () => {
   const auth = useContext(FirebaseContext)!.auth();
@@ -49,8 +48,10 @@ const Registration: React.FC = () => {
         registrationData.password
       )
       .then((cred: firebaseUserObject) => {
-        let id = cred.user.uid
-        db.child('users').child(id).set({username: registrationData.userName});
+        let id = cred.user.uid;
+        db.child("users")
+          .child(id)
+          .set({ username: registrationData.userName });
       });
     setModal(false);
   };
@@ -61,7 +62,9 @@ const Registration: React.FC = () => {
 
   return (
     <div>
-      {userInfo!.isUserLoggedIn ? "" : (
+      {userInfo!.isUserLoggedIn ? (
+        ""
+      ) : (
         <MDBContainer>
           <MDBBtn onClick={toggle}>Sign Up</MDBBtn>
           <MDBModal isOpen={modal} toggle={toggle}>
