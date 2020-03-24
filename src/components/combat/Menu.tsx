@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import ColorTest from "../ColorTest";
+import {MDBBtn} from "mdbreact";
 
 const Menu = () => {
     const [menuItems, setMenuItems] = useState<[]>([]);
@@ -43,7 +43,7 @@ const Menu = () => {
                    )
                 }) : "No menu items"}
 
-            <ColorTest />
+            <MDBBtn>i need this button so this row is higher</MDBBtn>
         </div>
     )
 };
