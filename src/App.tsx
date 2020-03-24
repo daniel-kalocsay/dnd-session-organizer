@@ -12,6 +12,7 @@ import Logout from "./components/user/Logout";
 import Login from "./components/user/Login";
 import { FirebaseProvider } from "./components/contexts/FirebaseContext";
 import { UserProvider } from "./components/contexts/UserContext";
+import { UserSearch } from "./components/UserSearch";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             </Route>
 
             <Route path={"/home"}>
+              <UserSearch/>
               <HomePage />
               <Registration />
               <Login />
