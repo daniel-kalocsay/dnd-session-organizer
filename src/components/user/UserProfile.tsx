@@ -8,6 +8,7 @@ import Register from "./user-state-change/Register";
 import Logout from "./user-state-change/Logout";
 
 const UserProfile = () => {
+    //TODO make this component work wrapped in WithAuth instead
 
     const auth = useContext(FirebaseContext)!.auth;
     const [user, initializing, error] = useAuthState(auth);
@@ -23,7 +24,7 @@ const UserProfile = () => {
     if (initializing) {
         return (
             <div>
-                <p>Authenticating User...</p>
+                <div>Authenticating User...</div>
             </div>
         );
     }
@@ -31,7 +32,7 @@ const UserProfile = () => {
     if (error) {
         return (
             <div>
-                <p>Error: {error.message}</p>
+                <p>Error: {error}</p>
             </div>
         );
     }

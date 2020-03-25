@@ -1,53 +1,29 @@
+import React from "react";
 import CombatField from "../combat/CombatField";
-import React, {useContext} from "react";
 import Players from "../combat/Players";
 import Menu from "../combat/Menu";
-import {useAuthState} from "react-firebase-hooks/auth";
-import {FirebaseContext} from "../contexts/FirebaseContext";
 
 const CombatView = () => {
 
-    const auth = useContext(FirebaseContext)!.auth;
-    const [user, initializing, error] = useAuthState(auth);
-
-    if (initializing) {
-        return (
-            <div>
-                <h1>Loading grid...</h1>
+    return (
+        <div style={styles.combatViewWrapper}>
+            <div style={styles.playersContainer}>
+                <Players />
             </div>
-        );
-    }
-    if (error) {
-        return (
-            <div>
-                <h1>Error loading grid: {error}</h1>
+
+            <div style={styles.gridContainer}>
+                <CombatField />
             </div>
-        );
-    }
 
-    if (user) {
-        return (
-            <div style={styles.combatViewWrapper}>
-                <div style={styles.playersContainer}>
-                    <Players />
-                </div>
-
-                <div style={styles.gridContainer}>
-                    <CombatField />
-                </div>
-
-                <div style={styles.sideBar}>
-                    <div>This is the sidebar</div>
-                </div>
-
-                <div style={styles.menuContainer}>
-                    <Menu />
-                </div>
+            <div style={styles.sideBar}>
+                <div>This is the sidebar</div>
             </div>
-        )
-    }
 
-    return <div>Please log in!</div>;
+            <div style={styles.menuContainer}>
+                <Menu />
+            </div>
+        </div>
+    )
 };
 
 export default CombatView;

@@ -1,5 +1,5 @@
 import React from "react";
-import  {MDBBtn } from "mdbreact";
+import { MDBBtn } from "mdbreact";
 import LoginModal from "./LoginModal";
 
 const Login = (props: any) => {
