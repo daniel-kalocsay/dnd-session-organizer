@@ -1,4 +1,5 @@
 import React, { createContext } from "react";
+import firebase from "firebase";
 
 export interface firebaseContextInterface {
   firebase: any;
@@ -11,14 +12,13 @@ export const FirebaseContext = createContext<firebaseContextInterface | null>(
 );
 
 export const FirebaseProvider = (props: any) => {
-  const firebaseValue = require("firebase");
-  const authValue = firebaseValue.auth;
-  const databaseValue = firebaseValue.database().ref();
+  const auth = firebase.auth;
+  const database = firebase.database().ref();
 
   const firebaseHandler: firebaseContextInterface = {
-    firebase: firebaseValue,
-    auth: authValue,
-    database: databaseValue
+    firebase: firebase,
+    auth: auth,
+    database: database
   };
 
   return (

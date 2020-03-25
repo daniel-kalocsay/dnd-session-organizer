@@ -16,6 +16,9 @@ import {
 } from "mdbreact";
 import {UserContext} from "../contexts/UserContext";
 
+
+//TODO replace MDB with core Material UI
+
 const Registration: React.FC = () => {
     const auth = useContext(FirebaseContext)!.auth();
     const userInfo = useContext(UserContext);
