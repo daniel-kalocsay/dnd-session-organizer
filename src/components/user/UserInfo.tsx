@@ -7,7 +7,7 @@ import Login from "./user-state-change/Login";
 import Register from "./user-state-change/Register";
 import Logout from "./user-state-change/Logout";
 
-const UserProfile = () => {
+const UserInfo = () => {
     //TODO make this component work wrapped in WithAuth instead
 
     const auth = useContext(FirebaseContext)!.auth;
@@ -62,7 +62,7 @@ const UserProfile = () => {
     )
 };
 
-export default UserProfile;
+export default UserInfo;
 
 const styles = {
     container: {
