@@ -1,8 +1,8 @@
 import React from "react";
 import HomePage from "../HomePage";
-import Register from "../user/register/Register";
-import Login from "../user/login/Login";
-import Logout from "../user/logout/Logout";
+import Register from "../user/user-state-change/Register";
+import Login from "../user/user-state-change/Login";
+import Logout from "../user/user-state-change/Logout";
 import {Link, Route} from "react-router-dom";
 import {MDBContainer, MDBNavbar} from "mdbreact";
 import User from "../user/User";

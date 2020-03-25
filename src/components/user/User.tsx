@@ -3,11 +3,11 @@ import React, {useContext, useState} from "react";
 import {FirebaseContext} from "../contexts/FirebaseContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 
-import Login from "./login/Login";
-import LoginModal from "./login/LoginModal";
-import Register from "./register/Register";
-import RegisterModal from "./register/RegisterModal";
-import Logout from "./logout/Logout";
+import Login from "./user-state-change/Login";
+import LoginModal from "./user-state-change/LoginModal";
+import Register from "./user-state-change/Register";
+import RegisterModal from "./user-state-change/RegisterModal";
+import Logout from "./user-state-change/Logout";
 
 import {MDBBtn} from "mdbreact";
 
@@ -17,7 +17,6 @@ const User = () => {
 
     const [loginOpen, setLoginOpen] = useState(false);
     const [registerOpen, setRegisterOpen] = useState(false);
-
 
     const showLogin = () => { setLoginOpen(true); };
     const hideLogin = () => { setLoginOpen(false); };
@@ -51,7 +50,6 @@ const User = () => {
             </div>
         )
     }
-
 
     return (
         <div style={styles.container}>
