@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import ColorTest from "../ColorTest";
 
 const Menu = () => {
     const [menuItems, setMenuItems] = useState<[]>([]);
@@ -43,7 +42,6 @@ const Menu = () => {
                    )
                 }) : "No menu items"}
 
-            <ColorTest />
         </div>
     )
 };
