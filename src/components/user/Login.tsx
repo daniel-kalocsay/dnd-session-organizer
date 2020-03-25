@@ -13,6 +13,7 @@ import {
 import {FirebaseContext} from "../contexts/FirebaseContext";
 
 import { useAuthState } from "react-firebase-hooks/auth";
+import firebase from "firebase";
 
 const Login = () => {
 

@@ -13,42 +13,41 @@ const CombatView = () => {
     if (initializing) {
         return (
             <div>
-                <p>Initialising User...</p>
+                <h1>Loading grid...</h1>
             </div>
         );
     }
     if (error) {
         return (
             <div>
-                <p>Error: {error}</p>
+                <h1>Error loading grid: {error}</h1>
             </div>
         );
     }
 
-    return (
-        <div>
-            {user ?
-                <div style={styles.combatViewWrapper}>
-                    <div style={styles.playersContainer}>
-                        <Players />
-                    </div>
+    if (user) {
+        return (
+            <div style={styles.combatViewWrapper}>
+                <div style={styles.playersContainer}>
+                    <Players />
+                </div>
 
-                    <div style={styles.gridContainer}>
-                        <CombatField />
-                    </div>
+                <div style={styles.gridContainer}>
+                    <CombatField />
+                </div>
 
-                    <div style={styles.sideBar}>
-                        <div>This is the sidebar</div>
-                    </div>
+                <div style={styles.sideBar}>
+                    <div>This is the sidebar</div>
+                </div>
 
-                    <div style={styles.menuContainer}>
-                        <Menu />
-                    </div>
-                </div> : <div>Please log in to see the combat view!</div>
+                <div style={styles.menuContainer}>
+                    <Menu />
+                </div>
+            </div>
+        )
+    }
 
-            }
-        </div>
-    )
+    return <div>Please log in!</div>;
 };
 
 export default CombatView;

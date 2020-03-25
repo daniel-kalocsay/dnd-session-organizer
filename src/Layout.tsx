@@ -28,7 +28,7 @@ const Layout = () => {
                     </Route>
 
                     <Route exact path={"/combat"}>
-                        {userInfo!.isUserLoggedIn ? <CombatView/> : "Please log in!"}
+                        <CombatView />
                     </Route>
                 </div>
             </div>
