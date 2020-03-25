@@ -1,10 +1,11 @@
 import React, {useContext, useState} from "react";
 
 import {FirebaseContext} from "../../contexts/FirebaseContext";
-
 import {useAuthState} from "react-firebase-hooks/auth";
-import LoginModal from "./LoginModal";
+
 import {MDBBtn} from "mdbreact";
+
+import LoginModal from "./LoginModal";
 
 const Login = () => {
 
