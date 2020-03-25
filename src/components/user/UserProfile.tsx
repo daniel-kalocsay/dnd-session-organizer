@@ -4,14 +4,11 @@ import {FirebaseContext} from "../contexts/FirebaseContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 
 import Login from "./user-state-change/Login";
-import LoginModal from "./user-state-change/LoginModal";
 import Register from "./user-state-change/Register";
-import RegisterModal from "./user-state-change/RegisterModal";
 import Logout from "./user-state-change/Logout";
 
-import {MDBBtn} from "mdbreact";
+const UserProfile = () => {
 
-const User = () => {
     const auth = useContext(FirebaseContext)!.auth;
     const [user, initializing, error] = useAuthState(auth);
 
@@ -30,10 +27,11 @@ const User = () => {
             </div>
         );
     }
+
     if (error) {
         return (
             <div>
-                <p>Error: {error}</p>
+                <p>Error: {error.message}</p>
             </div>
         );
     }
@@ -54,18 +52,16 @@ const User = () => {
     return (
         <div style={styles.container}>
             <div style={styles.user}>
-                <MDBBtn onClick={showLogin}>Login</MDBBtn>
-                <LoginModal open={loginOpen} show={showLogin} hide={hideLogin} />
+                <Login open={loginOpen} show={showLogin} hide={hideLogin} />
             </div>
             <div style={styles.buttons}>
-                <MDBBtn onClick={showRegister}>Sign Up</MDBBtn>
-                <RegisterModal open={registerOpen} show={showRegister} hide={hideRegister}/>
+                <Register open={registerOpen} show={showRegister} hide={hideRegister}/>
             </div>
         </div>
     )
 };
 
-export default User;
+export default UserProfile;
 
 const styles = {
     container: {
