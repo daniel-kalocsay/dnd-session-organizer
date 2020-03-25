@@ -6,6 +6,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import Login from "./user-state-change/Login";
 import Register from "./user-state-change/Register";
 import Logout from "./user-state-change/Logout";
+import {MDBBtn} from "mdbreact";
 
 const UserInfo = () => {
     //TODO make this component work wrapped in WithAuth instead
@@ -40,7 +41,7 @@ const UserInfo = () => {
     if (user) {
         return (
             <div style={styles.container}>
-                <div style={styles.user}>
+                <div style={styles.userInfo}>
                     <div>Logged in as {user.email}</div>
                 </div>
                 <div style={styles.buttons}>
@@ -52,10 +53,8 @@ const UserInfo = () => {
 
     return (
         <div style={styles.container}>
-            <div style={styles.user}>
-                <Login open={loginOpen} show={showLogin} hide={hideLogin} />
-            </div>
             <div style={styles.buttons}>
+                <Login open={loginOpen} show={showLogin} hide={hideLogin} />
                 <Register open={registerOpen} show={showRegister} hide={hideRegister}/>
             </div>
         </div>
@@ -69,12 +68,14 @@ const styles = {
         display: "grid",
         gridTemplate: "repeat(auto-fit, 1fr)",
         gridGap: "1em",
-        alignItems: "center"
+        alignItems: "center",
     },
-    user: {
+    userInfo: {
         gridColumn: "1/2"
     },
     buttons: {
-        gridColumn: "2/3"
+        gridColumn: "2/3",
+        display: "grid",
+        gridAutoFlow: "column"
     }
 };

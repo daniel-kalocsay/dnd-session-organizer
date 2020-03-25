@@ -14,3 +14,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+//TODO make navbar a grid
