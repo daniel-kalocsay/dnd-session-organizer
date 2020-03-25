@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
 import HomePage from "./components/HomePage";
 import CombatView from "./components/ui/CombatView";
 import {UserContext} from "./components/contexts/UserContext";
+import { UserSearch } from "./components/UserSearch";
 
 const Layout = () => {
 
@@ -23,6 +24,7 @@ const Layout = () => {
 
                     <Route path={"/home"}>
                         <HomePage/>
+                        <UserSearch/>
                     </Route>
 
                     <Route exact path={"/combat"}>

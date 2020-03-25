@@ -16,7 +16,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 const Login = () => {
 
-    const auth = useContext(FirebaseContext)!.auth();
+    const auth = useContext(FirebaseContext)!.auth;
 
     const [user, initializing, error] = useAuthState(auth);
 
@@ -35,8 +35,9 @@ const Login = () => {
 
     const handleSubmit = (event: React.SyntheticEvent) => {
         event.preventDefault();
-        auth.signInWithEmailAndPassword(loginData.email, loginData.password)
-            .then((cred: any) => {
+        auth
+            .signInWithEmailAndPassword(loginData.email, loginData.password)
+            .then((cred: firebase.auth.UserCredential) => {
                 console.log(cred.user);
             });
         setModal(false);
@@ -114,7 +115,6 @@ const Login = () => {
             }
         </div>
     );
-
 };
 
 export default Login;

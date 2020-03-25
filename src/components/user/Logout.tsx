@@ -4,12 +4,12 @@ import { FirebaseContext } from "../contexts/FirebaseContext";
 import { UserContext } from "../contexts/UserContext";
 
 const Logout: React.FC = () => {
-  const auth = useContext(FirebaseContext)!.auth();
+  const auth = useContext(FirebaseContext)!.auth;
   const userInfo = useContext(UserContext);
 
-  //TODO where to put this listener function?
+  //TODO where to put this listener function? -> index.js
   const userStatusListener = () => {
-    auth.onAuthStateChanged((user: any) => {
+    auth.onAuthStateChanged(user => {
       userInfo!.setUserStatus(user ? true : false);
     });
   };

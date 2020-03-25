@@ -7,7 +7,7 @@ import {FirebaseContext} from "../contexts/FirebaseContext";
 
 const CombatView = () => {
 
-    const auth = useContext(FirebaseContext)!.auth();
+    const auth = useContext(FirebaseContext)!.auth;
     const [user, initializing, error] = useAuthState(auth);
 
     if (initializing) {
