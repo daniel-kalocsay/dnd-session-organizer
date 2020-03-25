@@ -1,8 +1,8 @@
 import React from "react";
 import HomePage from "../HomePage";
-import Registration from "../user/Registration";
+import Register from "../user/register/Register";
 import Login from "../user/login/Login";
-import Logout from "../user/Logout";
+import Logout from "../user/logout/Logout";
 import {Link, Route} from "react-router-dom";
 import {MDBContainer, MDBNavbar} from "mdbreact";
 
@@ -11,7 +11,7 @@ const Navbar = () => {
         <MDBNavbar>
             <Link to={"/"}>Home</Link>
             <Link to={"/combat"}>Combat grid</Link>
-            <Registration/>
+            <Register/>
             <Login/>
             <Logout/>
         </MDBNavbar>

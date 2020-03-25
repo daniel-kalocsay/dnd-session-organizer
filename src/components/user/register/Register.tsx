@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { FirebaseContext } from "../contexts/FirebaseContext";
+import { FirebaseContext } from "../../contexts/FirebaseContext";
 import {
   MDBContainer,
   MDBRow,
@@ -14,13 +14,13 @@ import {
   MDBModalBody,
   MDBModalFooter
 } from "mdbreact";
-import { UserContext } from "../contexts/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 
 interface firebaseUserObject {
   user: { uid: string };
 }
 
-const Registration: React.FC = () => {
+const Register: React.FC = () => {
   const auth = useContext(FirebaseContext)!.auth;
   const userInfo = useContext(UserContext);
   const db = useContext(FirebaseContext)!.database.ref();
@@ -134,4 +134,4 @@ const Registration: React.FC = () => {
   );
 };
 
-export default Registration;
+export default Register;
