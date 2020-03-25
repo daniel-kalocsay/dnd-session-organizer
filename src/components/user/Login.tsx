@@ -11,11 +11,14 @@ import {
     MDBModalFooter
 } from "mdbreact";
 import {FirebaseContext} from "../contexts/FirebaseContext";
-import {UserContext} from "../contexts/UserContext";
+
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Login = () => {
+
     const auth = useContext(FirebaseContext)!.auth();
-    const userInfo = useContext(UserContext);
+
+    const [user, initializing, error] = useAuthState(auth);
 
     const [modal, setModal] = useState(false);
     const [loginData, setLoginData] = useState({
@@ -43,9 +46,27 @@ const Login = () => {
         setModal(!modal);
     };
 
+    if (initializing) {
+        return (
+            <div>
+                <p>Initialising User...</p>
+            </div>
+        );
+    }
+    if (error) {
+        return (
+            <div>
+                <p>Error: {error}</p>
+            </div>
+        );
+    }
+
     return (
         <div>
-            {userInfo!.isUserLoggedIn ? "" :
+            {user ?
+                <div>
+                    {user.email}
+                </div> :
                 <div>
                     <MDBBtn onClick={toggle}>Login</MDBBtn>
                     <MDBModal isOpen={modal} toggle={toggle}>
@@ -89,9 +110,11 @@ const Login = () => {
                             </MDBBtn>
                         </MDBModalFooter>
                     </MDBModal>
-                </div> }
+                </div>
+            }
         </div>
     );
+
 };
 
 export default Login;
