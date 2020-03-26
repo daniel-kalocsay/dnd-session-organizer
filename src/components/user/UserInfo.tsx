@@ -54,6 +54,7 @@ const UserInfo = () => {
 
     return (
         <div style={styles.container}>
+            <div>You are not logged in</div>
             <div style={styles.buttons}>
                 <Login open={loginOpen} show={showLogin} hide={hideLogin} />
                 <Register open={registerOpen} show={showRegister} hide={hideRegister}/>
