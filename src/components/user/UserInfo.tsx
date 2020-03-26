@@ -6,6 +6,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import Login from "./user-state-change/Login";
 import Register from "./user-state-change/Register";
 import Logout from "./user-state-change/Logout";
+import { Button } from "@material-ui/core";
 import {MDBBtn} from "mdbreact";
 
 const UserInfo = () => {
@@ -76,6 +77,7 @@ const styles = {
     buttons: {
         gridColumn: "2/3",
         display: "grid",
-        gridAutoFlow: "column"
+        gridAutoFlow: "column",
+        gridGap: "1em"
     }
 };
