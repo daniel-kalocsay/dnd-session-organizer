@@ -4,7 +4,7 @@ import {FirebaseContext} from "../contexts/FirebaseContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 
 import Login from "./user-state-change/login/Login";
-import Register from "./user-state-change/Register";
+import Register from "./user-state-change/register/Register";
 import Logout from "./user-state-change/Logout";
 import { Button } from "@material-ui/core";
 import {MDBBtn} from "mdbreact";

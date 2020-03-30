@@ -26,7 +26,7 @@ const LoginForm = (props: any) => {
     };
 
     const handleError = (error: any) => {
-
+        // except for this, all other errors are for the email, no need for switch case
         if (error.code === 'auth/wrong-password') {
             setPwError(true);
             setPwErrorMessage(error.message)
@@ -36,11 +36,15 @@ const LoginForm = (props: any) => {
         }
     };
 
-    const handleSubmit = (event: React.SyntheticEvent) => {
+    const resetErrors = () => {
         setEmailError(false);
         setPwError(false);
         setEmailErrorMessage("");
         setPwErrorMessage("");
+    };
+
+    const handleSubmit = (event: React.SyntheticEvent) => {
+        resetErrors();
 
         auth.signInWithEmailAndPassword(loginData.email, loginData.password)
             .then((cred: firebase.auth.UserCredential) => {
@@ -54,7 +58,6 @@ const LoginForm = (props: any) => {
 
     return (
         <div className="grey-text">
-
             <h2>Login</h2>
             <form>
                 <Grid container spacing={1} alignItems="flex-end">
@@ -62,7 +65,7 @@ const LoginForm = (props: any) => {
                         <AccountCircle/>
                     </Grid>
                     <Grid item>
-                        <TextField id="input-email"
+                        <TextField id="login-email"
                                    name="email"
                                    label="E-mail"
                                    onChange={handleChange}
@@ -78,7 +81,7 @@ const LoginForm = (props: any) => {
                         <Lock/>
                     </Grid>
                     <Grid item>
-                        <TextField id="input-pw"
+                        <TextField id="login-pw"
                                    name="password"
                                    label="Password"
                                    type="password"
