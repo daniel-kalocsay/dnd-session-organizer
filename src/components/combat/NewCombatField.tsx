@@ -13,6 +13,7 @@ export const NewCombatField = () => {
   const auth = useContext(FirebaseContext)!.auth;
   const [user, initializing, authError] = useAuthState(auth);
 
+  //TODO get the correct type for this event
   const createNewCombatfield = (event: any) => {
     event.preventDefault();
     let combatfieldName = event.currentTarget.combatfieldName.value
