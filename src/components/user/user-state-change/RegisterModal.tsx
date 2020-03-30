@@ -1,4 +1,5 @@
 import React, {useState, useContext} from "react";
+import firebase from 'firebase';
 import {FirebaseContext} from "../../contexts/FirebaseContext";
 import {
     MDBContainer,
@@ -14,7 +15,7 @@ import {
 
 const RegisterModal = (props: any) => {
     const auth = useContext(FirebaseContext)!.auth;
-    const db = useContext(FirebaseContext)!.database.ref();
+    const usersDB = firebase.firestore().collection('users');
 
     const [registrationData, setRegistrationData] = useState({
         email: "",
@@ -37,9 +38,7 @@ const RegisterModal = (props: any) => {
             )
             .then((cred: firebase.auth.UserCredential) => {
                 let id = cred.user!.uid;
-                db.child("users")
-                    .child(id)
-                    .set({ username: registrationData.userName });
+                usersDB.doc(id).set({ username: registrationData.userName })
             });
         props.hide();
     };

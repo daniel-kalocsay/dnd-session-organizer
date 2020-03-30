@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { FirebaseContext } from "./contexts/FirebaseContext";
 type DataSnapshot = firebase.database.DataSnapshot
 
+//TODO use firestore instead
 export const UserSearch = () => {
   const db = useContext(FirebaseContext)!.database.ref();
   const [users, setUsers] = useState([] as any[]);
