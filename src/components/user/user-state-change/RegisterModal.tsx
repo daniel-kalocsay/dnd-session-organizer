@@ -13,6 +13,16 @@ import {
     MDBModalFooter
 } from "mdbreact";
 
+class userModel {
+    username: string = "";
+    combatfields: string[] = [];
+
+    constructor(username: string, combatfields: string[]) {
+        this.username = username;
+        this.combatfields = combatfields;
+    }
+}
+
 const RegisterModal = (props: any) => {
     const auth = useContext(FirebaseContext)!.auth;
     const usersDB = firebase.firestore().collection('users');
@@ -37,8 +47,8 @@ const RegisterModal = (props: any) => {
                 registrationData.password
             )
             .then((cred: firebase.auth.UserCredential) => {
-                let id = cred.user!.uid;
-                usersDB.doc(id).set({ username: registrationData.userName })
+                let newUser = Object.assign({}, new userModel(registrationData.userName, []));
+                usersDB.doc(cred.user!.uid).set(newUser);
             });
         props.hide();
     };
