@@ -13,10 +13,12 @@ export const NewCombatField = () => {
   const auth = useContext(FirebaseContext)!.auth;
   const [user, initializing, authError] = useAuthState(auth);
 
-  const createNewCombatfield = () => {
+  const createNewCombatfield = (event: any) => {
+    event.preventDefault();
+    let combatfieldName = event.currentTarget.combatfieldName.value
 
     // save grid with userID
-    let grid = new Grid(100, [user!.uid]);
+    let grid = new Grid(combatfieldName, 100, [user!.uid]);
     let gridId = combatfields.doc().id;
     combatfields.doc(gridId).set(Object.assign({}, grid));
 
@@ -27,7 +29,10 @@ export const NewCombatField = () => {
 
   return (
     <div>
-      <button onClick={createNewCombatfield}></button>
+      <form onSubmit={createNewCombatfield}>
+        <input type='text' name='combatfieldName'></input>
+        <button>Create New Combatfield</button>
+      </form>
     </div>
   );
 };

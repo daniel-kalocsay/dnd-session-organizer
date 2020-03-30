@@ -1,125 +1,129 @@
-import React, {useState, useContext} from "react";
-import firebase from 'firebase';
-import {FirebaseContext} from "../../contexts/FirebaseContext";
+import React, { useState, useContext } from "react";
+import firebase from "firebase";
+import { FirebaseContext } from "../../contexts/FirebaseContext";
 import {
-    MDBContainer,
-    MDBRow,
-    MDBCol,
-    MDBInput,
-    MDBBtn,
-    MDBModal,
-    MDBModalHeader,
-    MDBModalBody,
-    MDBModalFooter
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBInput,
+  MDBBtn,
+  MDBModal,
+  MDBModalHeader,
+  MDBModalBody,
+  MDBModalFooter
 } from "mdbreact";
 
 class userModel {
-    username: string = "";
-    combatfields: string[] = [];
+  username: string = "";
+  combatfields: string[] = [];
 
-    constructor(username: string, combatfields: string[]) {
-        this.username = username;
-        this.combatfields = combatfields;
-    }
+  constructor(username: string, combatfields: string[]) {
+    this.username = username;
+    this.combatfields = combatfields;
+  }
 }
 
 const RegisterModal = (props: any) => {
-    const auth = useContext(FirebaseContext)!.auth;
-    const usersDB = firebase.firestore().collection('users');
+  const auth = useContext(FirebaseContext)!.auth;
+  const usersDB = firebase.firestore().collection("users");
 
-    const [registrationData, setRegistrationData] = useState({
-        email: "",
-        password: "",
-        userName: ""
+  const [registrationData, setRegistrationData] = useState({
+    email: "",
+    password: "",
+    userName: ""
+  });
+
+  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setRegistrationData({
+      ...registrationData,
+      [event.currentTarget.name]: event.currentTarget.value
     });
+  };
 
-    const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-        setRegistrationData({
-            ...registrationData,
-            [event.currentTarget.name]: event.currentTarget.value
-        });
-    };
+  const handleSubmit = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    auth
+      .createUserWithEmailAndPassword(
+        registrationData.email,
+        registrationData.password
+      )
+      .then((cred: firebase.auth.UserCredential) => {
+        let newUser = Object.assign(
+          {},
+          new userModel(registrationData.userName, [])
+        );
+        usersDB.doc(cred.user!.uid).set(newUser);
+      });
+    props.hide();
+  };
 
-    const handleSubmit = (event: React.SyntheticEvent) => {
-        event.preventDefault();
-        auth.createUserWithEmailAndPassword(
-                registrationData.email,
-                registrationData.password
-            )
-            .then((cred: firebase.auth.UserCredential) => {
-                let newUser = Object.assign({}, new userModel(registrationData.userName, []));
-                usersDB.doc(cred.user!.uid).set(newUser);
-            });
-        props.hide();
-    };
-
-    return (
-        <div>
-            <MDBContainer>
-                <MDBModal isOpen={props.open} >
-                    <MDBModalHeader>Sign Up</MDBModalHeader>
-                    <MDBModalBody>
-                        <MDBRow center true>
-                            <MDBCol>
-                                <form>
-                                    <div className="grey-text">
-                                        <MDBInput
-                                            label="Username"
-                                            icon="user"
-                                            group
-                                            type="text"
-                                            validate
-                                            error="wrong"
-                                            success="right"
-                                            onInput={handleChange}
-                                            name="userName"
-                                        />
-                                        <MDBInput
-                                            label="Your email"
-                                            icon="envelope"
-                                            group
-                                            type="email"
-                                            validate
-                                            error="wrong"
-                                            success="right"
-                                            onInput={handleChange}
-                                            name="email"
-                                        />
-                                        <MDBInput
-                                            label="Your password"
-                                            icon="lock"
-                                            group
-                                            type="password"
-                                            validate
-                                            onInput={handleChange}
-                                            name="password"
-                                        />
-                                        <MDBInput
-                                            label="Confirm password"
-                                            icon="lock"
-                                            group
-                                            type="password"
-                                            validate
-                                            onInput={handleChange}
-                                            name="confirmedPassword"
-                                        />
-                                    </div>
-                                </form>
-                            </MDBCol>
-                        </MDBRow>
-                    </MDBModalBody>
-                    <MDBModalFooter>
-                        <MDBBtn color="secondary" onClick={props.hide}>
-                            Close
-                        </MDBBtn>
-                        <MDBBtn onClick={handleSubmit} color="primary">
-                            Sign Up
-                        </MDBBtn>
-                    </MDBModalFooter>
-                </MDBModal>
-            </MDBContainer>
-        </div>
-    )
+  return (
+    <div>
+      <MDBContainer>
+        <MDBModal isOpen={props.open}>
+          <MDBModalHeader>Sign Up</MDBModalHeader>
+          <MDBModalBody>
+            <MDBRow center true>
+              <MDBCol>
+                <form>
+                  <div className="grey-text">
+                    <MDBInput
+                      label="Username"
+                      icon="user"
+                      group
+                      type="text"
+                      validate
+                      error="wrong"
+                      success="right"
+                      onInput={handleChange}
+                      name="userName"
+                    />
+                    <MDBInput
+                      label="Your email"
+                      icon="envelope"
+                      group
+                      type="email"
+                      validate
+                      error="wrong"
+                      success="right"
+                      onInput={handleChange}
+                      name="email"
+                    />
+                    <MDBInput
+                      label="Your password"
+                      icon="lock"
+                      group
+                      type="password"
+                      validate
+                      onInput={handleChange}
+                      name="password"
+                    />
+                    <MDBInput
+                      label="Confirm password"
+                      icon="lock"
+                      group
+                      type="password"
+                      validate
+                      onInput={handleChange}
+                      name="confirmedPassword"
+                    />
+                  </div>
+                </form>
+              </MDBCol>
+            </MDBRow>
+          </MDBModalBody>
+          <MDBModalFooter>
+            <MDBBtn color="secondary" onClick={props.hide}>
+              Close
+            </MDBBtn>
+            <MDBBtn onClick={handleSubmit} color="primary">
+              Sign Up
+            </MDBBtn>
+          </MDBModalFooter>
+        </MDBModal>
+      </MDBContainer>
+    </div>
+  );
 };
 
 export default RegisterModal;
