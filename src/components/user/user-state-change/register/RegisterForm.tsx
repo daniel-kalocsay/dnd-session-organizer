@@ -1,6 +1,6 @@
 import React, {useState, useContext, ChangeEvent} from "react";
 import {FirebaseContext} from "../../../contexts/FirebaseContext";
-import {Button, Grid, TextField, FormControl, Input, InputLabel, FormHelperText, FormLabel} from "@material-ui/core";
+import {Button, Grid, TextField, FormControl} from "@material-ui/core";
 import {AccountCircle, Lock, Mail} from "@material-ui/icons";
 import firebase from "firebase";
 
@@ -12,9 +12,7 @@ const RegisterForm = (props: any) => {
     const [pwError, setPwError] = useState<boolean>(false);
     const [emailErrorMessage, setEmailErrorMessage] = useState<string>("");
     const [pwErrorMessage, setPwErrorMessage] = useState<string>("");
-
-    const [pwConfirmed, setPwConfirmed] = useState<boolean>(true);
-
+    
     const [registrationData, setRegistrationData] = useState({
         email: "",
         password: "",
