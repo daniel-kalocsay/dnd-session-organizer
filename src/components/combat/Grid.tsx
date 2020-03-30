@@ -2,14 +2,14 @@ class Square {
     active: boolean = false;
 }
 
-export class Grid {
-    public tiles: Square[];
+export default class Grid {
+    public tiles: Object[];
     public players: string[];
 
     constructor( size: 100 | 400 | 900, players: string[] ) {
         let tiles = []
         for (let i= 1; i<size; i++) {
-            tiles.push(new Square())
+            tiles.push(Object.assign({}, new Square()))
         }
         this.tiles = tiles;
         this.players = players;
