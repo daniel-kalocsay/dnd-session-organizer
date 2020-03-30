@@ -1,12 +1,12 @@
-import CombatField from "../combat/CombatField";
 import React from "react";
+import CombatField from "../combat/CombatField";
 import Players from "../combat/Players";
 import Menu from "../combat/Menu";
 
 const CombatView = () => {
+
     return (
         <div style={styles.combatViewWrapper}>
-
             <div style={styles.playersContainer}>
                 <Players />
             </div>
@@ -22,7 +22,6 @@ const CombatView = () => {
             <div style={styles.menuContainer}>
                 <Menu />
             </div>
-
         </div>
     )
 };

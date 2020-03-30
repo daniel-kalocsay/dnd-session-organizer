@@ -1,21 +1,18 @@
 import React from "react";
-import HomePage from "../HomePage";
-import Registration from "../user/Registration";
-import Login from "../user/Login";
-import Logout from "../user/Logout";
 import {Link, Route} from "react-router-dom";
 import {MDBContainer, MDBNavbar} from "mdbreact";
+import UserInfo from "../user/UserInfo";
 
 const Navbar = () => {
     return (
         <MDBNavbar>
             <Link to={"/"}>Home</Link>
             <Link to={"/combat"}>Combat grid</Link>
-            <Registration/>
-            <Login/>
-            <Logout/>
+            <UserInfo />
         </MDBNavbar>
     )
 };
 
 export default Navbar;
+
+//TODO make navbar a grid
