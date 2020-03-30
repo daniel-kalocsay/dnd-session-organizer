@@ -8,9 +8,11 @@ import Register from "./user-state-change/register/Register";
 import Logout from "./user-state-change/Logout";
 import { Button } from "@material-ui/core";
 import {MDBBtn} from "mdbreact";
+import ModalWithForm from "./user-state-change/ModalWithForm";
+import LoginForm from "./user-state-change/login/LoginForm";
 
 const UserInfo = () => {
-    //TODO make this component work wrapped in WithAuth instead
+    //TODO make this component work wrapped in WithAuth instead?
 
     const auth = useContext(FirebaseContext)!.auth;
     const [user, initializing, error] = useAuthState(auth);

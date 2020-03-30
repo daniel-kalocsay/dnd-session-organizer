@@ -1,13 +1,16 @@
-import React from "react";
+import React, {useState} from "react";
 import {Backdrop, Button, Modal, Slide} from "@material-ui/core";
-import RegisterForm from "./RegisterForm";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
-const Register = (props: any) => {
-
+const ModalWithForm = (props: any) => {
     const classes = useStyles();
 
-    //TODO make generic Modal(+Button) component to avoid duplication of code below (in Login and Register comps)
+    const [open, setOpen] = useState(false);
+
+    const showModal = () => { setOpen(true); };
+    const hideModal = () => { setOpen(false); };
+
+    //TODO make this work
 
     return (
         <div>
@@ -15,22 +18,22 @@ const Register = (props: any) => {
                     color={"primary"}
                     onClick={props.show}
             >
-                Register
+                {props.buttonName}
             </Button>
 
             <Modal
                 className={classes.modal}
-                open={props.open}
-                onClose={props.hide}
+                open={props.form.open}
+                onClose={props.form.hide}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
                 BackdropProps={{
                     timeout: 500,
                 }}
             >
-                <Slide in={props.open} direction={"down"} timeout={200}>
+                <Slide in={open} direction={"down"} timeout={200}>
                     <div className={classes.paper}>
-                        <RegisterForm hide={props.hide}/>
+                        <props.form />
                     </div>
                 </Slide>
 
@@ -39,7 +42,7 @@ const Register = (props: any) => {
     )
 };
 
-export default Register;
+export default ModalWithForm;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
