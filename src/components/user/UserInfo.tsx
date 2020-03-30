@@ -3,7 +3,7 @@ import React, {useContext, useState} from "react";
 import {FirebaseContext} from "../contexts/FirebaseContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 
-import Login from "./user-state-change/Login";
+import Login from "./user-state-change/login/Login";
 import Register from "./user-state-change/Register";
 import Logout from "./user-state-change/Logout";
 import { Button } from "@material-ui/core";
