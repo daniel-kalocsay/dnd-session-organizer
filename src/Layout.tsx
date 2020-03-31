@@ -5,6 +5,7 @@ import HomePage from "./components/HomePage";
 import CombatView from "./components/ui/CombatView";
 import { UserSearch } from "./components/UserSearch";
 import WithAuth from "./helpers/WithAuth";
+import {NewCombatField} from "./components/combat/NewCombatField";
 
 const Layout = () => {
 
@@ -22,7 +23,6 @@ const Layout = () => {
 
                     <Route path={"/home"}>
                         <HomePage/>
-                        <UserSearch/>
                     </Route>
 
                     <Route exact path={"/combat"}>
@@ -34,6 +34,19 @@ const Layout = () => {
                         </WithAuth>
 
                     </Route>
+
+                    <Route path={"/new-combat-field"}>
+                        <WithAuth unauthorizedMsg={"You need to be logged in to create a new combat field"}>
+                            <NewCombatField />
+                        </WithAuth>
+                    </Route>
+
+                    <Route path={"/user-search"}>
+                        <WithAuth unauthorizedMsg={"You need to be logged in to search users"}>
+                            <UserSearch/>
+                        </WithAuth>
+                    </Route>
+
                 </div>
             </div>
         </Router>

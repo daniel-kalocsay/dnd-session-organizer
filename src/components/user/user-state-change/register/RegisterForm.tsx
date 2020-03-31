@@ -4,9 +4,19 @@ import {Button, Grid, TextField, FormControl} from "@material-ui/core";
 import {AccountCircle, Lock, Mail} from "@material-ui/icons";
 import firebase from "firebase";
 
+class userModel {
+    username: string = "";
+    combatfields: string[] = [];
+
+    constructor(username: string, combatfields: string[]) {
+        this.username = username;
+        this.combatfields = combatfields;
+    }
+}
+
 const RegisterForm = (props: any) => {
     const auth = useContext(FirebaseContext)!.auth;
-    const db = useContext(FirebaseContext)!.database.ref();
+    const usersDB = firebase.firestore().collection("users");
 
     const [emailError, setEmailError] = useState<boolean>(false);
     const [pwError, setPwError] = useState<boolean>(false);
@@ -62,10 +72,11 @@ const RegisterForm = (props: any) => {
             registrationData.password
         )
             .then((cred: firebase.auth.UserCredential) => {
-                let id = cred.user!.uid;
-                db.child("users")
-                    .child(id)
-                    .set({username: registrationData.username});
+                let newUser = Object.assign(
+                    {},
+                    new userModel(registrationData.username, [])
+                );
+                usersDB.doc(cred.user!.uid).set(newUser);
                 props.hide();
 
             })
