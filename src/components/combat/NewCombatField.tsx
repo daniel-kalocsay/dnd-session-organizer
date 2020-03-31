@@ -3,7 +3,7 @@ import React, {ChangeEvent, useContext, useState} from "react";
 import {FirebaseContext} from "../contexts/FirebaseContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 import Grid from "./Grid";
-import {FormControl, TextField, Button, Typography, Slider} from "@material-ui/core";
+import GridSizeForm from "./GridSizeForm";
 
 //TODO move component to a different directory, "combat" should only handle the combat itself
 
@@ -16,12 +16,14 @@ export const NewCombatField = () => {
     const auth = useContext(FirebaseContext)!.auth;
     const [user, initializing, authError] = useAuthState(auth);
 
-    const [gridSize, setGridSize] = useState<number>(0);
+    const [gridSize, setGridSize] = useState<number>(100);
 
     //TODO get the correct type for this event
     const createNewCombatfield = (event: any) => {
         event.preventDefault();
+
         let combatfieldName = event.target.combatfieldName.value;
+        console.log(`trying to add ${combatfieldName} to db`);
 
         // save grid with userID
         let grid = new Grid(combatfieldName, gridSize, [user!.uid]);
@@ -39,51 +41,15 @@ export const NewCombatField = () => {
         setGridSize(size * 10);
     };
 
-    const marks = [
-        {
-            value: 10,
-            label: "10x10",
-        },
-        {
-            value: 40,
-            label: "20x20",
-        },
-        {
-            value: 90,
-            label: "30x30",
-        },
-    ];
-
-    function valuetext(value: number) {
-        return `${value}x${value}`;
-    }
-
-    function valueLabelFormat(value: number) {
-        let index = marks.findIndex((mark) => mark.value === value) + 1;
-        return Math.pow(index, 2) * 100;
-    }
 
     return (
-        <div style={{width:500}}>
-            <form onSubmit={createNewCombatfield}>
-                <FormControl>
-                    <TextField variant={"outlined"} name='combatfieldName'/>
-                    <Button type={"submit"} variant={"outlined"}>Create New Combatfield</Button>
-                </FormControl>
-            </form>
-            <Typography id="discrete-slider-restrict" gutterBottom>
-                Choose the grid size of your combat field
-            </Typography>
-            <Slider
-                defaultValue={10}
-                valueLabelFormat={valueLabelFormat}
-                getAriaValueText={valuetext}
-                onChangeCommitted={saveSize}
-                aria-labelledby="discrete-slider-restrict"
-                step={null}
-                valueLabelDisplay="auto"
-                marks={marks}
+        <div style={{width:400, height: 400}} >
+
+            <GridSizeForm
+                onSubmit={createNewCombatfield}
+                saveSize={saveSize}
             />
+
         </div>
     );
 };
