@@ -9,7 +9,7 @@ const WithAuth = (props: any) => {
 
     const loadingMsg = props.loadingMsg ? props.loadingMsg : "Loading...";
     const errorMsg = props.errorMsg ? props.errorMsg : "An error has occurred";
-    const unauthorizedMsg = props.unauthorizedMsg ? props.unauthorizedMsg : "You are not authorized";
+    const unauthorizedMsg = props.unauthorizedMsg ? props.unauthorizedMsg : "";
     //TODO is unauthorizedMsg really needed? could be provided from props.alternative anyway
 
     if (initializing) {

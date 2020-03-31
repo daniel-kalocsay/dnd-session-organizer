@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as firebase from "firebase";
 
-// import mdb styles //TODO use Material UI instead of MDB
+//TODO use Material UI instead of MDB
+
+// import mdb styles
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";

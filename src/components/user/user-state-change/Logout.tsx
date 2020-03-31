@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { MDBBtn } from "mdbreact";
 import { FirebaseContext } from "../../contexts/FirebaseContext";
+import {Button} from "@material-ui/core";
 
 const Logout: React.FC = () => {
     const auth = useContext(FirebaseContext)!.auth;
@@ -12,7 +12,12 @@ const Logout: React.FC = () => {
     };
 
     return (
-        <MDBBtn onClick={logOut}> Log out </MDBBtn>
+        <Button variant={"contained"}
+                color={"primary"}
+                onClick={logOut}
+        >
+            Log out
+        </Button>
     );
 
 };

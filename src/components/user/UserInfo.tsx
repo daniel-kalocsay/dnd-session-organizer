@@ -3,13 +3,16 @@ import React, {useContext, useState} from "react";
 import {FirebaseContext} from "../contexts/FirebaseContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 
-import Login from "./user-state-change/Login";
-import Register from "./user-state-change/Register";
+import Login from "./user-state-change/login/Login";
+import Register from "./user-state-change/register/Register";
 import Logout from "./user-state-change/Logout";
+import { Button } from "@material-ui/core";
 import {MDBBtn} from "mdbreact";
+import ModalWithForm from "./user-state-change/ModalWithForm";
+import LoginForm from "./user-state-change/login/LoginForm";
 
 const UserInfo = () => {
-    //TODO make this component work wrapped in WithAuth instead
+    //TODO make this component work wrapped in WithAuth instead?
 
     const auth = useContext(FirebaseContext)!.auth;
     const [user, initializing, error] = useAuthState(auth);
@@ -53,6 +56,7 @@ const UserInfo = () => {
 
     return (
         <div style={styles.container}>
+            <div>You are not logged in</div>
             <div style={styles.buttons}>
                 <Login open={loginOpen} show={showLogin} hide={hideLogin} />
                 <Register open={registerOpen} show={showRegister} hide={hideRegister}/>
@@ -76,6 +80,7 @@ const styles = {
     buttons: {
         gridColumn: "2/3",
         display: "grid",
-        gridAutoFlow: "column"
+        gridAutoFlow: "column",
+        gridGap: "1em"
     }
 };
