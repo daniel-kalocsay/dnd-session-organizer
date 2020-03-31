@@ -1,5 +1,6 @@
 import React from "react";
 import { NewCombatField } from "./combat/NewCombatField"
+import { CombatfieldList } from "./CombatfieldList";
 
 const HomePage = () => {
     return (
@@ -8,6 +9,7 @@ const HomePage = () => {
             <h5>This is our in-progress home page!</h5>
             <h5>Check the combat grid by selecting it from the navbar!</h5>
             <NewCombatField/>
+            <CombatfieldList/>
         </div>
     )
 };

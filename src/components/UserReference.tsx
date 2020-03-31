@@ -5,7 +5,7 @@ export const UserReference = (props: any) => {
     const [user, setUser] = useState<UserInfo>(props.userData);
 
     const handleClick = () => {
-        console.log(user?.uid);
+        
     }
 
     useEffect(() => {
