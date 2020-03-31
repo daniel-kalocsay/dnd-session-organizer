@@ -7,10 +7,10 @@ export default class Grid {
     public players: string[];
     name: string;
 
-    constructor( name: string, size: 100 | 400 | 900, players: string[] ) {
+    constructor( name: string, size: number, players: string[] ) {
         this.name = name;
-        let tiles = []
-        for (let i= 0; i<size; i++) {
+        let tiles = [];
+        for (let i = 0; i < size; i++) {
             tiles.push(Object.assign({}, new Square()))
         }
         this.tiles = tiles;
