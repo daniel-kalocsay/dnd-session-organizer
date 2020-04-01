@@ -17,22 +17,21 @@ class CombatfieldData {
 }
 
 export const CombatfieldList = () => {
-  const combatfieldsRef = firebase
-    .firestore()
-    .collection("combatfields");
+  const combatfieldsRef = firebase.firestore().collection("combatfields");
 
-  const [combatfieldData, setCombatfieldData] = useState([] as CombatfieldData[]);
+  const [combatfieldData, setCombatfieldData] = useState(
+    [] as CombatfieldData[]
+  );
   const usersRef = firebase.firestore().collection("users");
 
   const auth = useContext(FirebaseContext)!.auth;
   const [user, initializing, authError] = useAuthState(auth);
 
-
-  //TODO get combatfield names paired to the uids
   useEffect(() => {
     let ids = [] as string[];
+    let combatfieldsTemp = [] as CombatfieldData[];
 
-    if ( user ) {
+    if (user) {
       usersRef
         .doc(user!.uid)
         .collection("combatfields")
@@ -42,11 +41,35 @@ export const CombatfieldList = () => {
             let entry = data.data();
             ids.push(entry!.gridId);
           });
+          ids.forEach((id: string) => {
+            combatfieldsRef
+              .doc(id)
+              .get()
+              .then((combatfieldRecord: DocumentSnapshot) => {
+                if (combatfieldRecord.exists) {
+                  let record = combatfieldRecord.data();
+                  let data = new CombatfieldData(
+                    record!.name,
+                    combatfieldRecord.id
+                  );
+                  combatfieldsTemp.push(Object.assign({}, data));
+                }
+              });
+          });
+          setCombatfieldData(combatfieldData => [...combatfieldsTemp]);
         })
-        .then((data: any) => {console.log(ids)})
     }
   }, [user]);
 
+  useEffect(() => {
+    console.log(combatfieldData)
+  }, [combatfieldData])
 
-return (<div>{combatfieldData ? combatfieldData.map(data => <p>{data.name}</p>) : ""}</div>);
+  return (
+    <div id="combatfield-list">
+      {combatfieldData
+        ? combatfieldData.map(combatfield => <p>{combatfield.name}</p>)
+        : ""}
+    </div>
+  );
 };

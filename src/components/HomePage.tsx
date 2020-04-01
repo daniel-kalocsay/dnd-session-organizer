@@ -1,4 +1,5 @@
 import React from "react";
+import { CombatfieldList } from "./CombatfieldList";
 
 const HomePage = () => {
     return (
@@ -6,6 +7,7 @@ const HomePage = () => {
             <h2>Hello world!</h2>
             <h5>This is our in-progress home page!</h5>
             <h5>Log in to check our other features!</h5>
+            <CombatfieldList/>
         </div>
     )
 };
