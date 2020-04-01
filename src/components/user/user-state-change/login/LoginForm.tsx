@@ -49,6 +49,7 @@ const LoginForm = (props: any) => {
         auth.signInWithEmailAndPassword(loginData.email, loginData.password)
             .then((cred: firebase.auth.UserCredential) => {
                 console.log(cred);
+                //TODO this won't work until hideModal is passed as prop
                 props.hide();
             })
             .catch((error: any) => {
@@ -94,6 +95,7 @@ const LoginForm = (props: any) => {
                 </Grid>
             </form>
 
+            {/*TODO this won't work until hideModal is passed as prop*/}
             <Button variant={"contained"} color="secondary" onClick={props.hide}>
                 Close
             </Button>
