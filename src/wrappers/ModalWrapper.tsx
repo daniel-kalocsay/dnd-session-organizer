@@ -31,9 +31,14 @@ const ModalWrapper = (props: any) => {
             >
                 <Slide in={open} direction={"down"} timeout={200}>
                     <div className={classes.paper}>
-
-                        {/*TODO figure out how to pass hideModal to child here*/}
-                        {props.children}
+                        <div>
+                            {/*TODO figure out how to pass hideModal as prop to child here*/}
+                            {props.children}
+                        </div>
+                        <br />
+                        <Button variant={"contained"} color="secondary" onClick={hideModal}>
+                            Close button from wrapper that actually works
+                        </Button>
                     </div>
                 </Slide>
 

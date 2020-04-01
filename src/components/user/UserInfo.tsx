@@ -14,20 +14,6 @@ const UserInfo = () => {
     const auth = useContext(FirebaseContext)!.auth;
     const [user, initializing, error] = useAuthState(auth);
 
-    const [loginOpen, setLoginOpen] = useState(false);
-    const [registerOpen, setRegisterOpen] = useState(false);
-
-    const showLogin = () => { setLoginOpen(true); };
-    const hideLogin = () => { setLoginOpen(false); };
-    const showRegister = () => { setRegisterOpen(true); };
-    const hideRegister = () => { setRegisterOpen(false); };
-
-    const [form, setForm] = useState<any>(null);
-
-    useEffect(() => {
-        setLoginOpen(false);
-    }, []);
-
     if (initializing) {
         return (
             <div>
@@ -63,11 +49,11 @@ const UserInfo = () => {
             <div style={styles.buttons}>
 
                 <ModalWrapper buttonName={"Log in"}  >
-                    <LoginForm hide={hideLogin} />
+                    <LoginForm />
                 </ModalWrapper>
 
                 <ModalWrapper buttonName={"register"}>
-                    <RegisterForm hide={hideRegister}/>
+                    <RegisterForm />
                 </ModalWrapper>
 
             </div>
