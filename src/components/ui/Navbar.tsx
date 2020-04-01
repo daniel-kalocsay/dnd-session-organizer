@@ -3,7 +3,7 @@ import {Link, Route} from "react-router-dom";
 import {MDBNavbar} from "mdbreact";
 import { AppBar, Toolbar } from "@material-ui/core"
 import UserInfo from "../user/UserInfo";
-import WithAuth from "../../helpers/WithAuth";
+import WithAuth from "../../wrappers/WithAuth";
 
 const Navbar = () => {
     return (

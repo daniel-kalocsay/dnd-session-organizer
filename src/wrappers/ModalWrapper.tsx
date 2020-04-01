@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Backdrop, Button, Modal, Slide} from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
-const ModalWithForm = (props: any) => {
+const ModalWrapper = (props: any) => {
     const classes = useStyles();
 
     const [open, setOpen] = useState(false);
@@ -10,21 +10,19 @@ const ModalWithForm = (props: any) => {
     const showModal = () => { setOpen(true); };
     const hideModal = () => { setOpen(false); };
 
-    //TODO make this work
-
     return (
         <div>
             <Button variant={"contained"}
                     color={"primary"}
-                    onClick={props.show}
+                    onClick={showModal}
             >
                 {props.buttonName}
             </Button>
 
             <Modal
                 className={classes.modal}
-                open={props.form.open}
-                onClose={props.form.hide}
+                open={open}
+                onClose={hideModal}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
                 BackdropProps={{
@@ -33,7 +31,9 @@ const ModalWithForm = (props: any) => {
             >
                 <Slide in={open} direction={"down"} timeout={200}>
                     <div className={classes.paper}>
-                        <props.form />
+
+                        {/*TODO figure out how to pass hideModal to child here*/}
+                        {props.children}
                     </div>
                 </Slide>
 
@@ -42,7 +42,7 @@ const ModalWithForm = (props: any) => {
     )
 };
 
-export default ModalWithForm;
+export default ModalWrapper;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
