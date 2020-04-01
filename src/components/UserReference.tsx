@@ -6,7 +6,7 @@ export const UserReference = (props: any) => {
 
     const handleClick = () => {
         
-    }
+    };
 
     useEffect(() => {
         setUser(props.userData);
@@ -14,7 +14,7 @@ export const UserReference = (props: any) => {
 
     return (
         <div>
-            <p onClick={handleClick}>{user?.name}</p>
+            <h3 onClick={handleClick}>{user?.name}</h3>
         </div>
     )
 }
