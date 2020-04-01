@@ -51,7 +51,7 @@ export const UserSearch = (props: any) => {
 
     return (
         <div>
-            <input onChange={handleChange} placeholder={"Username"}/>
+            <input placeholder={"Username"} onChange={handleChange} />
             <div>
                 {users ? users.map(user =>
                     <UserReference key={user.uid}
