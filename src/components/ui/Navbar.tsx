@@ -12,10 +12,8 @@ const Navbar = () => {
 
             <Link to={"/combat"}>Combat grid</Link>
 
-                <Link to={"/new-combat-field"}>Create new combat field</Link>
-
-                <Link to={"/user-search"}>Search user</Link>
-
+            <Link to={"/new-combat-field"}>Create new combat field</Link>
+            
             <UserInfo />
 
         </MDBNavbar>

@@ -41,12 +41,6 @@ const Layout = () => {
                         </WithAuth>
                     </Route>
 
-                    <Route path={"/user-search"}>
-                        <WithAuth unauthorizedMsg={"You need to be logged in to search users"}>
-                            <UserSearch/>
-                        </WithAuth>
-                    </Route>
-
                 </div>
             </div>
         </Router>
