@@ -1,9 +1,11 @@
 import firebase from "firebase";
-import React, {ChangeEvent, useContext, useState} from "react";
+import React, {ChangeEvent, useContext, useEffect, useState} from "react";
 import {FirebaseContext} from "../contexts/FirebaseContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 import Grid from "./Grid";
 import GridSizeForm from "./GridSizeForm";
+import {UserInfo, UserSearch} from "../UserSearch";
+import UserReference from "../UserReference";
 
 //TODO move component to a different directory, "combat" should only handle the combat itself
 
@@ -17,6 +19,7 @@ export const NewCombatField = () => {
     const [user, initializing, authError] = useAuthState(auth);
 
     const [gridSize, setGridSize] = useState<number>(100);
+    const [players, setPlayers] = useState<UserInfo[]>([]);
 
     //TODO get the correct type for this event
     const createNewCombatfield = (event: any) => {
@@ -25,8 +28,10 @@ export const NewCombatField = () => {
         let combatfieldName = event.target.combatfieldName.value;
         console.log(`trying to add ${combatfieldName} to db`);
 
+        let playerIDs = players.map(player => player.uid) as string[];
+
         // save grid with userID
-        let grid = new Grid(combatfieldName, gridSize, [user!.uid]);
+        let grid = new Grid(combatfieldName, gridSize, playerIDs);
         let gridId = combatfields.doc().id;
         combatfields.doc(gridId).set(Object.assign({}, grid));
 
@@ -41,6 +46,17 @@ export const NewCombatField = () => {
         setGridSize(size * 10);
     };
 
+    const addPlayer = (player: UserInfo) => {
+        if (!players.includes(player)) {
+            let newPlayerList = [...players, player] as UserInfo[];
+            setPlayers(newPlayerList);
+        }
+    };
+
+    useEffect(() => {
+        let currentUser = new UserInfo(user!.uid as string, "You");
+        setPlayers([currentUser]);
+    }, []);
 
     return (
         <div style={{width:400, height: 400}} >
@@ -49,6 +65,15 @@ export const NewCombatField = () => {
                 onSubmit={createNewCombatfield}
                 saveSize={saveSize}
             />
+
+            <h2>Add players to your combat field!</h2>
+            <UserSearch onAddPlayer={addPlayer}/>
+
+            <br />
+            <div>
+                <h3>Added players:</h3>
+                {players ? players.map( (player:UserInfo) => <UserReference userData={player} />) : "No players added"}
+            </div>
 
         </div>
     );
