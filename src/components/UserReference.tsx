@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { UserInfo } from './UserSearch';
 
-export const UserReference = (props: any) => {
+const UserReference = (props: any) => {
     const [user, setUser] = useState<UserInfo>(props.userData);
 
     const handleClick = () => {
-        
-    }
+        console.log(`Adding player: ${user.name}`);
+        props.onAddPlayer(user)
+    };
 
     useEffect(() => {
         setUser(props.userData);
@@ -14,7 +15,9 @@ export const UserReference = (props: any) => {
 
     return (
         <div>
-            <p onClick={handleClick}>{user?.name}</p>
+            <h3 onClick={handleClick}>{user?.name}</h3>
         </div>
     )
-}
+};
+
+export default UserReference;

@@ -3,10 +3,13 @@ import {Button, Grid, TextField} from "@material-ui/core";
 import {AccountCircle, Lock} from "@material-ui/icons";
 import {FirebaseContext} from "../../../contexts/FirebaseContext";
 import firebase from "firebase";
+import { ModalContext } from "../../../../wrappers/ModalWrapper"
 
 const LoginForm = (props: any) => {
 
     const auth = useContext(FirebaseContext)!.auth;
+
+    const { hideModal } = useContext(ModalContext)!;
 
     const [emailError, setEmailError] = useState<boolean>(false);
     const [pwError, setPwError] = useState<boolean>(false);
@@ -49,7 +52,7 @@ const LoginForm = (props: any) => {
         auth.signInWithEmailAndPassword(loginData.email, loginData.password)
             .then((cred: firebase.auth.UserCredential) => {
                 console.log(cred);
-                props.hide();
+                hideModal();
             })
             .catch((error: any) => {
                 handleError(error);
@@ -94,7 +97,7 @@ const LoginForm = (props: any) => {
                 </Grid>
             </form>
 
-            <Button variant={"contained"} color="secondary" onClick={props.hide}>
+            <Button variant={"contained"} color="secondary" onClick={hideModal}>
                 Close
             </Button>
             <Button variant={"contained"} onClick={handleSubmit} color="primary">

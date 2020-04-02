@@ -3,7 +3,7 @@ import {Link, Route} from "react-router-dom";
 import {MDBNavbar} from "mdbreact";
 import { AppBar, Toolbar } from "@material-ui/core"
 import UserInfo from "../user/UserInfo";
-import WithAuth from "../../helpers/WithAuth";
+import WithAuth from "../../wrappers/WithAuth";
 
 const Navbar = () => {
     return (
@@ -12,10 +12,8 @@ const Navbar = () => {
 
             <Link to={"/combat"}>Combat grid</Link>
 
-                <Link to={"/new-combat-field"}>Create new combat field</Link>
-
-                <Link to={"/user-search"}>Search user</Link>
-
+            <Link to={"/new-combat-field"}>Create new combat field</Link>
+            
             <UserInfo />
 
         </MDBNavbar>

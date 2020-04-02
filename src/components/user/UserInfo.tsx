@@ -1,29 +1,18 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 
 import {FirebaseContext} from "../contexts/FirebaseContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 
-import Login from "./user-state-change/login/Login";
-import Register from "./user-state-change/register/Register";
 import Logout from "./user-state-change/Logout";
-import { Button } from "@material-ui/core";
-import {MDBBtn} from "mdbreact";
-import ModalWithForm from "./user-state-change/ModalWithForm";
+import ModalWrapper from "../../wrappers/ModalWrapper";
 import LoginForm from "./user-state-change/login/LoginForm";
+import RegisterForm from "./user-state-change/register/RegisterForm";
 
 const UserInfo = () => {
     //TODO make this component work wrapped in WithAuth instead?
 
     const auth = useContext(FirebaseContext)!.auth;
     const [user, initializing, error] = useAuthState(auth);
-
-    const [loginOpen, setLoginOpen] = useState(false);
-    const [registerOpen, setRegisterOpen] = useState(false);
-
-    const showLogin = () => { setLoginOpen(true); };
-    const hideLogin = () => { setLoginOpen(false); };
-    const showRegister = () => { setRegisterOpen(true); };
-    const hideRegister = () => { setRegisterOpen(false); };
 
     if (initializing) {
         return (
@@ -58,8 +47,15 @@ const UserInfo = () => {
         <div style={styles.container}>
             <div>You are not logged in</div>
             <div style={styles.buttons}>
-                <Login open={loginOpen} show={showLogin} hide={hideLogin} />
-                <Register open={registerOpen} show={showRegister} hide={hideRegister}/>
+
+                <ModalWrapper buttonName={"Log in"}  >
+                    <LoginForm />
+                </ModalWrapper>
+
+                <ModalWrapper buttonName={"register"}>
+                    <RegisterForm />
+                </ModalWrapper>
+
             </div>
         </div>
     )

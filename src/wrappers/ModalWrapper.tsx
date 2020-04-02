@@ -1,30 +1,38 @@
-import React, {useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 import {Backdrop, Button, Modal, Slide} from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
-const ModalWithForm = (props: any) => {
-    const classes = useStyles();
+export interface ModalContextInterface {
+    open: boolean;
+    showModal: () => void;
+    hideModal: () => void;
+}
 
+export const ModalContext = createContext<ModalContextInterface | null>(null);
+
+const ModalWrapper = (props: any) => {
+
+    // set up modal state and state changers for the context provider
     const [open, setOpen] = useState(false);
-
     const showModal = () => { setOpen(true); };
     const hideModal = () => { setOpen(false); };
+    const modalHandler: ModalContextInterface = { open, hideModal, showModal };
 
-    //TODO make this work
+    const classes = useStyles();
 
     return (
         <div>
             <Button variant={"contained"}
                     color={"primary"}
-                    onClick={props.show}
+                    onClick={showModal}
             >
                 {props.buttonName}
             </Button>
 
             <Modal
                 className={classes.modal}
-                open={props.form.open}
-                onClose={props.form.hide}
+                open={open}
+                onClose={hideModal}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
                 BackdropProps={{
@@ -33,7 +41,12 @@ const ModalWithForm = (props: any) => {
             >
                 <Slide in={open} direction={"down"} timeout={200}>
                     <div className={classes.paper}>
-                        <props.form />
+
+                        {/* provide modal state and state changers here */}
+                        <ModalContext.Provider value={modalHandler}>
+                            {props.children}
+                        </ModalContext.Provider>
+                        
                     </div>
                 </Slide>
 
@@ -42,7 +55,7 @@ const ModalWithForm = (props: any) => {
     )
 };
 
-export default ModalWithForm;
+export default ModalWrapper;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

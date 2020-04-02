@@ -4,7 +4,7 @@ import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
 import HomePage from "./components/HomePage";
 import CombatView from "./components/ui/CombatView";
 import { UserSearch } from "./components/UserSearch";
-import WithAuth from "./helpers/WithAuth";
+import WithAuth from "./wrappers/WithAuth";
 import {NewCombatField} from "./components/combat/NewCombatField";
 
 const Layout = () => {
@@ -38,12 +38,6 @@ const Layout = () => {
                     <Route path={"/new-combat-field"}>
                         <WithAuth unauthorizedMsg={"You need to be logged in to create a new combat field"}>
                             <NewCombatField />
-                        </WithAuth>
-                    </Route>
-
-                    <Route path={"/user-search"}>
-                        <WithAuth unauthorizedMsg={"You need to be logged in to search users"}>
-                            <UserSearch/>
                         </WithAuth>
                     </Route>
 
