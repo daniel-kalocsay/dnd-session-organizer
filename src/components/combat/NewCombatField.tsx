@@ -4,8 +4,9 @@ import { FirebaseContext } from "../contexts/FirebaseContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Grid from "./Grid";
 import GridSizeForm from "./GridSizeForm";
-import { UserInfo, UserSearch } from "../UserSearch";
-import UserReference from "../UserReference";
+import { UserSearch } from "../user/UserSearch";
+import UserInfo from "../user/UserInfo";
+import UserReference from "../user/UserReference";
 
 //TODO move component to a different directory, "combat" should only handle the combat itself
 
@@ -67,7 +68,7 @@ export const NewCombatField = () => {
         <h3>Added players:</h3>
         {players
           ? players.map((player: UserInfo) => (
-              <UserReference key={player.uid} userData={player} />
+              <UserReference key={player.uid!} userData={player} />
             ))
           : "No players added"}
       </div>
