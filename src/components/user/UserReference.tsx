@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import UserInfo from "./UserInfo";
 
 interface userClickable {
@@ -8,6 +8,7 @@ interface userClickable {
 }
 
 const UserReference = (props: userClickable) => {
+  //TODO how to do it without checking this at every click?
   const handleClick = () => {
     if (props.onUserClick) {
       props.onUserClick(props.userData);
