@@ -13,7 +13,7 @@ export const SessionList = () => {
   return (
     <div>
       {sessions.map(session => (
-        <Session />
+        <Session sessionData={session} />
       ))}
     </div>
   );
