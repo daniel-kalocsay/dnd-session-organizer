@@ -29,6 +29,7 @@ export const NewCombatfield = () => {
 
     let playerIDs = players.map(player => player.uid) as string[];
 
+    //TODO lazy creation of grid
     // save grid with userID
     let grid = new Grid(combatfieldName, gridSize, playerIDs);
     let gridId = combatfields.doc().id;

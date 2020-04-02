@@ -6,6 +6,7 @@ import WithAuth from "./wrappers/WithAuth";
 import { NewCombatfield } from "./components/combat/NewCombatfield";
 import { CombatfieldList } from "./components/combat/CombatfieldList";
 import Session from "./components/ui/Session";
+import { SessionList } from "./components/ui/SessionList";
 
 const Layout = () => {
   return (
@@ -33,12 +34,12 @@ const Layout = () => {
             </WithAuth>
           </Route>
 
-          <Route exact path={"/my-lobbies"}>
+          <Route exact path={"/my-sessions"}>
             <WithAuth
-              loadingMsg={"Loading lobbies..."}
-              unauthorizedMsg={"Log in to access your lobbies"}
+              loadingMsg={"Loading sessions..."}
+              unauthorizedMsg={"Log in to access your sessions"}
             >
-              <Session />
+              <SessionList />
             </WithAuth>
           </Route>
 
