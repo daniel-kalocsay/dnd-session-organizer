@@ -53,11 +53,14 @@ const Session = (props: any) => {
       });
   };
 
-  useEffect(() => {}, []);
-
   return (
     <div>
-      <CombatfieldList combatfields={combatfieldData} />
+      <p>{props.sessionData.name}</p>
+      {props.sessionData.clicked ? (
+        <CombatfieldList combatfields={combatfieldData} />
+      ) : (
+        ""
+      )}
     </div>
   );
 };
