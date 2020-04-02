@@ -46,11 +46,7 @@ const ModalWrapper = (props: any) => {
                         <ModalContext.Provider value={modalHandler}>
                             {props.children}
                         </ModalContext.Provider>
-
-                        <br />
-                        <Button variant={"contained"} color="secondary" onClick={hideModal}>
-                            Close button from wrapper that actually works
-                        </Button>
+                        
                     </div>
                 </Slide>
 
