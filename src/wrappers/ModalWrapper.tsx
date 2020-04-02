@@ -1,14 +1,24 @@
-import React, {useEffect, useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 import {Backdrop, Button, Modal, Slide} from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
+export interface ModalContextInterface {
+    open: boolean;
+    showModal: () => void;
+    hideModal: () => void;
+}
+
+export const ModalContext = createContext<ModalContextInterface | null>(null);
+
 const ModalWrapper = (props: any) => {
-    const classes = useStyles();
 
+    // set up modal state and state changers for the context provider
     const [open, setOpen] = useState(false);
-
     const showModal = () => { setOpen(true); };
     const hideModal = () => { setOpen(false); };
+    const modalHandler: ModalContextInterface = { open, hideModal, showModal };
+
+    const classes = useStyles();
 
     return (
         <div>
@@ -31,10 +41,12 @@ const ModalWrapper = (props: any) => {
             >
                 <Slide in={open} direction={"down"} timeout={200}>
                     <div className={classes.paper}>
-                        <div>
-                            {/*TODO figure out how to pass hideModal as prop to child here*/}
+
+                        {/* provide modal state and state changers here */}
+                        <ModalContext.Provider value={modalHandler}>
                             {props.children}
-                        </div>
+                        </ModalContext.Provider>
+
                         <br />
                         <Button variant={"contained"} color="secondary" onClick={hideModal}>
                             Close button from wrapper that actually works

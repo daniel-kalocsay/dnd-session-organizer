@@ -3,6 +3,7 @@ import {FirebaseContext} from "../../../contexts/FirebaseContext";
 import {Button, Grid, TextField, FormControl} from "@material-ui/core";
 import {AccountCircle, Lock, Mail} from "@material-ui/icons";
 import firebase from "firebase";
+import {ModalContext} from "../../../../wrappers/ModalWrapper";
 
 class userModel {
     username: string = "";
@@ -15,6 +16,9 @@ class userModel {
 }
 
 const RegisterForm = (props: any) => {
+
+    const { hideModal } = useContext(ModalContext)!;
+
     const auth = useContext(FirebaseContext)!.auth;
     const usersDB = firebase.firestore().collection("users");
 
@@ -77,7 +81,7 @@ const RegisterForm = (props: any) => {
                     new userModel(registrationData.username, [])
                 );
                 usersDB.doc(cred.user!.uid).set(newUser);
-                props.hide();
+                hideModal();
 
             })
             .catch((error: any) => {
@@ -166,7 +170,7 @@ const RegisterForm = (props: any) => {
                 {/*    </Grid>*/}
                 {/*</Grid>*/}
 
-                <Button variant={"contained"} color="secondary" onClick={props.hide}>
+                <Button variant={"contained"} color="secondary" onClick={hideModal}>
                     Close
                 </Button>
                 <Button variant={"contained"} onClick={handleSubmit} color="primary" >
