@@ -57,7 +57,7 @@ export const CombatfieldList = () => {
   return (
     <div id="combatfield-list">
       {combatfieldData.map(combatfield => (
-        <p>{combatfield.name}</p>
+        <p key={combatfield.uid}>{combatfield.name}</p>
       ))}
     </div>
   );
