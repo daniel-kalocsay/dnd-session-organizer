@@ -28,9 +28,6 @@ export const CombatfieldList = () => {
   const [user, initializing, authError] = useAuthState(auth);
 
   useEffect(() => {
-    let ids = [] as string[];
-    let combatfieldsTemp = [] as CombatfieldData[];
-
     if (user) {
       usersRef
         .doc(user!.uid)
@@ -39,37 +36,29 @@ export const CombatfieldList = () => {
         .then(function(querySnapshot: QuerySnapshot) {
           querySnapshot.forEach((data: DocumentSnapshot) => {
             let entry = data.data();
-            ids.push(entry!.gridId);
-          });
-          ids.forEach((id: string) => {
             combatfieldsRef
-              .doc(id)
+              .doc(entry!.gridId)
               .get()
               .then((combatfieldRecord: DocumentSnapshot) => {
                 if (combatfieldRecord.exists) {
-                  let record = combatfieldRecord.data();
+                  let entry = combatfieldRecord.data();
                   let data = new CombatfieldData(
-                    record!.name,
+                    entry!.name,
                     combatfieldRecord.id
                   );
-                  combatfieldsTemp.push(Object.assign({}, data));
+                  setCombatfieldData(oldData => [...oldData, data]);
                 }
               });
           });
-          setCombatfieldData(combatfieldData => [...combatfieldsTemp]);
-        })
+        });
     }
   }, [user]);
 
-  useEffect(() => {
-    console.log(combatfieldData)
-  }, [combatfieldData])
-
   return (
     <div id="combatfield-list">
-      {combatfieldData
-        ? combatfieldData.map(combatfield => <p>{combatfield.name}</p>)
-        : ""}
+      {combatfieldData.map(combatfield => (
+        <p>{combatfield.name}</p>
+      ))}
     </div>
   );
 };
