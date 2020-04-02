@@ -1,6 +1,6 @@
 import React from "react";
 import UserReference from "./UserReference";
-import UserInfo from "./UserInfo";
+import UserInfo from "../../model/UserInfo";
 
 const UserList = (props: any) => {
   return (

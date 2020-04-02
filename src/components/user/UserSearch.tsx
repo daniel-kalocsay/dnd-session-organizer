@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import firebase from "firebase";
-import UserInfo from "./UserInfo";
+import UserInfo from "../../model/UserInfo";
 import UserList from "./UserList";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;

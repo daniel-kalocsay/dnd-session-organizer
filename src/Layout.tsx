@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import Navbar from "./components/ui/Navbar";
 import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 import HomePage from "./components/HomePage";
-import CombatView from "./components/ui/CombatView";
-import { UserSearch } from "./components/user/UserSearch";
 import WithAuth from "./wrappers/WithAuth";
-import { NewCombatField } from "./components/combat/NewCombatField";
+import { NewCombatfield } from "./components/combat/NewCombatfield";
+import { CombatfieldList } from "./components/combat/CombatfieldList";
+import Session from "./components/ui/Session";
 
 const Layout = () => {
   return (
@@ -26,20 +26,29 @@ const Layout = () => {
 
           <Route exact path={"/combat"}>
             <WithAuth
-              loadingMsg={"Loading combat view..."}
-              unauthorizedMsg={"You cannot access this grid."}
+              loadingMsg={"Loading combatfields..."}
+              unauthorizedMsg={"Log in to access your combatfields"}
             >
-              <CombatView />
+              <CombatfieldList />
+            </WithAuth>
+          </Route>
+
+          <Route exact path={"/my-lobbies"}>
+            <WithAuth
+              loadingMsg={"Loading lobbies..."}
+              unauthorizedMsg={"Log in to access your lobbies"}
+            >
+              <Session />
             </WithAuth>
           </Route>
 
           <Route path={"/new-combat-field"}>
             <WithAuth
               unauthorizedMsg={
-                "You need to be logged in to create a new combat field"
+                "You need to be logged in to create a new combatfield"
               }
             >
-              <NewCombatField />
+              <NewCombatfield />
             </WithAuth>
           </Route>
         </div>

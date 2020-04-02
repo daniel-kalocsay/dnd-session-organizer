@@ -10,7 +10,7 @@ const Navbar = () => {
     <MDBNavbar position={"static"}>
       <Link to={"/"}>Home</Link>
 
-      <Link to={"/combat"}>Combat grid</Link>
+      <Link to={"/my-lobbies"}>My Lobbies</Link>
 
       <Link to={"/new-combat-field"}>Create new combat field</Link>
 

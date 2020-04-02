@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import UserInfo from "./UserInfo";
+import React from "react";
+import UserInfo from "../../model/UserInfo";
 
 interface userClickable {
   key: string;
