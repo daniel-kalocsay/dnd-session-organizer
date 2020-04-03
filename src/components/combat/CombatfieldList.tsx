@@ -1,7 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
-import firebase from "firebase";
-import { FirebaseContext } from "../contexts/FirebaseContext";
-import { useAuthState } from "react-firebase-hooks/auth";
+import React from "react";
+
 import CombatfieldData from "../../model/CombatfieldData";
 
 export const CombatfieldList = (props: any) => {

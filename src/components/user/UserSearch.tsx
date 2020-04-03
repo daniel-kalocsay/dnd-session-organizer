@@ -6,7 +6,7 @@ import UserList from "./UserList";
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
 
-export const UserSearch = (props: any) => {
+const UserSearch = (props: any) => {
   const usersDB = firebase.firestore().collection("users");
   const [users, setUsers] = useState([] as UserInfo[]);
 
@@ -49,3 +49,5 @@ export const UserSearch = (props: any) => {
     </div>
   );
 };
+
+export default UserSearch;

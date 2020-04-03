@@ -1,11 +1,14 @@
-import firebase from "firebase";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
+
+import firebase from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import { useAuthState } from "react-firebase-hooks/auth";
+
 import Grid from "../../model/Grid";
-import GridSizeForm from "./GridSizeForm";
-import { UserSearch } from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
+
+import GridSizeForm from "./GridSizeForm";
+import UserSearch from "../user/UserSearch";
 import UserReference from "../user/UserReference";
 
 //TODO move component to a different directory, "combat" should only handle the combat itself

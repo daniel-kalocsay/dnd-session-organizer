@@ -1,9 +1,12 @@
-import { CombatfieldList } from "../combat/CombatfieldList";
 import React, { useState, useContext, useEffect } from "react";
+
 import firebase from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import { useAuthState } from "react-firebase-hooks/auth";
+
 import CombatfieldData from "../../model/CombatfieldData";
+
+import { CombatfieldList } from "../combat/CombatfieldList";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;

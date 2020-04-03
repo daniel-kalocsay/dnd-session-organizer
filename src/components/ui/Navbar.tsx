@@ -1,9 +1,15 @@
 import React from "react";
 import { Link, Route } from "react-router-dom";
+
 import { MDBNavbar } from "mdbreact";
-import { AppBar, Toolbar } from "@material-ui/core";
+
 import UserInfo from "../user/UserProfile";
-import WithAuth from "../../wrappers/WithAuth";
+
+//TODO make navbar a grid, and with MUI components instead
+
+// import AppBar from "@material-ui/core/AppBar";
+// import Toolbar from "@material-ui/core/Toolbar";
+
 
 const Navbar = () => {
   return (
@@ -20,5 +26,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-//TODO make navbar a grid

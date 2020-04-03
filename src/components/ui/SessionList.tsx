@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import Session from "./Session";
 
 export const SessionList = () => {
