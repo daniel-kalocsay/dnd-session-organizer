@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-
 import Session from "./Session";
 
-export const SessionList = () => {
+const SessionList = () => {
   const [sessions, setSessions] = useState([] as any[]);
 
   //TODO fetch sessions belonging to the user
@@ -33,3 +32,5 @@ export const SessionList = () => {
     </div>
   );
 };
+
+export default SessionList;

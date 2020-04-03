@@ -13,7 +13,7 @@ import UserReference from "../user/UserReference";
 
 //TODO move component to a different directory, "combat" should only handle the combat itself
 
-export const NewCombatfield = () => {
+const NewCombatfield = () => {
   const combatfields = firebase.firestore().collection("combatfields");
   const users = firebase.firestore().collection("users");
 
@@ -79,3 +79,5 @@ export const NewCombatfield = () => {
     </div>
   );
 };
+
+export default NewCombatfield;

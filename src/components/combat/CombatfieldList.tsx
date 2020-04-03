@@ -2,7 +2,7 @@ import React from "react";
 
 import CombatfieldData from "../../model/CombatfieldData";
 
-export const CombatfieldList = (props: any) => {
+const CombatfieldList = (props: any) => {
   return (
     <div id="combatfield-list">
       {props.combatfields
@@ -13,3 +13,5 @@ export const CombatfieldList = (props: any) => {
     </div>
   );
 };
+
+export default CombatfieldList;

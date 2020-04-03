@@ -1,5 +1,6 @@
 import React from "react";
-import { CombatfieldList } from "./combat/CombatfieldList";
+
+import CombatfieldList from "./combat/CombatfieldList";
 
 const HomePage = () => {
   return (

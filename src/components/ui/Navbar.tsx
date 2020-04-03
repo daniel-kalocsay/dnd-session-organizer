@@ -2,7 +2,6 @@ import React from "react";
 import { Link, Route } from "react-router-dom";
 
 import { MDBNavbar } from "mdbreact";
-
 import UserInfo from "../user/UserProfile";
 
 //TODO make navbar a grid, and with MUI components instead

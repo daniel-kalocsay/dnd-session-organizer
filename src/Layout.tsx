@@ -1,12 +1,12 @@
 import React from "react";
-import Navbar from "./components/ui/Navbar";
 import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
+
+import Navbar from "./components/ui/Navbar";
 import HomePage from "./components/HomePage";
 import WithAuth from "./wrappers/WithAuth";
-import { NewCombatfield } from "./components/combat/NewCombatfield";
-import { CombatfieldList } from "./components/combat/CombatfieldList";
-import Session from "./components/ui/Session";
-import { SessionList } from "./components/ui/SessionList";
+import NewCombatfield from "./components/combat/NewCombatfield";
+import CombatfieldList from "./components/combat/CombatfieldList";
+import SessionList from "./components/ui/SessionList";
 
 const Layout = () => {
   return (

@@ -6,7 +6,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 import CombatfieldData from "../../model/CombatfieldData";
 
-import { CombatfieldList } from "../combat/CombatfieldList";
+import CombatfieldList from "../combat/CombatfieldList";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
