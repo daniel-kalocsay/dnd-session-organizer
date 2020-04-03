@@ -1,5 +1,10 @@
 import React from "react";
-import {Button, FormControl, Slider, TextField, Typography} from "@material-ui/core";
+
+import Button from "@material-ui/core/Button";
+import FormControl from "@material-ui/core/FormControl";
+import Slider from "@material-ui/core/Slider";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 
 const GridSizeForm = (props: any) => {
     const marks = [

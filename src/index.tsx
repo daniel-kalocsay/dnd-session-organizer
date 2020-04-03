@@ -4,7 +4,6 @@ import App from './App';
 import * as firebase from "firebase";
 
 //TODO use Material UI instead of MDB
-//TODO import MUI components separately to increase build time!!!
 
 // import mdb styles
 import "bootstrap-css-only/css/bootstrap.min.css";
