@@ -1,6 +1,13 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
-import {Backdrop, Button, Modal, Slide} from "@material-ui/core";
-import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+
+import Backdrop from "@material-ui/core/Backdrop";
+import Button from "@material-ui/core/Button";
+import Modal from "@material-ui/core/Modal";
+import Slide from "@material-ui/core/Slide";
+
+import createStyles from "@material-ui/core/styles/createStyles";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import { Theme } from "@material-ui/core/styles/createMuiTheme";
 
 export interface ModalContextInterface {
     open: boolean;
