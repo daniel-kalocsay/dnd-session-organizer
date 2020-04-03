@@ -9,6 +9,7 @@ import CombatfieldList from "./components/combat/CombatfieldList";
 import SessionList from "./components/ui/SessionList";
 
 const Layout = () => {
+  //TODO use react-swipeable views?
   return (
     <Router>
       <div style={styles.appWrapper}>
