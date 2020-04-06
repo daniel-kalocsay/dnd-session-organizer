@@ -5,6 +5,7 @@ import CombatfieldData from "../../model/CombatfieldData";
 const CombatfieldList = (props: any) => {
   return (
     <div id="combatfield-list">
+      <p>Combatfields:</p>
       {props.combatfields
         ? props.combatfields.map((combatfield: CombatfieldData) => (
             <p key={combatfield.uid}>{combatfield.name}</p>
