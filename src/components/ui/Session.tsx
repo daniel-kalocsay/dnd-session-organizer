@@ -5,8 +5,13 @@ import {FirebaseContext} from "../contexts/FirebaseContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 
 import CombatfieldData from "../../model/CombatfieldData";
-
 import CombatfieldList from "../combat/CombatfieldList";
+
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {Typography} from "@material-ui/core";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
@@ -14,13 +19,13 @@ type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 const Session = (props: any) => {
     const combatfieldsRef = firebase.firestore().collection("combatfields");
 
-    const [combatfieldData, setCombatfieldData] = useState(
-        [] as CombatfieldData[]
-    );
     const usersRef = firebase.firestore().collection("users");
 
     const auth = useContext(FirebaseContext)!.auth;
     const [user, initializing, authError] = useAuthState(auth);
+
+    const [combatfieldData, setCombatfieldData] = useState([] as CombatfieldData[]);
+    const [selected, setSelected] = useState<boolean>(false);
 
     useEffect(() => {
         if (user) {
@@ -57,13 +62,17 @@ const Session = (props: any) => {
     };
 
     return (
-        <div>
-            {props.sessionData.clicked ? (
-                <CombatfieldList combatfields={combatfieldData}/>
-            ) : (
-                ""
-            )}
-        </div>
+        <ExpansionPanel expanded={selected} onChange={ () => {setSelected(!selected)} }>
+
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} >
+                    <Typography>Details</Typography>
+                </ExpansionPanelSummary>
+
+                <ExpansionPanelDetails>
+                    <CombatfieldList combatfields={combatfieldData} />
+                </ExpansionPanelDetails>
+
+        </ExpansionPanel>
     );
 };
 
