@@ -65,7 +65,7 @@ const SessionList = () => {
   return (
     <div style={styles.sessionListContainer}>
       {sessions.map((session: sessionPreviewData) => (
-        <div style={styles.cardContainer}>
+        <div style={styles.cardContainer} key={session.uid}>
           <Card style={styles.card}>
             <CardHeader title={session.name} />
             <CardContent>
