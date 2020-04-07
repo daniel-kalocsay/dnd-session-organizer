@@ -5,7 +5,6 @@ import Navbar from "./components/ui/Navbar";
 import HomePage from "./components/HomePage";
 import WithAuth from "./wrappers/WithAuth";
 import NewCombatfield from "./components/combat/NewCombatfield";
-import CombatfieldList from "./components/combat/CombatfieldList";
 import SessionList from "./components/ui/SessionList";
 import CombatView from "./components/ui/CombatView";
 import SessionDetails from "./components/ui/SessionDetails";
