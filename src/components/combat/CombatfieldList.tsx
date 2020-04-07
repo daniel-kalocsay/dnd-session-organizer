@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import CombatfieldData from "../../model/CombatfieldData";
 
@@ -8,7 +9,9 @@ const CombatfieldList = (props: any) => {
       <p>Combatfields:</p>
       {props.combatfields
         ? props.combatfields.map((combatfield: CombatfieldData) => (
-            <p key={combatfield.uid}>{combatfield.name}</p>
+            <Link to="/combat" key={combatfield.uid}>
+              {combatfield.name}
+            </Link>
           ))
         : ""}
     </div>
