@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Square from "./Square";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import firebase from "firebase";
+
 type DataSnapshot = firebase.database.DataSnapshot;
 
 const CombatGrid = () => {

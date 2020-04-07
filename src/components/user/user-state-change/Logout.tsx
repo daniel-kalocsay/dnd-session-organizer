@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
+
 import { FirebaseContext } from "../../contexts/FirebaseContext";
-import {Button} from "@material-ui/core";
+
+import Button from "@material-ui/core/Button";
 
 const Logout: React.FC = () => {
     const auth = useContext(FirebaseContext)!.auth;

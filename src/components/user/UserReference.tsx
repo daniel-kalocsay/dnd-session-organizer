@@ -1,4 +1,5 @@
 import React from "react";
+
 import UserInfo from "../../model/UserInfo";
 
 interface userClickable {

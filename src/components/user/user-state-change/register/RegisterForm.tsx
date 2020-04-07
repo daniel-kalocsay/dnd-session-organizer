@@ -1,9 +1,17 @@
 import React, {useState, useContext, ChangeEvent} from "react";
-import {FirebaseContext} from "../../../contexts/FirebaseContext";
-import {Button, Grid, TextField, FormControl} from "@material-ui/core";
-import {AccountCircle, Lock, Mail} from "@material-ui/icons";
+
 import firebase from "firebase";
-import {ModalContext} from "../../../../wrappers/ModalWrapper";
+import { FirebaseContext } from "../../../contexts/FirebaseContext";
+import { ModalContext } from "../../../../wrappers/ModalWrapper";
+
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import FormControl from "@material-ui/core/FormControl";
+
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import Lock from "@material-ui/icons/Lock";
+import Mail from "@material-ui/icons/Mail";
 
 class userModel {
     username: string = "";

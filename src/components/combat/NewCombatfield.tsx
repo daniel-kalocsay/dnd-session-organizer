@@ -1,16 +1,19 @@
-import firebase from "firebase";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
+
+import firebase from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import { useAuthState } from "react-firebase-hooks/auth";
+
 import Grid from "../../model/Grid";
-import GridSizeForm from "./GridSizeForm";
-import { UserSearch } from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
+
+import GridSizeForm from "./GridSizeForm";
+import UserSearch from "../user/UserSearch";
 import UserReference from "../user/UserReference";
 
 //TODO move component to a different directory, "combat" should only handle the combat itself
 
-export const NewCombatfield = () => {
+const NewCombatfield = () => {
   const combatfields = firebase.firestore().collection("combatfields");
   const users = firebase.firestore().collection("users");
 
@@ -76,3 +79,5 @@ export const NewCombatfield = () => {
     </div>
   );
 };
+
+export default NewCombatfield;

@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 
-import {FirebaseContext} from "../contexts/FirebaseContext";
-import {useAuthState} from "react-firebase-hooks/auth";
+import { FirebaseContext } from "../contexts/FirebaseContext";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 import Logout from "./user-state-change/Logout";
 import ModalWrapper from "../../wrappers/ModalWrapper";

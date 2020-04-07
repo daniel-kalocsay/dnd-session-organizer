@@ -1,6 +1,7 @@
 import React from "react";
-import {FirebaseProvider} from "./components/contexts/FirebaseContext"
-import {UserProvider} from "./components/contexts/UserContext";
+
+import { FirebaseProvider } from "./components/contexts/FirebaseContext"
+import { UserProvider } from "./components/contexts/UserContext";
 
 const AppWrapper = (props: any) => {
     return (

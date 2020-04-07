@@ -1,9 +1,15 @@
 import React, {ChangeEvent, useContext, useState} from "react";
-import {Button, Grid, TextField} from "@material-ui/core";
-import {AccountCircle, Lock} from "@material-ui/icons";
-import {FirebaseContext} from "../../../contexts/FirebaseContext";
+
 import firebase from "firebase";
+import { FirebaseContext } from "../../../contexts/FirebaseContext";
 import { ModalContext } from "../../../../wrappers/ModalWrapper"
+
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import Lock from "@material-ui/icons/Lock";
 
 const LoginForm = (props: any) => {
 

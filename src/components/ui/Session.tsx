@@ -1,68 +1,79 @@
-import { CombatfieldList } from "../combat/CombatfieldList";
-import React, { useState, useContext, useEffect } from "react";
+import React, {useState, useContext, useEffect} from "react";
+
 import firebase from "firebase";
-import { FirebaseContext } from "../contexts/FirebaseContext";
-import { useAuthState } from "react-firebase-hooks/auth";
+import {FirebaseContext} from "../contexts/FirebaseContext";
+import {useAuthState} from "react-firebase-hooks/auth";
+
 import CombatfieldData from "../../model/CombatfieldData";
+import CombatfieldList from "../combat/CombatfieldList";
+
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {Typography} from "@material-ui/core";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 const Session = (props: any) => {
-  const combatfieldsRef = firebase.firestore().collection("combatfields");
+    const combatfieldsRef = firebase.firestore().collection("combatfields");
 
-  const [combatfieldData, setCombatfieldData] = useState(
-    [] as CombatfieldData[]
-  );
-  const usersRef = firebase.firestore().collection("users");
+    const usersRef = firebase.firestore().collection("users");
 
-  const auth = useContext(FirebaseContext)!.auth;
-  const [user, initializing, authError] = useAuthState(auth);
+    const auth = useContext(FirebaseContext)!.auth;
+    const [user, initializing, authError] = useAuthState(auth);
 
-  useEffect(() => {
-    if (user) {
-      fetchCombatfields();
-    }
-  }, [user]);
+    const [combatfieldData, setCombatfieldData] = useState([] as CombatfieldData[]);
+    const [selected, setSelected] = useState<boolean>(false);
 
-  //TODO use session ID as well
-  const fetchCombatfields = () => {
-    let sessionId = props.sessionData.id;
+    useEffect(() => {
+        if (user) {
+            fetchCombatfields();
+        }
+    }, [user]);
 
-    usersRef
-      .doc(user!.uid)
-      .collection("combatfields")
-      .get()
-      .then(function(querySnapshot: QuerySnapshot) {
-        querySnapshot.forEach((data: DocumentSnapshot) => {
-          let entry = data.data();
-          combatfieldsRef
-            .doc(entry!.gridId)
+    //TODO use session ID as well
+    const fetchCombatfields = () => {
+        let sessionId = props.sessionData.id;
+
+        usersRef
+            .doc(user!.uid)
+            .collection("combatfields")
             .get()
-            .then((combatfieldRecord: DocumentSnapshot) => {
-              if (combatfieldRecord.exists) {
-                let entry = combatfieldRecord.data();
-                let data = new CombatfieldData(
-                  entry!.name,
-                  combatfieldRecord.id
-                );
-                setCombatfieldData(oldData => [...oldData, data]);
-              }
+            .then(function (querySnapshot: QuerySnapshot) {
+                querySnapshot.forEach((data: DocumentSnapshot) => {
+                    let entry = data.data();
+                    combatfieldsRef
+                        .doc(entry!.gridId)
+                        .get()
+                        .then((combatfieldRecord: DocumentSnapshot) => {
+                            if (combatfieldRecord.exists) {
+                                let entry = combatfieldRecord.data();
+                                let data = new CombatfieldData(
+                                    entry!.name,
+                                    combatfieldRecord.id
+                                );
+                                setCombatfieldData(oldData => [...oldData, data]);
+                            }
+                        });
+                });
             });
-        });
-      });
-  };
+    };
 
-  return (
-    <div>
-      <p>{props.sessionData.name}</p>
-      {props.sessionData.clicked ? (
-        <CombatfieldList combatfields={combatfieldData} />
-      ) : (
-        ""
-      )}
-    </div>
-  );
+    return (
+        <ExpansionPanel expanded={selected} onChange={ () => {setSelected(!selected)} }>
+
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} >
+                    <Typography>Details</Typography>
+                </ExpansionPanelSummary>
+
+                <ExpansionPanelDetails>
+                    <CombatfieldList combatfields={combatfieldData} />
+                </ExpansionPanelDetails>
+
+        </ExpansionPanel>
+    );
 };
 
 export default Session;
