@@ -18,7 +18,6 @@ export const SessionList = () => {
       return { id: session.id, name: session.name, clicked: session.id === id };
     });
 
-    console.log(newSessions);
     setSessions(newSessions);
   };
 
