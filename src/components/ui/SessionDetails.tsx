@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import firebase from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
-import { useAuthState } from "react-firebase-hooks/auth";
 import CombatfieldData from "../../model/CombatfieldData";
 import CombatfieldList from "../combat/CombatfieldList";
 import UserSearch from "../user/UserSearch";
@@ -10,13 +9,11 @@ type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 const SessionDetails = (props: any) => {
-  const combatfieldsRef = firebase.firestore().collection("combatfields");
-  const sessionsRef = firebase.firestore().collection("sessions");
-  const usersRef = firebase.firestore().collection("users");
+  const combatfieldsRef = useContext(FirebaseContext)!.combatfieldsRef;
+  const sessionsRef = useContext(FirebaseContext)!.sessionsRef;
+  const usersRef = useContext(FirebaseContext)!.usersRef;
 
   const [sessionId, setId] = useState("" as string);
-  const auth = useContext(FirebaseContext)!.auth;
-  const [user, initializing, authError] = useAuthState(auth);
   const [combatfieldData, setCombatfieldData] = useState(
     [] as CombatfieldData[]
   );

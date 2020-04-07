@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import firebase from "firebase";
-
+import { FirebaseContext } from "../contexts/FirebaseContext";
 import UserInfo from "../../model/UserInfo";
 import UserList from "./UserList";
 
@@ -8,7 +8,7 @@ type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
 
 const UserSearch = (props: any) => {
-  const usersDB = firebase.firestore().collection("users");
+  const usersDB = useContext(FirebaseContext)!.usersRef;
   const [users, setUsers] = useState([] as UserInfo[]);
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {

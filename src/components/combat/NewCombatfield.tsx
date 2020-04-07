@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import firebase from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
@@ -14,8 +14,8 @@ import UserReference from "../user/UserReference";
 //TODO move component to a different directory, "combat" should only handle the combat itself
 
 const NewCombatfield = () => {
-  const combatfields = firebase.firestore().collection("combatfields");
-  const users = firebase.firestore().collection("users");
+  const combatfields = useContext(FirebaseContext)!.combatfieldsRef;
+  const users = useContext(FirebaseContext)!.usersRef;
 
   const auth = useContext(FirebaseContext)!.auth;
   const [user, initializing, authError] = useAuthState(auth);
@@ -30,7 +30,7 @@ const NewCombatfield = () => {
     let combatfieldName = event.target.combatfieldName.value;
     console.log(`trying to add ${combatfieldName} to db`);
 
-    let playerIDs = players.map(player => player.uid) as string[];
+    let playerIDs = players.map((player) => player.uid) as string[];
 
     //TODO lazy creation of grid
     // save grid with userID

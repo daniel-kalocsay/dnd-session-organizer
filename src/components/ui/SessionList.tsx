@@ -24,8 +24,8 @@ class sessionPreviewData {
 }
 
 const SessionList = () => {
-  const sessionsRef = firebase.firestore().collection("sessions");
-  const usersRef = firebase.firestore().collection("users");
+  const sessionsRef = useContext(FirebaseContext)!.sessionsRef;
+  const usersRef = useContext(FirebaseContext)!.usersRef;
   const [sessions, setSessions] = useState([] as any[]);
 
   const auth = useContext(FirebaseContext)!.auth;
