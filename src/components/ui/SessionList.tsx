@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import firebase from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
-
-import Session from "./Session";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -66,14 +64,14 @@ const SessionList = () => {
 
   return (
     <div style={styles.sessionListContainer}>
-      {sessions.map((session) => (
+      {sessions.map((session: sessionPreviewData) => (
         <div style={styles.cardContainer}>
           <Card style={styles.card}>
             <CardHeader title={session.name} />
             <CardContent>
-              <p>created on: just now</p>
+              <p>created on: right now</p>
 
-              <Link to={"/combat"}>Combatfields</Link>
+              <Link to={`/session?id=${session.uid}`}>Details</Link>
             </CardContent>
           </Card>
         </div>

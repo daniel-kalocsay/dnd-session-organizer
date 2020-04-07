@@ -7,6 +7,8 @@ import WithAuth from "./wrappers/WithAuth";
 import NewCombatfield from "./components/combat/NewCombatfield";
 import CombatfieldList from "./components/combat/CombatfieldList";
 import SessionList from "./components/ui/SessionList";
+import CombatView from "./components/ui/CombatView";
+import SessionDetails from "./components/ui/SessionDetails";
 
 const Layout = () => {
   //TODO use react-swipeable views?
@@ -31,7 +33,7 @@ const Layout = () => {
               loadingMsg={"Loading combatfields..."}
               unauthorizedMsg={"Log in to access your combatfields"}
             >
-              <CombatfieldList />
+              <CombatView />
             </WithAuth>
           </Route>
 
@@ -41,6 +43,15 @@ const Layout = () => {
               unauthorizedMsg={"Log in to access your sessions"}
             >
               <SessionList />
+            </WithAuth>
+          </Route>
+
+          <Route exact path={"/session"}>
+            <WithAuth
+              loadingMsg={"Loading session details..."}
+              unauthorizedMsg={"Log in to continue"}
+            >
+              <SessionDetails />
             </WithAuth>
           </Route>
 
@@ -65,12 +76,12 @@ const styles = {
   appWrapper: {
     display: "grid",
     gridTemplate: "repeat(auto-fit, 1fr)",
-    gridGap: "1em"
+    gridGap: "1em",
   },
   navBar: {
-    gridRow: "1/2"
+    gridRow: "1/2",
   },
   page: {
-    gridRow: "2/10"
-  }
+    gridRow: "2/10",
+  },
 };

@@ -3,14 +3,14 @@ import firebase from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import CombatfieldData from "../../model/CombatfieldData";
+import CombatfieldList from "../combat/CombatfieldList";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 const SessionDetails = (props: any) => {
   const combatfieldsRef = firebase.firestore().collection("combatfields");
-
-  const usersRef = firebase.firestore().collection("users");
+  const sessionsRef = firebase.firestore().collection("sessions");
 
   const auth = useContext(FirebaseContext)!.auth;
   const [user, initializing, authError] = useAuthState(auth);
@@ -24,35 +24,40 @@ const SessionDetails = (props: any) => {
     }
   }, [user]);
 
-  //TODO use session ID as well
   const fetchCombatfields = () => {
-    let sessionId = props.sessionData.id;
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get("id");
 
-    usersRef
-      .doc(user!.uid)
+    sessionsRef
+      .doc(sessionId!)
       .collection("combatfields")
       .get()
-      .then(function(querySnapshot: QuerySnapshot) {
+      .then(function (querySnapshot: QuerySnapshot) {
         querySnapshot.forEach((data: DocumentSnapshot) => {
-          let entry = data.data();
           combatfieldsRef
-            .doc(entry!.gridId)
+            .doc(data.id)
             .get()
             .then((combatfieldRecord: DocumentSnapshot) => {
               if (combatfieldRecord.exists) {
                 let entry = combatfieldRecord.data();
+                console.log(entry);
+
                 let data = new CombatfieldData(
                   entry!.name,
                   combatfieldRecord.id
                 );
-                setCombatfieldData(oldData => [...oldData, data]);
+                setCombatfieldData((oldData) => [...oldData, data]);
               }
             });
         });
       });
   };
 
-  return <div></div>;
+  return (
+    <div>
+      <CombatfieldList combatfields={combatfieldData} />
+    </div>
+  );
 };
 
 export default SessionDetails;
