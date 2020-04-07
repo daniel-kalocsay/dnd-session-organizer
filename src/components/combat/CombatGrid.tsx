@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import firebase from "firebase";
 
 import Square from "./Square";
-import UserInfo from "../../model/UserInfo";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
@@ -22,8 +21,9 @@ const CombatGrid = (props: any) => {
             .get()
             .then((snapshot: DocumentSnapshot) => {
                 let grid = snapshot.data()!;
-                grid.tiles.forEach((tile: any) => {
-                    setSquares(squares => [...squares, {id: snapshot.id, active: tile.active}])
+                grid.tiles.forEach((tile: any, index:any) => {
+                    let square = {id: index, active: tile.active};
+                    setSquares(squares => [...squares, square])
                 });
             });
 
@@ -38,20 +38,11 @@ const CombatGrid = (props: any) => {
         fetchGridData();
     }, []);
 
-    useEffect(() => {
-        // console.log(squares);
-    }, [squares]);
-
-
-    //TODO use these to store individual grids in db
-
     // grids.push({tiles: newSquares}) // saves grid in db under "grids" node and generates key for it
-    // myGrid.set({tiles: newSquares}); // sets data in a node
 
     const movePlayer = (id: any) => {
-        console.log(id);
-        let newSquares = squares.map(square => {
-            return { active: square.id === id };
+        let newSquares = squares.map((square, index) => {
+            return { active: index === id };
         });
 
         gridRef.update({ tiles: newSquares }).then(() => {
@@ -63,10 +54,10 @@ const CombatGrid = (props: any) => {
     return (
         <div style={styles.grid}>
             {squares
-                ? squares.map(square => (
+                ? squares.map((square, index) => (
                     <div
                         style={square.active ? styles.active : styles.inactive}
-                        onClick={() => movePlayer(square.id)}
+                        onClick={() => movePlayer(index)}
                     >
                         <Square square={square} />
                     </div>
@@ -81,8 +72,8 @@ export default CombatGrid;
 const styles = {
     grid: {
         display: "grid",
-        gridTemplateRows: "repeat(auto-fill, 1fr)",
-        gridTemplateColumns: "repeat(5, 1fr)",
+        gridTemplateRows: "repeat(10, 1fr)",
+        gridTemplateColumns: "repeat(10, 1fr)",
         backgroundColor: "lightgreen",
         //TODO don't use this magic number
         height: "30em"
