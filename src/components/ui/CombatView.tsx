@@ -4,7 +4,10 @@ import CombatGrid from "../combat/CombatGrid";
 import Players from "../combat/Players";
 import Menu from "../combat/Menu";
 
-const CombatView = () => {
+const CombatView = (props: any) => {
+  const params = new URLSearchParams(window.location.search);
+  const gridId = params.get("id");
+
   return (
     <div style={styles.combatViewWrapper}>
       <div style={styles.playersContainer}>
@@ -12,7 +15,7 @@ const CombatView = () => {
       </div>
 
       <div style={styles.gridContainer}>
-        <CombatGrid />
+        <CombatGrid gridId={gridId} />
       </div>
 
       <div style={styles.sideBar}>
