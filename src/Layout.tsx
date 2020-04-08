@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 import Navbar from "./components/ui/Navbar";
 import HomePage from "./components/HomePage";
 import WithAuth from "./wrappers/WithAuth";
-import NewCombatfield from "./components/combat/NewCombatfield";
+import NewSession from "./components/ui/NewSession";
 import SessionList from "./components/ui/SessionList";
 import CombatView from "./components/ui/CombatView";
 import SessionDetails from "./components/ui/SessionDetails";
@@ -54,13 +54,13 @@ const Layout = () => {
             </WithAuth>
           </Route>
 
-          <Route path={"/new-combat-field"}>
+          <Route path={"/new-session"}>
             <WithAuth
               unauthorizedMsg={
                 "You need to be logged in to create a new combatfield"
               }
             >
-              <NewCombatfield />
+              <NewSession />
             </WithAuth>
           </Route>
         </div>

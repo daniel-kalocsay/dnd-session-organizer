@@ -9,7 +9,6 @@ import UserInfo from "../user/UserProfile";
 // import AppBar from "@material-ui/core/AppBar";
 // import Toolbar from "@material-ui/core/Toolbar";
 
-
 const Navbar = () => {
   return (
     <MDBNavbar position={"static"}>
@@ -17,7 +16,7 @@ const Navbar = () => {
 
       <Link to={"/my-sessions"}>My Sessions</Link>
 
-      <Link to={"/new-combat-field"}>Create new combat field</Link>
+      <Link to={"/new-session"}>Create new session</Link>
 
       <UserInfo />
     </MDBNavbar>
