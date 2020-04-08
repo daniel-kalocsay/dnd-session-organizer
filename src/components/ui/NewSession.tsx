@@ -3,10 +3,8 @@ import { FirebaseContext } from "../contexts/FirebaseContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-//import firebase from "firebase";
 import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
-import UserReference from "../user/UserReference";
 import { firestore } from "firebase";
 
 const NewSession = () => {
@@ -24,6 +22,28 @@ const NewSession = () => {
     setPlayers([...players, userData]);
   }, []);
 
+  const addSessionIdToPlayers = (sessionId: string) => {
+    players.forEach((player: UserInfo) => {
+      usersRef.doc(player.uid!).collection("sessions").doc(sessionId).set({});
+    });
+  };
+
+  const addPlayerIdsToSession = (sessionId: string, session: Object) => {
+    let batch: firestore.WriteBatch = firebase.firestore().batch();
+    let sessionRef = sessionsRef.doc(sessionId).collection("players");
+
+    players.forEach((player: UserInfo) => {
+      batch.set(sessionRef.doc(player.uid!), {});
+    });
+
+    sessionsRef
+      .doc(sessionId)
+      .set(Object.assign({}, session))
+      .then(() => {
+        batch.commit();
+      });
+  };
+
   const createNewSession = (event: any) => {
     event.preventDefault();
 
@@ -39,29 +59,8 @@ const NewSession = () => {
       .collection("sessions")
       .doc().id;
 
-    // session Id added to players
-    players.forEach((player: UserInfo) => {
-      usersRef
-        .doc(player.uid!)
-        .collection("sessions")
-        .doc(generatedSessionId)
-        .set({});
-    });
-
-    // player Ids added to session
-    let batch: firestore.WriteBatch = firebase.firestore().batch();
-    let sessionRef = sessionsRef.doc(generatedSessionId).collection("players");
-
-    players.forEach((player: UserInfo) => {
-      batch.set(sessionRef.doc(player.uid!), {});
-    });
-
-    sessionsRef
-      .doc(generatedSessionId)
-      .set(Object.assign({}, session))
-      .then(() => {
-        batch.commit();
-      });
+    addSessionIdToPlayers(generatedSessionId);
+    addPlayerIdsToSession(generatedSessionId, session);
   };
 
   const addPlayer = (player: UserInfo) => {
