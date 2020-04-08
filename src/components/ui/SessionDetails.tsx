@@ -4,6 +4,7 @@ import { FirebaseContext } from "../contexts/FirebaseContext";
 import CombatfieldData from "../../model/CombatfieldData";
 import CombatfieldList from "../combat/CombatfieldList";
 import UserSearch from "../user/UserSearch";
+import NewSession from "./NewSession";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
@@ -65,6 +66,7 @@ const SessionDetails = (props: any) => {
     <div>
       <CombatfieldList combatfields={combatfieldData} />
       <UserSearch onAddPlayer={addPlayer} />
+      <NewSession />
     </div>
   );
 };
