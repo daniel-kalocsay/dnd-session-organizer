@@ -6,6 +6,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
+import Button from "@material-ui/core/Button";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
@@ -62,6 +63,21 @@ const SessionList = () => {
       });
   };
 
+  const deleteSession = (sessionId: string) => {
+    console.log("session: " + sessionId);
+
+    sessionsRef
+      .doc(sessionId)
+      .collection("players")
+      .get()
+      .then(function (querySnapshot: QuerySnapshot) {
+        querySnapshot.forEach((user: DocumentSnapshot) => {
+          console.log("user: " + user.id);
+          usersRef.doc(user.id).collection("sessions").doc(sessionId).delete();
+        });
+      });
+  };
+
   return (
     <div style={styles.sessionListContainer}>
       {sessions.map((session: sessionPreviewData) => (
@@ -72,6 +88,13 @@ const SessionList = () => {
               <p>created on: right now</p>
 
               <Link to={`/session?id=${session.uid}`}>Details</Link>
+              <Button
+                onClick={() => {
+                  deleteSession(session.uid);
+                }}
+              >
+                Delete
+              </Button>
             </CardContent>
           </Card>
         </div>
