@@ -63,18 +63,20 @@ const SessionList = () => {
       });
   };
 
+  //TODO im sure this can be done in a better way
   const deleteSession = (sessionId: string) => {
-    console.log("session: " + sessionId);
-
     sessionsRef
       .doc(sessionId)
       .collection("players")
       .get()
       .then(function (querySnapshot: QuerySnapshot) {
         querySnapshot.forEach((user: DocumentSnapshot) => {
-          console.log("user: " + user.id);
           usersRef.doc(user.id).collection("sessions").doc(sessionId).delete();
         });
+        querySnapshot.forEach((user: DocumentSnapshot) => {
+          user.ref.delete();
+        });
+        sessionsRef.doc(sessionId).delete();
       });
   };
 
