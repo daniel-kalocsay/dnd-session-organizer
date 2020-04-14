@@ -27,7 +27,7 @@ class sessionPreviewData {
 const SessionList = () => {
   const sessionsRef = useContext(FirebaseContext)!.sessionsRef;
   const usersRef = useContext(FirebaseContext)!.usersRef;
-  const [sessions, setSessions] = useState([] as any[]);
+  const [sessions, setSessions] = useState([] as sessionPreviewData[]);
 
   const auth = useContext(FirebaseContext)!.auth;
   const [user, initializing, authError] = useAuthState(auth);
@@ -64,6 +64,7 @@ const SessionList = () => {
   };
 
   //TODO im sure this can be done in a better way
+  //TODO some response after deletion
   const deleteSession = (sessionId: string) => {
     sessionsRef
       .doc(sessionId)
@@ -78,6 +79,11 @@ const SessionList = () => {
         });
         sessionsRef.doc(sessionId).delete();
       });
+
+    let updatedSessions = sessions.filter(
+      (session: sessionPreviewData) => session.uid !== sessionId
+    );
+    setSessions(updatedSessions);
   };
 
   return (
