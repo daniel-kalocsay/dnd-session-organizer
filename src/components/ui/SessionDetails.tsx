@@ -62,6 +62,7 @@ const SessionDetails = (props: any) => {
       .doc(sessionId)
       .collection("players")
       .onSnapshot(function (querySnapshot: QuerySnapshot) {
+        setPlayers([]);
         querySnapshot.forEach((player: DocumentSnapshot) => {
           usersRef
             .doc(player.id)
@@ -75,7 +76,6 @@ const SessionDetails = (props: any) => {
   };
 
   const addPlayer = (userData: UserInfo) => {
-    setPlayers([]);
     let userId = userData!.uid;
 
     usersRef.doc(userId!).collection("sessions").doc(sessionId).set({});
