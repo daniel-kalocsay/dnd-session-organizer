@@ -27,7 +27,9 @@ class CampaignPreviewData {
 
     getDate() {
         let date = this.createdAt;
-        return `${date.getFullYear()} ${date.getMonth()+1}.${date.getDate()} at ${date.getHours()}:${date.getMinutes()}`;
+        return date ?
+            `${date.getFullYear()} ${date.getMonth()+1}.${date.getDate()} at ${date.getHours()}:${date.getMinutes()}`
+            : "date unknown";
     }
 }
 
@@ -87,6 +89,11 @@ const CampaignList = () => {
                 });
                 campaignsRef.doc(campaignId).delete();
             });
+
+        usersRef
+            .doc(user!.uid)
+            .collection("campaigns")
+            .doc(campaignId).delete();
 
         let updatedCampaigns = campaigns.filter(
             (campaign: CampaignPreviewData) => campaign.uid !== campaignId
