@@ -5,7 +5,7 @@ import Navbar from "./components/ui/Navbar";
 import HomePage from "./components/HomePage";
 import WithAuth from "./wrappers/WithAuth";
 import NewSession from "./components/ui/NewSession";
-import SessionList from "./components/ui/SessionList";
+import CampaignList from "./components/ui/CampaignList";
 import CombatView from "./components/ui/CombatView";
 import SessionDetails from "./components/ui/SessionDetails";
 
@@ -41,7 +41,7 @@ const Layout = () => {
               loadingMsg={"Loading sessions..."}
               unauthorizedMsg={"Log in to access your sessions"}
             >
-              <SessionList />
+              <CampaignList />
             </WithAuth>
           </Route>
 

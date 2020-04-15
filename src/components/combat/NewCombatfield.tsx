@@ -47,7 +47,7 @@ const NewCombatfield = () => {
   };
 
   const addPlayer = (player: UserInfo) => {
-    if (!players.includes(player)) {
+    if (!players.some(p => p.uid === player.uid)) {
       let newPlayerList = [...players, player] as UserInfo[];
       setPlayers(newPlayerList);
     }

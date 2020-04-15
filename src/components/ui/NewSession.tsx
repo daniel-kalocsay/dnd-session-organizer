@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
 import { firestore } from "firebase";
+import NewCombatfield from "../combat/NewCombatfield";
 
 const NewSession = () => {
   const sessionsRef = useContext(FirebaseContext)!.sessionsRef;
@@ -73,6 +74,7 @@ const NewSession = () => {
   return (
     <div id="add-new-session">
       <h3>Create new session:</h3>
+      <NewCombatfield/>
       <form onSubmit={createNewSession}>
         <TextField
           id="sessionName"
