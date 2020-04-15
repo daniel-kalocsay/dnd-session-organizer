@@ -76,10 +76,6 @@ const SessionDetails = (props: any) => {
   };
 
   const addPlayer = (userData: UserInfo) => {
-<<<<<<< HEAD
-=======
-    //setPlayers([]);
->>>>>>> bb3633541a273bd61a1d09cd6366e2a3bd4de1c7
     let userId = userData!.uid;
 
     usersRef.doc(userId!).collection("sessions").doc(sessionId).set({});
