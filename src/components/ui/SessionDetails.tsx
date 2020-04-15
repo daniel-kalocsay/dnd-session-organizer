@@ -4,6 +4,7 @@ import { FirebaseContext } from "../contexts/FirebaseContext";
 import CombatfieldData from "../../model/CombatfieldData";
 import CombatfieldList from "../combat/CombatfieldList";
 import UserSearch from "../user/UserSearch";
+import UserInfo from "../../model/UserInfo";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
@@ -17,7 +18,7 @@ const SessionDetails = (props: any) => {
   const [combatfieldData, setCombatfieldData] = useState(
     [] as CombatfieldData[]
   );
-  const [players, setPlayers] = useState([] as any[]);
+  const [players, setPlayers] = useState([] as string[]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -60,36 +61,35 @@ const SessionDetails = (props: any) => {
     sessionsRef
       .doc(sessionId)
       .collection("players")
-      .get()
-      .then(function (querySnapshot: QuerySnapshot) {
+      .onSnapshot(function (querySnapshot: QuerySnapshot) {
         querySnapshot.forEach((player: DocumentSnapshot) => {
           usersRef
             .doc(player.id)
             .get()
             .then((userRecord: DocumentSnapshot) => {
-              setPlayers((oldData) => [
-                ...oldData,
-                userRecord.data()!.username,
-              ]);
+              let username = userRecord.data()!.username;
+              setPlayers((oldData) => [...oldData, username] as string[]);
             });
         });
       });
   };
 
-  const addPlayer = (userData: any) => {
+  const addPlayer = (userData: UserInfo) => {
+    setPlayers([]);
     let userId = userData!.uid;
 
-    usersRef.doc(userId).collection("sessions").doc(sessionId).set({});
-    sessionsRef.doc(sessionId).collection("players").doc(userId).set({});
+    usersRef.doc(userId!).collection("sessions").doc(sessionId).set({});
+    sessionsRef.doc(sessionId).collection("players").doc(userId!).set({});
   };
 
   return (
     <div>
+      <h2>{sessionId}</h2>
       <CombatfieldList combatfields={combatfieldData} />
       <h3>Add player to session:</h3>
       <UserSearch onAddPlayer={addPlayer} />
       <h3>Players in the session:</h3>
-      {players.map((player) => (
+      {players.map((player: string) => (
         <p>{player}</p>
       ))}
     </div>
