@@ -63,6 +63,7 @@ const NewSession = () => {
     addPlayerIdsToSession(generatedSessionId, session);
   };
 
+  //TODO some response on UI
   const addPlayer = (player: UserInfo) => {
     if (!players.includes(player)) {
       let newPlayerList = [...players, player] as UserInfo[];
@@ -86,6 +87,10 @@ const NewSession = () => {
           Create new session
         </Button>
       </form>
+      <h3>Players in the session:</h3>
+      {players.map((player) => (
+        <p>{player.name}</p>
+      ))}
     </div>
   );
 };

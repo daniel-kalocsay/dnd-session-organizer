@@ -64,7 +64,6 @@ const SessionList = () => {
   };
 
   //TODO im sure this can be done in a better way
-  //TODO some response after deletion
   const deleteSession = (sessionId: string) => {
     sessionsRef
       .doc(sessionId)
