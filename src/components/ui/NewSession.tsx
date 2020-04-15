@@ -63,7 +63,6 @@ const NewSession = () => {
     addPlayerIdsToSession(generatedSessionId, session);
   };
 
-  //TODO some response on UI
   const addPlayer = (player: UserInfo) => {
     if (!players.includes(player)) {
       let newPlayerList = [...players, player] as UserInfo[];

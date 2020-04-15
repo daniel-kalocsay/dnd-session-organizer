@@ -17,6 +17,7 @@ const SessionDetails = (props: any) => {
   const [combatfieldData, setCombatfieldData] = useState(
     [] as CombatfieldData[]
   );
+  const [players, setPlayers] = useState([] as any[]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -27,6 +28,7 @@ const SessionDetails = (props: any) => {
   useEffect(() => {
     if (sessionId) {
       fetchCombatfields();
+      fetchPlayers();
     }
   }, [sessionId]);
 
@@ -54,6 +56,26 @@ const SessionDetails = (props: any) => {
       });
   };
 
+  const fetchPlayers = () => {
+    sessionsRef
+      .doc(sessionId)
+      .collection("players")
+      .get()
+      .then(function (querySnapshot: QuerySnapshot) {
+        querySnapshot.forEach((player: DocumentSnapshot) => {
+          usersRef
+            .doc(player.id)
+            .get()
+            .then((userRecord: DocumentSnapshot) => {
+              setPlayers((oldData) => [
+                ...oldData,
+                userRecord.data()!.username,
+              ]);
+            });
+        });
+      });
+  };
+
   const addPlayer = (userData: any) => {
     let userId = userData!.uid;
 
@@ -66,6 +88,10 @@ const SessionDetails = (props: any) => {
       <CombatfieldList combatfields={combatfieldData} />
       <h3>Add player to session:</h3>
       <UserSearch onAddPlayer={addPlayer} />
+      <h3>Players in the session:</h3>
+      {players.map((player) => (
+        <p>{player}</p>
+      ))}
     </div>
   );
 };
