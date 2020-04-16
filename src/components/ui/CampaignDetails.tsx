@@ -13,18 +13,18 @@ type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 const CampaignDetails = (props: any) => {
-    const combatfieldsRef = useContext(FirebaseContext)!.combatfieldsRef;
-    const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
-    const usersRef = useContext(FirebaseContext)!.usersRef;
+  const combatfieldsRef = useContext(FirebaseContext)!.combatfieldsRef;
+  const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
+  const usersRef = useContext(FirebaseContext)!.usersRef;
 
-    const [campaignId, setId] = useState("" as string);
-    const [combatfieldData, setCombatfieldData] = useState(
-        [] as CombatfieldData[]
-    );
-    const [players, setPlayers] = useState([] as UserInfo[]);
+  const [campaignId, setId] = useState("" as string);
+  const [combatfieldData, setCombatfieldData] = useState(
+    [] as CombatfieldData[]
+  );
+  const [players, setPlayers] = useState([] as UserInfo[]);
 
   let state = useLocation().state as any;
-  let campaignDetails = state.campaign as CampaignPreviewData;
+  let campaignName = state.name as string;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -32,92 +32,87 @@ const CampaignDetails = (props: any) => {
     setId(campaignId!);
   }, []);
 
-    useEffect(() => {
-        if (campaignId) {
-            fetchCombatfields();
-            fetchPlayers();
-        }
-    }, [campaignId]);
+  useEffect(() => {
+    if (campaignId) {
+      fetchCombatfields();
+      fetchPlayers();
+    }
+  }, [campaignId]);
 
-    const fetchCombatfields = async() => {
+  const fetchCombatfields = async () => {
+    let campaignsCol: QuerySnapshot = await campaignsRef
+      .doc(campaignId!)
+      .collection("combatfields")
+      .get();
 
-        let campaignsCol:QuerySnapshot = await
-            campaignsRef
-            .doc(campaignId!)
-            .collection("combatfields")
-            .get();
-
-        campaignsCol.forEach((data: DocumentSnapshot) => {
-            combatfieldsRef
-                .doc(data.id)
-                .get()
-                .then((combatfieldRecord: DocumentSnapshot) => {
-                    if (combatfieldRecord.exists) {
-                        let entry = combatfieldRecord.data();
-                        let data = new CombatfieldData(
-                            combatfieldRecord.id,
-                            entry!.name,
-                        );
-                        setCombatfieldData((oldData) => [...oldData, data]);
-                    }
-                });
+    campaignsCol.forEach((data: DocumentSnapshot) => {
+      combatfieldsRef
+        .doc(data.id)
+        .get()
+        .then((combatfieldRecord: DocumentSnapshot) => {
+          if (combatfieldRecord.exists) {
+            let entry = combatfieldRecord.data();
+            let data = new CombatfieldData(combatfieldRecord.id, entry!.name);
+            setCombatfieldData((oldData) => [...oldData, data]);
+          }
         });
-    };
+    });
+  };
 
-    const fetchPlayers = () => {
-        campaignsRef
-            .doc(campaignId)
-            .collection("players")
-            .onSnapshot((querySnapshot: QuerySnapshot) => {
-                setPlayers([]);
-                querySnapshot.forEach((player: DocumentSnapshot) => {
-                    usersRef
-                        .doc(player.id)
-                        .get()
-                        .then((userRecord: DocumentSnapshot) => {
-                            let userInfo = new UserInfo(
-                                player.id,
-                                userRecord.data()!.username
-                            );
-                            setPlayers((oldData) => [...oldData, userInfo] as UserInfo[]);
-                        });
-                });
+  const fetchPlayers = () => {
+    campaignsRef
+      .doc(campaignId)
+      .collection("players")
+      .onSnapshot((querySnapshot: QuerySnapshot) => {
+        setPlayers([]);
+        querySnapshot.forEach((player: DocumentSnapshot) => {
+          usersRef
+            .doc(player.id)
+            .get()
+            .then((userRecord: DocumentSnapshot) => {
+              let userInfo = new UserInfo(
+                player.id,
+                userRecord.data()!.username
+              );
+              setPlayers((oldData) => [...oldData, userInfo] as UserInfo[]);
             });
-    };
+        });
+      });
+  };
 
-    const addPlayer = (userData: UserInfo) => {
-        let userId = userData!.uid;
+  const addPlayer = (userData: UserInfo) => {
+    let userId = userData!.uid;
 
-        usersRef.doc(userId!).collection("campaigns").doc(campaignId).set({});
-        campaignsRef.doc(campaignId).collection("players").doc(userId!).set({});
-    };
+    usersRef.doc(userId!).collection("campaigns").doc(campaignId).set({});
+    campaignsRef.doc(campaignId).collection("players").doc(userId!).set({});
+  };
 
-    const deletePlayer = (userId: string) => {
-        campaignsRef.doc(campaignId).collection("players").doc(userId).delete();
-        usersRef.doc(userId).collection("campaigns").doc(campaignId).delete();
-    };
+  const deletePlayer = (userId: string) => {
+    campaignsRef.doc(campaignId).collection("players").doc(userId).delete();
+    usersRef.doc(userId).collection("campaigns").doc(campaignId).delete();
+  };
 
-    return (
-        <div>
-            <h2>{campaignDetails.name}</h2>
-            <CombatfieldList combatfields={combatfieldData}/>
-            <h3>Add player to session:</h3>
-            <UserSearch onAddPlayer={addPlayer}/>
-            <h3>Players in the session:</h3>
-            {players.map((player: UserInfo) => (
-                <div key={player.uid!}>
-                    <p>{player.name}</p>
-                    <Button
-                        onClick={() => {
-                            deletePlayer(player.uid!);
-                        }}
-                    >
-                        Remove
-                    </Button>
-                </div>
-            ))}
+  return (
+    <div>
+      <h2>{campaignName}</h2>
+      <CombatfieldList combatfields={combatfieldData} />
+      <h3>Add player to session:</h3>
+      <UserSearch onAddPlayer={addPlayer} />
+      <h3>Players in the session:</h3>
+      {players.map((player: UserInfo) => (
+        <div key={player.uid!}>
+          <p>{player.name}</p>
+          <Button
+            onClick={() => {
+              deletePlayer(player.uid!);
+            }}
+          >
+            Remove
+          </Button>
         </div>
-    );
+      ))}
+    </div>
+  );
 };
 
 export default CampaignDetails;

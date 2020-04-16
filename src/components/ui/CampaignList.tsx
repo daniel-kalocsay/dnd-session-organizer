@@ -73,7 +73,6 @@ const CampaignList = () => {
         });
     };
 
-    //TODO im sure this can be done in a better way
     const deleteCampaign = async(campaignId: string) => {
 
         let playersCol:QuerySnapshot = await
@@ -118,7 +117,7 @@ const CampaignList = () => {
                 to={{
                   pathname: "/campaign",
                   search: `?id=${campaign.uid}`,
-                  state: { campaign: campaign },
+                  state: { name: campaign.name },
                 }}
               >
                 Details
