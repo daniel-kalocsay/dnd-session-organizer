@@ -29,6 +29,7 @@ const RegisterForm = (props: any) => {
   const auth = useContext(FirebaseContext)!.auth;
   const usersDB = useContext(FirebaseContext)!.usersRef;
 
+  //TODO use reducer instead
   const [emailError, setEmailError] = useState<boolean>(false);
   const [pwError, setPwError] = useState<boolean>(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState<string>("");
