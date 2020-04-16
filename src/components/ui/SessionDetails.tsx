@@ -86,7 +86,7 @@ const SessionDetails = (props: any) => {
     sessionsRef.doc(sessionId).collection("players").doc(userId!).set({});
   };
 
-  const deleteUser = (userId: string) => {
+  const deletePlayer = (userId: string) => {
     sessionsRef.doc(sessionId).collection("players").doc(userId).delete();
     usersRef.doc(userId).collection("sessions").doc(sessionId).delete();
   };
@@ -103,10 +103,10 @@ const SessionDetails = (props: any) => {
           <p>{player.name}</p>
           <Button
             onClick={() => {
-              deleteUser(player.uid!);
+              deletePlayer(player.uid!);
             }}
           >
-            Remove user from session
+            Remove
           </Button>
         </div>
       ))}
