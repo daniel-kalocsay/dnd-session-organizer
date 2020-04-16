@@ -37,53 +37,54 @@ const CampaignList = () => {
         );
     };
 
-    const fetchCampaigns = () => {
-        usersRef
+    const fetchCampaigns = async() => {
+
+        const campaignsCol:QuerySnapshot = await
+            usersRef
             .doc(user!.uid)
             .collection("campaigns")
-            .get()
-            .then((querySnapshot: QuerySnapshot) => {
-                querySnapshot.forEach((campaignRef: DocumentSnapshot) => {
-                    campaignsRef
-                        .doc(campaignRef.id)
-                        .get()
-                        .then((campaignDoc: DocumentSnapshot) => {
-                            if (campaignDoc.exists) {
-                                let entry = campaignDoc.data();
-                                let data = new CampaignPreviewData(
-                                    campaignDoc.id,
-                                    entry!.name,
-                                    entry!.created_at.toDate()
-                                );
-                                setCampaigns((oldData) => [...oldData, data]);
-                            }
-                        });
+            .get();
+
+        campaignsCol.forEach((campaignRef: DocumentSnapshot) => {
+            campaignsRef
+                .doc(campaignRef.id)
+                .get()
+                .then((campaignDoc: DocumentSnapshot) => {
+                    if (campaignDoc.exists) {
+                        let entry = campaignDoc.data();
+                        let data = new CampaignPreviewData(
+                            campaignDoc.id,
+                            entry!.name,
+                            entry!.created_at.toDate()
+                        );
+                        setCampaigns((oldData) => [...oldData, data]);
+                    }
                 });
-                sortCampaignList();
-            });
+        });
     };
 
     //TODO im sure this can be done in a better way
-    const deleteCampaign = (campaignId: string) => {
-        campaignsRef
+    const deleteCampaign = async(campaignId: string) => {
+
+        const playersCol:QuerySnapshot = await
+            campaignsRef
             .doc(campaignId)
             .collection("players")
-            .get()
-            .then((playersDoc: QuerySnapshot) => {
-                playersDoc.forEach((player: DocumentSnapshot) => {
-                    usersRef
-                        .doc(player.id)
-                        .collection("campaigns")
-                        .doc(campaignId)
-                        .delete();
-                    player.ref.delete();
+            .get();
 
-                    //TODO entire campaigns collection of the user is deleted after this
-                    // if it was the only one. is that okay?
-                });
+        playersCol.forEach((player: DocumentSnapshot) => {
+            usersRef
+                .doc(player.id)
+                .collection("campaigns")
+                .doc(campaignId)
+                .delete();
+            player.ref.delete();
 
-                campaignsRef.doc(campaignId).delete();
-            });
+            //TODO entire campaigns collection of the user is deleted after this
+            // if it was the only one. is that okay?
+        });
+
+        campaignsRef.doc(campaignId).delete();
 
         usersRef.doc(user!.uid).collection("campaigns").doc(campaignId).delete();
 
