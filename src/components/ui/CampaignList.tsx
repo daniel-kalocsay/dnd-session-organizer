@@ -10,28 +10,10 @@ import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
 import Button from "@material-ui/core/Button";
 
+import CampaignPreviewData from "../../model/CampaignPreviewData";
+
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
-
-//TODO create a generic class
-class CampaignPreviewData {
-    name: string;
-    uid: string;
-    createdAt: Date;
-
-    constructor(uid: string, name: string, createdAt: Date) {
-        this.uid = uid;
-        this.name = name;
-        this.createdAt = createdAt;
-    }
-
-    getDate() {
-        let date = this.createdAt;
-        return date ?
-            `${date.getFullYear()} ${date.getMonth()+1}.${date.getDate()} at ${date.getHours()}:${date.getMinutes()}`
-            : "date unknown";
-    }
-}
 
 const CampaignList = () => {
     const sessionsRef = useContext(FirebaseContext)!.sessionsRef;
@@ -80,13 +62,15 @@ const CampaignList = () => {
             .doc(campaignId)
             .collection("players")
             .get()
-            .then((playerDoc: QuerySnapshot) => {
-                playerDoc.forEach((player: DocumentSnapshot) => {
+            .then((playersDoc: QuerySnapshot) => {
+                playersDoc.forEach((player: DocumentSnapshot) => {
                     usersRef.doc(player.id).collection("campaigns").doc(campaignId).delete();
+                    player.ref.delete();
+
+                    //TODO entire campaigns collection of the user is deleted after this
+                    // if it was the only one. is that okay?
                 });
-                playerDoc.forEach((user: DocumentSnapshot) => {
-                    user.ref.delete();
-                });
+
                 campaignsRef.doc(campaignId).delete();
             });
 
