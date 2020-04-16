@@ -22,13 +22,17 @@ const CampaignDetails = () => {
   const [combatfieldData, setCombatfieldData] = useState(
     [] as CombatfieldData[]
   );
-  const [players, setPlayers] = useState([] as UserInfo[]);
 
   //Campaign Name variables
   const state = useLocation().state as any;
-  const [campaignName, setName] = useState(state.name as string);
+  const [campaignName, setName] = useState(state.campaign.name as string);
   const inputRef = useRef(null);
   const [inputVisible, setInputVisible] = useState(false);
+
+  const [originalPlayers, setOriginalPlayers] = useState(
+    state.campaign.playerIds as string[]
+  );
+  const [players, setPlayers] = useState([] as UserInfo[]);
 
   const [batch, setBatch] = useState(
     firebase.firestore().batch() as firestore.WriteBatch
@@ -59,6 +63,7 @@ const CampaignDetails = () => {
     }
   };
 
+  //TODO update only once
   const updateCampaignName = () => {
     batch.update(campaignsRef.doc(campaignId), { name: campaignName });
   };
@@ -116,21 +121,53 @@ const CampaignDetails = () => {
       });
   };
 
-  //TODO add players only to the state, not to the db
-  const addPlayer = (userData: UserInfo) => {
-    let userId = userData!.uid;
-
-    usersRef.doc(userId!).collection("campaigns").doc(campaignId).set({});
-    campaignsRef.doc(campaignId).collection("players").doc(userId!).set({});
+  const addPlayerToState = (player: UserInfo) => {
+    if (!players.some((p) => p.uid === player.uid)) {
+      let newPlayerList = [...players, player] as UserInfo[];
+      setPlayers(newPlayerList);
+    }
   };
 
-  const deletePlayer = (userId: string) => {
-    campaignsRef.doc(campaignId).collection("players").doc(userId).delete();
-    usersRef.doc(userId).collection("campaigns").doc(campaignId).delete();
+  const saveUpdatedPlayers = (playerId: string) => {
+    batch.set(
+      usersRef.doc(playerId).collection("campaigns").doc(campaignId),
+      {}
+    );
+    batch.set(
+      campaignsRef.doc(campaignId).collection("players").doc(playerId),
+      {}
+    );
+  };
+
+  const deletePlayerFromState = (userId: string) => {
+    let playerRemoved = players.filter((player) => player.uid !== userId);
+    setPlayers(playerRemoved);
+  };
+
+  const deleteUpdatedPlayers = (playerId: string) => {
+    campaignsRef.doc(campaignId).collection("players").doc(playerId).delete();
+    usersRef.doc(playerId).collection("campaigns").doc(campaignId).delete();
+  };
+
+  const comparePlayers = () => {
+    let missing = [...originalPlayers];
+    let plus = [...players.map((player) => player.uid!)];
+
+    players.forEach((p: UserInfo) =>
+      originalPlayers.forEach((op: string) => {
+        if (p.uid === op) {
+          missing = missing.filter((player) => player !== op);
+          plus = plus.filter((player) => player !== op);
+        }
+      })
+    );
+    missing.forEach((p) => deleteUpdatedPlayers(p));
+    plus.forEach((p) => saveUpdatedPlayers(p));
   };
 
   //TODO redirect after commit
   const handleSubmit = () => {
+    comparePlayers();
     batch.commit();
   };
 
@@ -148,15 +185,15 @@ const CampaignDetails = () => {
         <span onClick={() => setInputVisible(true)}>{campaignName}</span>
       )}
       <CombatfieldList combatfields={combatfieldData} />
-      <h3>Add player to session:</h3>
-      <UserSearch onAddPlayer={addPlayer} />
-      <h3>Players in the session:</h3>
+      <h3>Add player to the campaign:</h3>
+      <UserSearch onAddPlayer={addPlayerToState} />
+      <h3>Players in the campaign:</h3>
       {players.map((player: UserInfo) => (
         <div key={player.uid!}>
           <p>{player.name}</p>
           <Button
             onClick={() => {
-              deletePlayer(player.uid!);
+              deletePlayerFromState(player.uid!);
             }}
           >
             Remove

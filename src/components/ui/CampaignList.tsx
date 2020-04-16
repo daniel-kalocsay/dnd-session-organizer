@@ -117,7 +117,7 @@ const CampaignList = () => {
                 to={{
                   pathname: "/campaign",
                   search: `?id=${campaign.uid}`,
-                  state: { name: campaign.name },
+                  state: { campaign: campaign },
                 }}
               >
                 Details
