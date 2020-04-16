@@ -6,11 +6,13 @@ import CombatfieldList from "../combat/CombatfieldList";
 import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
 import Button from "@material-ui/core/Button";
+import { useLocation } from "react-router-dom";
+import CampaignPreviewData from "../../model/CampaignPreviewData";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
-const CampaignDetails = (props: any) => {
+const CampaignDetails = () => {
   const combatfieldsRef = useContext(FirebaseContext)!.combatfieldsRef;
   const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
   const usersRef = useContext(FirebaseContext)!.usersRef;
@@ -21,7 +23,11 @@ const CampaignDetails = (props: any) => {
   );
   const [players, setPlayers] = useState([] as UserInfo[]);
 
+  let state = useLocation().state as any;
+  let campaignDetails = state.campaign as CampaignPreviewData;
+
   useEffect(() => {
+    console.log(campaignDetails);
     const params = new URLSearchParams(window.location.search);
     const campaignId = params.get("id");
     setId(campaignId!);
@@ -93,7 +99,7 @@ const CampaignDetails = (props: any) => {
 
   return (
     <div>
-      <h2>{campaignId}</h2>
+      <h2>{campaignDetails!.name}</h2>
       <CombatfieldList combatfields={combatfieldData} />
       <h3>Add player to session:</h3>
       <UserSearch onAddPlayer={addPlayer} />

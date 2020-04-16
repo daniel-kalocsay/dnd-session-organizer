@@ -1,20 +1,24 @@
 class CampaignPreviewData {
-    name: string;
-    uid: string;
-    createdAt: Date;
+  name: string;
+  uid: string;
+  createdAt: Date;
+  playerIds: string[];
 
-    constructor(uid: string, name: string, createdAt: Date) {
-        this.uid = uid;
-        this.name = name;
-        this.createdAt = createdAt;
-    }
+  constructor(uid: string, name: string, createdAt: Date, playerIds: any[]) {
+    this.uid = uid;
+    this.name = name;
+    this.createdAt = createdAt;
+    this.playerIds = playerIds;
+  }
 
-    getDate() {
-        let date = this.createdAt;
-        return date ?
-            `${date.getFullYear()} ${date.getMonth()+1}.${date.getDate()} at ${date.getHours()}:${date.getMinutes()}`
-            : "date unknown";
-    }
+  getDate() {
+    let date = this.createdAt;
+    return date
+      ? `${date.getFullYear()} ${
+          date.getMonth() + 1
+        }.${date.getDate()} at ${date.getHours()}:${date.getMinutes()}`
+      : "date unknown";
+  }
 }
 
 export default CampaignPreviewData;

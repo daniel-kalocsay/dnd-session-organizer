@@ -16,8 +16,6 @@ type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 const CampaignList = () => {
-  const sessionsRef = useContext(FirebaseContext)!.sessionsRef;
-
   const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
   const usersRef = useContext(FirebaseContext)!.usersRef;
   const [campaigns, setCampaigns] = useState([] as CampaignPreviewData[]);
@@ -41,13 +39,24 @@ const CampaignList = () => {
           campaignsRef
             .doc(campaignRef.id)
             .get()
-            .then((campaignDoc: DocumentSnapshot) => {
+            .then(async (campaignDoc: DocumentSnapshot) => {
               if (campaignDoc.exists) {
                 let entry = campaignDoc.data();
+
+                const playersCol = await campaignDoc.ref
+                  .collection("players")
+                  .get();
+
+                let playerIds = [] as string[];
+                playersCol.forEach((player: DocumentSnapshot) => {
+                  playerIds.push(player.id);
+                });
+
                 let data = new CampaignPreviewData(
                   campaignDoc.id,
                   entry!.name,
-                  entry!.created_at.toDate()
+                  entry!.created_at.toDate(),
+                  playerIds
                 );
                 setCampaigns((oldData) => [...oldData, data]);
               }
@@ -97,8 +106,17 @@ const CampaignList = () => {
                 created at:{" "}
                 {campaign.createdAt ? campaign.getDate() : "no date"}
               </p>
-
-              <Link to={`/campaign?id=${campaign.uid}`}>Details</Link>
+              <p>Number of players: {campaign.playerIds.length}</p>
+              <Link
+                to={{
+                  pathname: "/campaign",
+                  search: `?id=${campaign.uid}`,
+                  //state: { name: campaign.name, playerIds: campaign.playerIds },
+                  state: { campaign: campaign },
+                }}
+              >
+                Details
+              </Link>
               <Button
                 onClick={() => {
                   deleteCampaign(campaign.uid);
