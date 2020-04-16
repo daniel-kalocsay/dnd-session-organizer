@@ -1,10 +1,10 @@
 class CombatfieldData {
-  name: string;
   uid: string;
+  name: string;
 
-  constructor(name: string, uid: string) {
-    this.name = name;
+  constructor(uid: string, name: string) {
     this.uid = uid;
+    this.name = name;
   }
 }
 

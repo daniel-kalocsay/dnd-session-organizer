@@ -57,7 +57,7 @@ const Layout = () => {
           <Route path={"/new-campaign"}>
             <WithAuth
               unauthorizedMsg={
-                "You need to be logged in to create a new combatfield"
+                "You need to be logged in to create a new campaign"
               }
             >
               <NewCampaign />

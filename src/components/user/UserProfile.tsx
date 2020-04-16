@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useState} from "react";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import Logout from "./user-state-change/Logout";
+import Logout from "./user-state-change/logout/Logout";
 import ModalWrapper from "../../wrappers/ModalWrapper";
 import LoginForm from "./user-state-change/login/LoginForm";
 import RegisterForm from "./user-state-change/register/RegisterForm";
