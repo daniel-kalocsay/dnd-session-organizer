@@ -10,12 +10,12 @@ import Button from "@material-ui/core/Button";
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
-const SessionDetails = (props: any) => {
+const CampaignDetails = (props: any) => {
   const combatfieldsRef = useContext(FirebaseContext)!.combatfieldsRef;
-  const sessionsRef = useContext(FirebaseContext)!.sessionsRef;
+  const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
   const usersRef = useContext(FirebaseContext)!.usersRef;
 
-  const [sessionId, setId] = useState("" as string);
+  const [campaignId, setId] = useState("" as string);
   const [combatfieldData, setCombatfieldData] = useState(
     [] as CombatfieldData[]
   );
@@ -23,20 +23,20 @@ const SessionDetails = (props: any) => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get("id");
-    setId(sessionId!);
+    const campaignId = params.get("id");
+    setId(campaignId!);
   }, []);
 
   useEffect(() => {
-    if (sessionId) {
+    if (campaignId) {
       fetchCombatfields();
       fetchPlayers();
     }
-  }, [sessionId]);
+  }, [campaignId]);
 
   const fetchCombatfields = () => {
-    sessionsRef
-      .doc(sessionId!)
+    campaignsRef
+      .doc(campaignId!)
       .collection("combatfields")
       .get()
       .then(function (querySnapshot: QuerySnapshot) {
@@ -59,8 +59,8 @@ const SessionDetails = (props: any) => {
   };
 
   const fetchPlayers = () => {
-    sessionsRef
-      .doc(sessionId)
+    campaignsRef
+      .doc(campaignId)
       .collection("players")
       .onSnapshot(function (querySnapshot: QuerySnapshot) {
         setPlayers([]);
@@ -82,18 +82,18 @@ const SessionDetails = (props: any) => {
   const addPlayer = (userData: UserInfo) => {
     let userId = userData!.uid;
 
-    usersRef.doc(userId!).collection("sessions").doc(sessionId).set({});
-    sessionsRef.doc(sessionId).collection("players").doc(userId!).set({});
+    usersRef.doc(userId!).collection("campaigns").doc(campaignId).set({});
+    campaignsRef.doc(campaignId).collection("players").doc(userId!).set({});
   };
 
   const deletePlayer = (userId: string) => {
-    sessionsRef.doc(sessionId).collection("players").doc(userId).delete();
-    usersRef.doc(userId).collection("sessions").doc(sessionId).delete();
+    campaignsRef.doc(campaignId).collection("players").doc(userId).delete();
+    usersRef.doc(userId).collection("campaigns").doc(campaignId).delete();
   };
 
   return (
     <div>
-      <h2>{sessionId}</h2>
+      <h2>{campaignId}</h2>
       <CombatfieldList combatfields={combatfieldData} />
       <h3>Add player to session:</h3>
       <UserSearch onAddPlayer={addPlayer} />
@@ -114,4 +114,4 @@ const SessionDetails = (props: any) => {
   );
 };
 
-export default SessionDetails;
+export default CampaignDetails;

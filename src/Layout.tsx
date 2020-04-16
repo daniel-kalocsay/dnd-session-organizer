@@ -4,10 +4,10 @@ import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 import Navbar from "./components/ui/Navbar";
 import HomePage from "./components/HomePage";
 import WithAuth from "./wrappers/WithAuth";
-import NewSession from "./components/ui/NewSession";
+import NewCampaign from "./components/ui/NewCampaign";
 import CampaignList from "./components/ui/CampaignList";
 import CombatView from "./components/ui/CombatView";
-import SessionDetails from "./components/ui/SessionDetails";
+import CampaignDetails from "./components/ui/CampaignDetails";
 
 const Layout = () => {
   //TODO use react-swipeable views?
@@ -36,31 +36,31 @@ const Layout = () => {
             </WithAuth>
           </Route>
 
-          <Route exact path={"/my-sessions"}>
+          <Route exact path={"/my-campaigns"}>
             <WithAuth
-              loadingMsg={"Loading sessions..."}
-              unauthorizedMsg={"Log in to access your sessions"}
+              loadingMsg={"Loading campaigns..."}
+              unauthorizedMsg={"Log in to access your campaigns"}
             >
               <CampaignList />
             </WithAuth>
           </Route>
 
-          <Route exact path={"/session"}>
+          <Route exact path={"/campaign"}>
             <WithAuth
-              loadingMsg={"Loading session details..."}
+              loadingMsg={"Loading campaign details..."}
               unauthorizedMsg={"Log in to continue"}
             >
-              <SessionDetails />
+              <CampaignDetails />
             </WithAuth>
           </Route>
 
-          <Route path={"/new-session"}>
+          <Route path={"/new-campaign"}>
             <WithAuth
               unauthorizedMsg={
                 "You need to be logged in to create a new combatfield"
               }
             >
-              <NewSession />
+              <NewCampaign />
             </WithAuth>
           </Route>
         </div>

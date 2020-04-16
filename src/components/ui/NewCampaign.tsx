@@ -6,10 +6,9 @@ import Button from "@material-ui/core/Button";
 import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
 import { firestore } from "firebase";
-import NewCombatfield from "../combat/NewCombatfield";
 
-const NewSession = () => {
-  const sessionsRef = useContext(FirebaseContext)!.sessionsRef;
+const NewCampaign = () => {
+  const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
   const usersRef = useContext(FirebaseContext)!.usersRef;
   const firebase = useContext(FirebaseContext)!.firebase;
 
@@ -23,22 +22,22 @@ const NewSession = () => {
     setPlayers([...players, userData]);
   }, []);
 
-  const addSessionIdToPlayers = (sessionId: string) => {
+  const addCampaignIdToPlayers = (campaignId: string) => {
     players.forEach((player: UserInfo) => {
-      usersRef.doc(player.uid!).collection("sessions").doc(sessionId).set({});
+      usersRef.doc(player.uid!).collection("campaigns").doc(campaignId).set({});
     });
   };
 
-  const addPlayerIdsToSession = (sessionId: string, session: Object) => {
+  const addPlayerIdsToCampaign = (campaignId: string, session: Object) => {
     let batch: firestore.WriteBatch = firebase.firestore().batch();
-    let sessionRef = sessionsRef.doc(sessionId).collection("players");
+    let sessionRef = campaignsRef.doc(campaignId).collection("players");
 
     players.forEach((player: UserInfo) => {
       batch.set(sessionRef.doc(player.uid!), {});
     });
 
-    sessionsRef
-      .doc(sessionId)
+    campaignsRef
+      .doc(campaignId)
       .set(Object.assign({}, session))
       .then(() => {
         batch.commit();
@@ -51,17 +50,17 @@ const NewSession = () => {
     let sessionName = event.target.sessionName.value;
     let session = {
       name: sessionName,
-      created_on: firebase.firestore.FieldValue.serverTimestamp(),
+      created_at: firebase.firestore.FieldValue.serverTimestamp(),
       created_by: user!.uid,
     };
 
-    let generatedSessionId = usersRef
+    let generatedCampaignId = usersRef
       .doc(user!.uid)
-      .collection("sessions")
+      .collection("campaigns")
       .doc().id;
 
-    addSessionIdToPlayers(generatedSessionId);
-    addPlayerIdsToSession(generatedSessionId, session);
+    addCampaignIdToPlayers(generatedCampaignId);
+    addPlayerIdsToCampaign(generatedCampaignId, session);
   };
 
   const addPlayer = (player: UserInfo) => {
@@ -74,7 +73,7 @@ const NewSession = () => {
   return (
     <div id="add-new-session">
       <h3>Create new session:</h3>
-      <NewCombatfield/>
+      {/* <NewCombatfield/> */}
       <form onSubmit={createNewSession}>
         <TextField
           id="sessionName"
@@ -96,4 +95,4 @@ const NewSession = () => {
   );
 };
 
-export default NewSession;
+export default NewCampaign;

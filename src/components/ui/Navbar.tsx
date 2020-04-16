@@ -14,9 +14,9 @@ const Navbar = () => {
     <MDBNavbar position={"static"}>
       <Link to={"/"}>Home</Link>
 
-      <Link to={"/my-sessions"}>My Sessions</Link>
+      <Link to={"/my-campaigns"}>My Campaigns</Link>
 
-      <Link to={"/new-session"}>Create new session</Link>
+      <Link to={"/new-campaign"}>Create new Campaign</Link>
 
       <UserInfo />
     </MDBNavbar>
