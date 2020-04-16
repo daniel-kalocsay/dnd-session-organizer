@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useContext} from "react";
-import {Link} from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 
 import firebase from "firebase";
-import {FirebaseContext} from "../contexts/FirebaseContext";
-import {useAuthState} from "react-firebase-hooks/auth";
+import { FirebaseContext } from "../contexts/FirebaseContext";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -48,13 +48,24 @@ const CampaignList = () => {
             campaignsRef
                 .doc(campaignRef.id)
                 .get()
-                .then((campaignDoc: DocumentSnapshot) => {
+                .then(async (campaignDoc: DocumentSnapshot) => {
                     if (campaignDoc.exists) {
                         let entry = campaignDoc.data();
+
+                        const playersCol = await campaignDoc.ref
+                            .collection("players")
+                            .get();
+
+                        let playerIds = [] as string[];
+                        playersCol.forEach((player: DocumentSnapshot) => {
+                            playerIds.push(player.id);
+                        });
+
                         let data = new CampaignPreviewData(
                             campaignDoc.id,
                             entry!.name,
-                            entry!.created_at.toDate()
+                            entry!.created_at.toDate(),
+                            playerIds
                         );
                         setCampaigns((oldData) => [...oldData, data]);
                     }
@@ -91,31 +102,40 @@ const CampaignList = () => {
         setCampaigns(updatedCampaigns);
     };
 
-    return (
-        <div style={styles.campaignListContainer}>
-            {sortCampaignList().map((campaign: CampaignPreviewData) => (
-                <div style={styles.cardContainer} key={campaign.uid}>
-                    <Card style={styles.card}>
-                        <CardHeader title={campaign.name}/>
-                        <CardContent>
-                            <p>
-                                Created: {campaign.createdAt ? campaign.getDate() : "unknown"}
-                            </p>
-
-                            <Link to={`/campaign?id=${campaign.uid}`}>Details</Link>
-                            <Button
-                                onClick={() => {
-                                    deleteCampaign(campaign.uid);
-                                }}
-                            >
-                                Delete
-                            </Button>
-                        </CardContent>
-                    </Card>
-                </div>
-            ))}
+  return (
+    <div style={styles.campaignListContainer}>
+      {sortCampaignList().map((campaign: CampaignPreviewData) => (
+        <div style={styles.cardContainer} key={campaign.uid}>
+          <Card style={styles.card}>
+            <CardHeader title={campaign.name} />
+            <CardContent>
+              <p>
+                created at:{" "}
+                {campaign.createdAt ? campaign.getDate() : "no date"}
+              </p>
+              <p>Number of players: {campaign.playerIds.length}</p>
+              <Link
+                to={{
+                  pathname: "/campaign",
+                  search: `?id=${campaign.uid}`,
+                  state: { campaign: campaign },
+                }}
+              >
+                Details
+              </Link>
+              <Button
+                onClick={() => {
+                  deleteCampaign(campaign.uid);
+                }}
+              >
+                Delete
+              </Button>
+            </CardContent>
+          </Card>
         </div>
-    );
+      ))}
+    </div>
+  );
 };
 
 export default CampaignList;
