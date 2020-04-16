@@ -7,6 +7,7 @@ export interface firebaseContextInterface {
   sessionsRef: firebase.firestore.CollectionReference;
   usersRef: firebase.firestore.CollectionReference;
   combatfieldsRef: firebase.firestore.CollectionReference;
+  campaignsRef: firebase.firestore.CollectionReference;
 }
 
 export const FirebaseContext = createContext<firebaseContextInterface | null>(
@@ -15,9 +16,13 @@ export const FirebaseContext = createContext<firebaseContextInterface | null>(
 
 export const FirebaseProvider = (props: any) => {
   const auth = firebase.auth();
+  const combatfieldsRef = firebase.firestore().collection("combatfields");
+
+  // TODO these will be replaced
   const sessionsRef = firebase.firestore().collection("sessions");
   const usersRef = firebase.firestore().collection("users");
-  const combatfieldsRef = firebase.firestore().collection("combatfields");
+
+  const campaignsRef = firebase.firestore().collection("campaigns");
 
   const firebaseHandler: firebaseContextInterface = {
     firebase,
@@ -25,6 +30,7 @@ export const FirebaseProvider = (props: any) => {
     sessionsRef,
     usersRef,
     combatfieldsRef,
+    campaignsRef
   };
 
   return (
