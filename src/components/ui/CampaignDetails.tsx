@@ -1,31 +1,40 @@
-import React, { useState, useContext, useEffect } from "react";
-import firebase from "firebase";
+import React, { useState, useContext, useEffect, useRef } from "react";
+import firebase, { firestore } from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import CombatfieldData from "../../model/CombatfieldData";
 import CombatfieldList from "../combat/CombatfieldList";
 import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
 import Button from "@material-ui/core/Button";
-import { useLocation } from "react-router-dom";
-import CampaignPreviewData from "../../model/CampaignPreviewData";
+import { useLocation, Redirect } from "react-router-dom";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
-const CampaignDetails = (props: any) => {
+//TODO component too big, refactor
+const CampaignDetails = () => {
   const combatfieldsRef = useContext(FirebaseContext)!.combatfieldsRef;
   const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
   const usersRef = useContext(FirebaseContext)!.usersRef;
 
+  //TODO maybe collect the campaign variables into one campaign object?
   const [campaignId, setId] = useState("" as string);
   const [combatfieldData, setCombatfieldData] = useState(
     [] as CombatfieldData[]
   );
   const [players, setPlayers] = useState([] as UserInfo[]);
 
-  let state = useLocation().state as any;
-  let campaignName = state.name as string;
+  //Campaign Name variables
+  const state = useLocation().state as any;
+  const [campaignName, setName] = useState(state.name as string);
+  const inputRef = useRef(null);
+  const [inputVisible, setInputVisible] = useState(false);
 
+  const [batch, setBatch] = useState(
+    firebase.firestore().batch() as firestore.WriteBatch
+  );
+
+  //TODO use specialized hook for this
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const campaignId = params.get("id");
@@ -38,6 +47,33 @@ const CampaignDetails = (props: any) => {
       fetchPlayers();
     }
   }, [campaignId]);
+
+  const onClickOutside = (e: any) => {
+    // Check if user is clicking outside of <input>
+    if (inputRef.current) {
+      let input = inputRef.current as any;
+      if (!input.contains(e.target)) {
+        setInputVisible(false);
+        updateCampaignName();
+      }
+    }
+  };
+
+  const updateCampaignName = () => {
+    batch.update(campaignsRef.doc(campaignId), { name: campaignName });
+  };
+
+  useEffect(() => {
+    // Handle outside clicks on mounted state
+    if (inputVisible) {
+      document.addEventListener("mousedown", onClickOutside);
+    }
+
+    // This is a necessary step to "dismount" unnecessary events when we destroy the component
+    return () => {
+      document.removeEventListener("mousedown", onClickOutside);
+    };
+  });
 
   const fetchCombatfields = async () => {
     let campaignsCol: QuerySnapshot = await campaignsRef
@@ -80,6 +116,7 @@ const CampaignDetails = (props: any) => {
       });
   };
 
+  //TODO add players only to the state, not to the db
   const addPlayer = (userData: UserInfo) => {
     let userId = userData!.uid;
 
@@ -92,9 +129,24 @@ const CampaignDetails = (props: any) => {
     usersRef.doc(userId).collection("campaigns").doc(campaignId).delete();
   };
 
+  //TODO redirect after commit
+  const handleSubmit = () => {
+    batch.commit();
+  };
+
   return (
     <div>
-      <h2>{campaignName}</h2>
+      {inputVisible ? (
+        <input
+          ref={inputRef}
+          value={campaignName}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+        />
+      ) : (
+        <span onClick={() => setInputVisible(true)}>{campaignName}</span>
+      )}
       <CombatfieldList combatfields={combatfieldData} />
       <h3>Add player to session:</h3>
       <UserSearch onAddPlayer={addPlayer} />
@@ -111,6 +163,7 @@ const CampaignDetails = (props: any) => {
           </Button>
         </div>
       ))}
+      <Button onClick={handleSubmit}>Submit</Button>
     </div>
   );
 };
