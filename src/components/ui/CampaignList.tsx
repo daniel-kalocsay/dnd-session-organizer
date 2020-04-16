@@ -16,7 +16,6 @@ type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 const CampaignList = () => {
-    const sessionsRef = useContext(FirebaseContext)!.sessionsRef;
 
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const usersRef = useContext(FirebaseContext)!.usersRef;
@@ -27,7 +26,7 @@ const CampaignList = () => {
 
     useEffect(() => {
         if (user) {
-            fetchCampaigns();
+            fetchCampaigns()
         }
     }, [user]);
 
@@ -39,7 +38,7 @@ const CampaignList = () => {
 
     const fetchCampaigns = async() => {
 
-        const campaignsCol:QuerySnapshot = await
+        let campaignsCol:QuerySnapshot = await
             usersRef
             .doc(user!.uid)
             .collection("campaigns")
@@ -66,7 +65,7 @@ const CampaignList = () => {
     //TODO im sure this can be done in a better way
     const deleteCampaign = async(campaignId: string) => {
 
-        const playersCol:QuerySnapshot = await
+        let playersCol:QuerySnapshot = await
             campaignsRef
             .doc(campaignId)
             .collection("players")
@@ -79,9 +78,6 @@ const CampaignList = () => {
                 .doc(campaignId)
                 .delete();
             player.ref.delete();
-
-            //TODO entire campaigns collection of the user is deleted after this
-            // if it was the only one. is that okay?
         });
 
         campaignsRef.doc(campaignId).delete();
@@ -91,6 +87,7 @@ const CampaignList = () => {
         let updatedCampaigns = campaigns.filter(
             (campaign: CampaignPreviewData) => campaign.uid !== campaignId
         );
+
         setCampaigns(updatedCampaigns);
     };
 

@@ -3,7 +3,11 @@ import {Link} from "react-router-dom";
 
 import CombatfieldData from "../../model/CombatfieldData";
 
-const CombatfieldList = (props: any) => {
+interface CombatFieldListProps {
+    combatfields: CombatfieldData[]
+}
+
+const CombatfieldList = (props: CombatFieldListProps) => {
     return (
         <div id="combatfield-list">
             <h2>Combatfields:</h2>
