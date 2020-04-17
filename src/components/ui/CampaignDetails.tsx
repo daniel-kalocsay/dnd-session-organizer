@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
-import firebase, { firestore } from "firebase";
-import { FirebaseContext } from "../contexts/FirebaseContext";
+import React, {useState, useContext, useEffect, useRef} from "react";
+import {useLocation} from "react-router-dom";
+import firebase, {firestore} from "firebase";
+import {FirebaseContext} from "../contexts/FirebaseContext";
 import CombatfieldData from "../../model/CombatfieldData";
 import CombatfieldList from "../combat/CombatfieldList";
 import UserSearch from "../user/UserSearch";
@@ -16,7 +16,7 @@ const CampaignDetails = () => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const usersRef = useContext(FirebaseContext)!.usersRef;
 
-    //TODO maybe collect the campaign variables into one campaign object?
+    //TODO store original and current cmpaign details state in objects
     const [campaignId, setId] = useState("" as string);
 
     //Campaign Name variables
@@ -56,6 +56,10 @@ const CampaignDetails = () => {
         }
     }, [campaignId]);
 
+    useEffect(() => {
+        isCampaignDetailsChanged();
+    }, [originalPlayers, players]);
+
     const onClickOutside = (e: any) => {
         // Check if user is clicking outside of <input>
         if (inputRef.current) {
@@ -84,8 +88,8 @@ const CampaignDetails = () => {
 
     const fetchCombatfields = () => {
 
-        originalCombatfields.forEach( async(combatfieldId: string) => {
-            let combatfieldDoc = await
+        originalCombatfields.forEach(async (combatfieldId: string) => {
+            let combatfieldDoc:DocumentSnapshot = await
                 campaignsRef
                     .doc(campaignId)
                     .collection("combatfields")
@@ -102,8 +106,8 @@ const CampaignDetails = () => {
 
     const fetchPlayers = () => {
         //TODO make sure if using async await here is slower
-        originalPlayers.forEach( async(playerId) => {
-            let userRecord:DocumentSnapshot = await
+        originalPlayers.forEach(async (playerId) => {
+            let userRecord: DocumentSnapshot = await
                 usersRef
                     .doc(playerId)
                     .get();
@@ -142,6 +146,14 @@ const CampaignDetails = () => {
     };
 
     const prepareDatabaseBatch = () => {
+        let result = compareOriginalAndRecentPlayers();
+
+        result.missing.forEach((p) => deleteUpdatedPlayers(p));
+        result.plus.forEach((p) => saveUpdatedPlayers(p));
+        updateCampaignName();
+    };
+
+    const compareOriginalAndRecentPlayers = () => {
         let missing = [...originalPlayers];
         let plus = [...players.map((player) => player.uid!)];
 
@@ -154,14 +166,20 @@ const CampaignDetails = () => {
             })
         );
 
-        missing.forEach((p) => deleteUpdatedPlayers(p));
-        plus.forEach((p) => saveUpdatedPlayers(p));
-        updateCampaignName();
+        return {missing: missing, plus: plus};
+    };
+
+    //TODO include campaign name change as well
+    const isCampaignDetailsChanged = () => {
+        let result = compareOriginalAndRecentPlayers();
+        return result.missing.length === 0 && result.plus.length === 0;
     };
 
     const handleSubmit = () => {
         prepareDatabaseBatch();
-        batch.commit();
+        batch.commit().then(() => {
+            setBatch(firebase.firestore().batch());
+        });
     };
 
     return (
@@ -175,7 +193,9 @@ const CampaignDetails = () => {
                     }}
                 />
             ) : (
-                <span onClick={() => setInputVisible(true)}>{campaignName}</span>
+                <span onClick={() => setInputVisible(true)}>
+                    {campaignName}
+                </span>
             )}
             <CombatfieldList combatfields={combatfieldData}/>
             <h3>Add player to the campaign:</h3>
@@ -197,7 +217,12 @@ const CampaignDetails = () => {
                     </div>
                 ))
             )}
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button
+                disabled={isCampaignDetailsChanged()}
+                onClick={handleSubmit}
+            >
+                Submit
+            </Button>
         </div>
     );
 };
