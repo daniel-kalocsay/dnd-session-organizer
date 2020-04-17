@@ -3,12 +3,14 @@ class CampaignPreviewData {
     name: string;
     createdAt: Date;
     playerIds: string[];
+    combatfieldIds: string[];
 
-    constructor(uid: string, name: string, createdAt: Date, playerIds: any[]) {
+    constructor(uid: string, name: string, createdAt: Date, playerIds: string[], combatfieldIds: string[]) {
         this.uid = uid;
         this.name = name;
         this.createdAt = createdAt;
         this.playerIds = playerIds;
+        this.combatfieldIds = combatfieldIds;
     }
 
     getDate() {
