@@ -98,28 +98,17 @@ const CampaignDetails = () => {
     });
   };
 
-  //TODO fetch players from the originalPlayers
   const fetchPlayers = () => {
-    campaignsRef
-      .doc(campaignId)
-      .collection("players")
-      .onSnapshot((querySnapshot: QuerySnapshot) => {
-        setPlayers([]);
-        querySnapshot.forEach((player: DocumentSnapshot) => {
-          //TODO make sure if using async await here is slower
-
-          usersRef
-            .doc(player.id)
-            .get()
-            .then((userRecord: DocumentSnapshot) => {
-              let userInfo = new UserInfo(
-                player.id,
-                userRecord.data()!.username
-              );
-              setPlayers((oldData) => [...oldData, userInfo] as UserInfo[]);
-            });
+    //TODO make sure if using async await here is slower
+    originalPlayers.forEach((playerId) => {
+      usersRef
+        .doc(playerId)
+        .get()
+        .then((userRecord: DocumentSnapshot) => {
+          let userInfo = new UserInfo(playerId, userRecord.data()!.username);
+          setPlayers((oldData) => [...oldData, userInfo] as UserInfo[]);
         });
-      });
+    });
   };
 
   const addPlayerToState = (player: UserInfo) => {
