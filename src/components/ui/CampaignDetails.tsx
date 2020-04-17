@@ -100,6 +100,7 @@ const CampaignDetails = () => {
     });
   };
 
+  //TODO fetch players from the originalPlayers
   const fetchPlayers = () => {
     campaignsRef
       .doc(campaignId)
@@ -149,7 +150,7 @@ const CampaignDetails = () => {
     usersRef.doc(playerId).collection("campaigns").doc(campaignId).delete();
   };
 
-  const comparePlayers = () => {
+  const compareCampaignDetailsStates = () => {
     let missing = [...originalPlayers];
     let plus = [...players.map((player) => player.uid!)];
 
@@ -165,9 +166,9 @@ const CampaignDetails = () => {
     plus.forEach((p) => saveUpdatedPlayers(p));
   };
 
-  //TODO redirect after commit
+  //TODO redirect or clear batch after commit
   const handleSubmit = () => {
-    comparePlayers();
+    compareCampaignDetailsStates();
     batch.commit();
   };
 
