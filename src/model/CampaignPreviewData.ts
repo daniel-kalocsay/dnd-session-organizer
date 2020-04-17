@@ -16,7 +16,8 @@ class CampaignPreviewData {
     getDate() {
         let date = this.createdAt;
         return date ?
-            `${date.getFullYear()} ${date.getMonth() + 1}.${date.getDate()} at ${date.getHours()}:${date.getMinutes()}`
+            `${date.getFullYear()} ${date.getMonth() + 1}.${date.getDate()}` +
+            ` at ${date.getHours()}:${date.getMinutes()}`
             : "unknown";
     }
 }

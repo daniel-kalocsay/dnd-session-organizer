@@ -1,12 +1,12 @@
-import React, {useState, useContext, useEffect, useRef} from "react";
-import firebase, {firestore} from "firebase";
-import {FirebaseContext} from "../contexts/FirebaseContext";
+import React, { useState, useContext, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import firebase, { firestore } from "firebase";
+import { FirebaseContext } from "../contexts/FirebaseContext";
 import CombatfieldData from "../../model/CombatfieldData";
 import CombatfieldList from "../combat/CombatfieldList";
 import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
 import Button from "@material-ui/core/Button";
-import {useLocation, Redirect} from "react-router-dom";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
@@ -19,7 +19,6 @@ const CampaignDetails = () => {
     //TODO maybe collect the campaign variables into one campaign object?
     const [campaignId, setId] = useState("" as string);
 
-
     //Campaign Name variables
     const state = useLocation().state as any;
     const [campaignName, setName] = useState(state.campaign.name as string);
@@ -31,8 +30,12 @@ const CampaignDetails = () => {
     );
     const [players, setPlayers] = useState([] as UserInfo[]);
 
+    const [originalCombatfields, setOriginalCombatfields] = useState(
+        state.campaign.combatfieldIds as string[]
+    );
+
     const [combatfieldData, setCombatfieldData] = useState(
-        state.campaign.combatfieldIds as CombatfieldData[]
+        [] as CombatfieldData[]
     );
 
     const [batch, setBatch] = useState(
@@ -79,32 +82,34 @@ const CampaignDetails = () => {
         };
     });
 
-    const fetchCombatfields = async () => {
-        let campaignsCol: QuerySnapshot = await campaignsRef
-            .doc(campaignId!)
-            .collection("combatfields")
-            .get();
+    const fetchCombatfields = () => {
 
-        campaignsCol.forEach((combatfieldDoc: DocumentSnapshot) => {
+        originalCombatfields.forEach( async(combatfieldId: string) => {
+            let combatfieldDoc = await
+                campaignsRef
+                    .doc(campaignId)
+                    .collection("combatfields")
+                    .doc(combatfieldId).get();
+
             if (combatfieldDoc.exists) {
                 let entry = combatfieldDoc.data();
                 let data = new CombatfieldData(combatfieldDoc.id, entry!.name);
-                console.log(data);
                 setCombatfieldData((oldData) => [...oldData, data]);
             }
+
         });
     };
 
     const fetchPlayers = () => {
         //TODO make sure if using async await here is slower
-        originalPlayers.forEach((playerId) => {
-            usersRef
-                .doc(playerId)
-                .get()
-                .then((userRecord: DocumentSnapshot) => {
-                    let userInfo = new UserInfo(playerId, userRecord.data()!.username);
-                    setPlayers((oldData) => [...oldData, userInfo] as UserInfo[]);
-                });
+        originalPlayers.forEach( async(playerId) => {
+            let userRecord:DocumentSnapshot = await
+                usersRef
+                    .doc(playerId)
+                    .get();
+
+            let userInfo = new UserInfo(playerId, userRecord.data()!.username);
+            setPlayers((oldData) => [...oldData, userInfo] as UserInfo[]);
         });
     };
 
@@ -154,7 +159,6 @@ const CampaignDetails = () => {
         updateCampaignName();
     };
 
-    //TODO redirect or clear batch after commit
     const handleSubmit = () => {
         prepareDatabaseBatch();
         batch.commit();
