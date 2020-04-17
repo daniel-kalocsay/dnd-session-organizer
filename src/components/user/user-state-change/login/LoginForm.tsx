@@ -17,6 +17,7 @@ const LoginForm = (props: any) => {
 
     const { hideModal } = useContext(ModalContext)!;
 
+    //TODO use reducer instead
     const [emailError, setEmailError] = useState<boolean>(false);
     const [pwError, setPwError] = useState<boolean>(false);
     const [emailErrorMessage, setEmailErrorMessage] = useState<string>("");

@@ -108,6 +108,8 @@ const CampaignDetails = () => {
       .onSnapshot((querySnapshot: QuerySnapshot) => {
         setPlayers([]);
         querySnapshot.forEach((player: DocumentSnapshot) => {
+          //TODO make sure if using async await here is slower
+
           usersRef
             .doc(player.id)
             .get()
@@ -189,18 +191,22 @@ const CampaignDetails = () => {
       <h3>Add player to the campaign:</h3>
       <UserSearch onAddPlayer={addPlayerToState} />
       <h3>Players in the campaign:</h3>
-      {players.map((player: UserInfo) => (
-        <div key={player.uid!}>
-          <p>{player.name}</p>
-          <Button
-            onClick={() => {
-              deletePlayerFromState(player.uid!);
-            }}
-          >
-            Remove
-          </Button>
-        </div>
-      ))}
+      {players.length === 0 ? (
+        <p>Loading players...</p>
+      ) : (
+        players.map((player: UserInfo) => (
+          <div key={player.uid!}>
+            <p>{player.name}</p>
+            <Button
+              onClick={() => {
+                deletePlayerFromState(player.uid!);
+              }}
+            >
+              Remove
+            </Button>
+          </div>
+        ))
+      )}
       <Button onClick={handleSubmit}>Submit</Button>
     </div>
   );
