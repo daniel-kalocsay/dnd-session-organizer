@@ -58,12 +58,10 @@ const CampaignDetails = () => {
       let input = inputRef.current as any;
       if (!input.contains(e.target)) {
         setInputVisible(false);
-        updateCampaignName();
       }
     }
   };
 
-  //TODO update only once
   const updateCampaignName = () => {
     batch.update(campaignsRef.doc(campaignId), { name: campaignName });
   };
@@ -152,7 +150,7 @@ const CampaignDetails = () => {
     usersRef.doc(playerId).collection("campaigns").doc(campaignId).delete();
   };
 
-  const compareCampaignDetailsStates = () => {
+  const prepareDatabaseBatch = () => {
     let missing = [...originalPlayers];
     let plus = [...players.map((player) => player.uid!)];
 
@@ -164,13 +162,15 @@ const CampaignDetails = () => {
         }
       })
     );
+
     missing.forEach((p) => deleteUpdatedPlayers(p));
     plus.forEach((p) => saveUpdatedPlayers(p));
+    updateCampaignName();
   };
 
   //TODO redirect or clear batch after commit
   const handleSubmit = () => {
-    compareCampaignDetailsStates();
+    prepareDatabaseBatch();
     batch.commit();
   };
 
