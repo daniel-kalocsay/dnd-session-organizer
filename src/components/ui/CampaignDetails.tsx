@@ -129,8 +129,8 @@ const CampaignDetails = () => {
     );
   };
 
-  const deletePlayerFromState = (userId: string) => {
-    let playerRemoved = players.filter((player) => player.uid !== userId);
+  const deletePlayerFromState = (playerId: string) => {
+    let playerRemoved = players.filter((player) => player.uid !== playerId);
     setPlayers(playerRemoved);
   };
 
@@ -151,16 +151,21 @@ const CampaignDetails = () => {
         }
       })
     );
-
     missing.forEach((p) => deleteUpdatedPlayers(p));
     plus.forEach((p) => saveUpdatedPlayers(p));
     updateCampaignName();
   };
 
-  //TODO redirect or clear batch after commit
+  //TODO sumbit button only enabled when real change happened
+  const isCampaignDetailsChanged = () => {
+    return true;
+  };
+
   const handleSubmit = () => {
     prepareDatabaseBatch();
-    batch.commit();
+    batch.commit().then(() => {
+      setBatch(firebase.firestore().batch());
+    });
   };
 
   return (
