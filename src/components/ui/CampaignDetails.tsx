@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect, useRef} from "react";
-import {useLocation} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import firebase, {firestore} from "firebase";
 import {FirebaseContext} from "../contexts/FirebaseContext";
 import CombatfieldData from "../../model/CombatfieldData";
@@ -34,7 +34,7 @@ const CampaignDetails = () => {
         state.campaign.combatfieldIds as string[]
     );
 
-    const [combatfieldData, setCombatfieldData] = useState(
+    const [combatfields, setCombatFields] = useState(
         [] as CombatfieldData[]
     );
 
@@ -98,7 +98,7 @@ const CampaignDetails = () => {
             if (combatfieldDoc.exists) {
                 let entry = combatfieldDoc.data();
                 let data = new CombatfieldData(combatfieldDoc.id, entry!.name);
-                setCombatfieldData((oldData) => [...oldData, data]);
+                setCombatFields((oldData) => [...oldData, data]);
             }
 
         });
@@ -197,13 +197,32 @@ const CampaignDetails = () => {
                     {campaignName}
                 </span>
             )}
-            <CombatfieldList combatfields={combatfieldData}/>
+
+            <div id="combatfield-list">
+                <h2>Combatfields:</h2>
+                {combatfields ? combatfields.map((combatfield: CombatfieldData) => (
+                    <div>
+                        <Link
+                            to={{
+                                pathname: "/combat",
+                                search: `?id=${combatfield.uid}`,
+                                state: { combatfieldData: combatfield, players: players },
+                            }}
+                            key={combatfield.uid}
+                        >
+                            {combatfield.name}
+                        </Link>
+                        <br />
+                    </div>
+                )) : ""}
+            </div>
+
             <h3>Add player to the campaign:</h3>
             <UserSearch onAddPlayer={addPlayerToState}/>
+
             <h3>Players in the campaign:</h3>
-            {players.length === 0 ? (
-                <p>Loading players...</p>
-            ) : (
+
+            {players.length === 0 ? <p>Loading players...</p> :
                 players.map((player: UserInfo) => (
                     <div key={player.uid!}>
                         <p>{player.name}</p>
@@ -215,8 +234,9 @@ const CampaignDetails = () => {
                             Remove
                         </Button>
                     </div>
-                ))
+                )
             )}
+
             <Button
                 disabled={isCampaignDetailsChanged()}
                 onClick={handleSubmit}
