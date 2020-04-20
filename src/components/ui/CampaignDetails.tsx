@@ -200,13 +200,13 @@ const CampaignDetails = () => {
 
             <div id="combatfield-list">
                 <h2>Combatfields:</h2>
-                {combatfields ? combatfields.map((combatfield: CombatfieldData) => (
+                {combatfields && campaignId !== "" ? combatfields.map((combatfield: CombatfieldData) => (
                     <div>
                         <Link
                             to={{
                                 pathname: "/combat",
                                 search: `?id=${combatfield.uid}`,
-                                state: { combatfieldData: combatfield, players: players },
+                                state: { campaignId: campaignId, combatfieldData: combatfield, players: players },
                             }}
                             key={combatfield.uid}
                         >

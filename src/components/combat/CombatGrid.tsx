@@ -2,57 +2,71 @@ import React, { useState, useEffect, useContext } from "react";
 import firebase from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import Square from "./Square";
+import Tile from "../../model/Tile";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
+type QuerySnapshot = firebase.firestore.QuerySnapshot;
 
 const CombatGrid = (props: any) => {
-    const gridId = props.gridId;
 
-    const [squares, setSquares] = useState<any[]>([] as any[]);
+    const auth = useContext(FirebaseContext)!.auth;
+    const [user, initializing, authError] = useAuthState(auth);
 
-    const combatfieldsRef = useContext(FirebaseContext)!.combatfieldsRef;
-    const gridRef = combatfieldsRef.doc(gridId);
+    const campaignRef = useContext(FirebaseContext)!.campaignsRef.doc(props.campaignId);
+    let gridRef = campaignRef.collection("combatfields").doc(props.gridData.uid);
 
-    const fetchGridData = () => {
-        gridRef.get().then((snapshot: DocumentSnapshot) => {
-            let grid = snapshot.data()!;
-            grid.tiles.forEach((tile: any, index: any) => {
-                let square = { id: index, active: tile.active };
-                setSquares((squares) => [...squares, square]);
-            });
+    const [tiles, setTiles] = useState<Tile[]>([] as Tile[]);
+
+    const buildGrid = async() => {
+        let tilesRef:QuerySnapshot = await gridRef.collection("tiles").get();
+
+        tilesRef.forEach((tile: any) => {
+            console.log(tile);
+            console.log(tile.data());
+
+            let newTile = new Tile(tile.uid, tile.x, tile.y, tile.occupied_by);
+            setTiles(oldData => [...oldData, newTile]);
         });
 
-        gridRef.onSnapshot((snapshot: DocumentSnapshot) => {
-            let tilesTemp = snapshot.get("tiles");
-            setSquares(tilesTemp);
-        });
     };
 
     useEffect(() => {
-        fetchGridData();
+        buildGrid();
     }, []);
 
-    // grids.push({tiles: newSquares}) // saves grid in db under "grids" node and generates key for it
+    useEffect(() => {
+        console.log(tiles);
+    }, [tiles]);
 
-    const movePlayer = (id: any) => {
-        let newSquares = squares.map((square, index) => {
-            return { active: index === id };
+    const movePlayer = (currentTile: Tile) => {
+        console.log(currentTile);
+        
+        let playerOnTile = currentTile.occupied_by;
+        let movable:boolean = playerOnTile === "" || playerOnTile === user!.uid;
+
+        let newTiles = tiles.map((tile) => {
+            return Object.assign({}, currentTile, { occupied_by: movable ? user!.uid : tile.occupied_by });
         });
 
-        gridRef.update({ tiles: newSquares }).then(() => {
-            // console.log("Update successful")
-        });
+        console.log(newTiles);
+
+        setTiles(newTiles);
+
+        // gridRef.set({ tiles: newTiles }).then(() => {
+        //     // console.log("Update successful")
+        // });
     };
 
     return (
         <div style={styles.grid}>
-            {squares
-                ? squares.map((square, index) => (
+            {tiles
+                ? tiles.map((tile: Tile) => (
                     <div
-                        style={square.active ? styles.active : styles.inactive}
-                        onClick={() => movePlayer(index)}
+                        style={tile.occupied_by !== "" ? styles.inactive : styles.active}
+                        onClick={() => movePlayer(tile)}
                     >
-                        <Square square={square} />
+                        <Square square={tile} />
                     </div>
                 ))
                 : null}

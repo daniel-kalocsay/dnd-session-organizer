@@ -9,12 +9,11 @@ import UserInfo from "../../model/UserInfo";
 const CombatView = (props: any) => {
 
     const params = new URLSearchParams(window.location.search);
+
     const state = useLocation().state as any;
     const combatfieldData = state.combatfieldData;
     const players = state.players as UserInfo[];
-
-    console.log(combatfieldData);
-    console.log(players);
+    const campaignId = state.campaignId;
 
     return (
         <div style={styles.combatViewWrapper}>
@@ -23,7 +22,7 @@ const CombatView = (props: any) => {
             </div>
 
             <div style={styles.gridContainer}>
-                <CombatGrid gridId={combatfieldData.uid} />
+                <CombatGrid campaignId={campaignId} gridData={combatfieldData} />
             </div>
 
             <div style={styles.sideBar}>
