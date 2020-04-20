@@ -1,62 +1,56 @@
 import React, {useEffect, useState} from "react";
+import UserInfo from "../../model/UserInfo";
 
-const Players = () => {
-    const [players, setPlayers] = useState<[]>([]);
-    const [DM, setDM] = useState<[]>([]);
+const Players = (props: any) => {
 
-    let participantsStub: any;
-
-    const initPlayers = () => {
+    const getStubbedPlayers = () => {
         return [
             {
-                id: 0,
-                name: "Dungeon Master",
+                uid: 0,
+                name: "These",
                 status: "keeping everyone alive"
             },
             {
-                id: 1,
-                name: "Carric",
+                uid: 1,
+                name: "players",
                 status: "status"
             },
             {
-                id: 2,
-                name: "Gregan",
+                uid: 2,
+                name: "are",
                 status: "trying to keep his integrity"
             },
             {
-                id: 3,
-                name: "Filbert",
+                uid: 3,
+                name: "all",
                 status: "hiding"
             },
             {
-                id: 4,
-                name: "Ginso",
+                uid: 4,
+                name: "fake",
                 status: "dead"
             },
             {
-                id: 5,
-                name: "hope this fits",
+                uid: 5,
+                name: "hehe",
                 status: "it does now"
             },
 
         ]
     };
 
-    useEffect( () => {
-        participantsStub = initPlayers();
-        setPlayers(participantsStub);
-    }, []);
+    const players:UserInfo[] = props.players ? props.players : getStubbedPlayers();
 
     return (
         <div style={styles.container}>
 
             <div style={styles.players}>
-                {players ? players.map((player: any) => {
+                {players ? players.map((player: UserInfo) => {
                     return (
                         <div style={styles.player}>
                             <div style={styles.name}>{player.name}</div>
                             <div style={styles.status}>
-                                <div>{player.status}</div>
+                                <div>{player.status ? player.status : "no status"}</div>
                             </div>
                         </div>
                     )

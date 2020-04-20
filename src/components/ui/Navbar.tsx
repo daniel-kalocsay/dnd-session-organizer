@@ -2,7 +2,7 @@ import React from "react";
 import { Link, Route } from "react-router-dom";
 
 import { MDBNavbar } from "mdbreact";
-import UserInfo from "../user/UserProfile";
+import UserProfile from "../user/UserProfile";
 
 //TODO make navbar a grid, and with MUI components instead
 
@@ -18,7 +18,7 @@ const Navbar = () => {
 
       <Link to={"/new-campaign"}>Create new Campaign</Link>
 
-      <UserInfo />
+      <UserProfile />
     </MDBNavbar>
   );
 };

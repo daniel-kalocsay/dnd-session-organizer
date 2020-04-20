@@ -8,7 +8,7 @@ import ModalWrapper from "../../wrappers/ModalWrapper";
 import LoginForm from "./user-state-change/login/LoginForm";
 import RegisterForm from "./user-state-change/register/RegisterForm";
 
-const UserInfo = () => {
+const UserProfile = () => {
     //TODO make this component work wrapped in WithAuth instead?
 
     const auth = useContext(FirebaseContext)!.auth;
@@ -61,7 +61,7 @@ const UserInfo = () => {
     )
 };
 
-export default UserInfo;
+export default UserProfile;
 
 const styles = {
     container: {
