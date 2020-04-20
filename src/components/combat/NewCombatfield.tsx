@@ -1,18 +1,19 @@
-import React, {useContext, useEffect, useState} from "react";
-import {FirebaseContext} from "../contexts/FirebaseContext";
-import {useAuthState} from "react-firebase-hooks/auth";
-
+import React, { useContext, useEffect, useState } from "react";
+import { FirebaseContext } from "../contexts/FirebaseContext";
+import { useAuthState } from "react-firebase-hooks/auth";
 import Grid from "../../model/Grid";
 import UserInfo from "../../model/UserInfo";
-
 import GridSizeForm from "./GridSizeForm";
 import UserSearch from "../user/UserSearch";
 import UserReference from "../user/UserReference";
 
+type QuerySnapshot = firebase.firestore.QuerySnapshot;
+
 //TODO move component to a different directory, "combat" should only handle the combat itself
 
-const NewCombatfield = () => {
-    const combatfields = useContext(FirebaseContext)!.combatfieldsRef;
+const NewCombatfield = (props: any) => {
+    //const combatfields = useContext(FirebaseContext)!.combatfieldsRef;
+    const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const users = useContext(FirebaseContext)!.usersRef;
 
     const auth = useContext(FirebaseContext)!.auth;
@@ -21,35 +22,22 @@ const NewCombatfield = () => {
     const [gridSize, setGridSize] = useState<number>(100);
     const [players, setPlayers] = useState<UserInfo[]>([]);
 
-    //TODO get the correct type for this event
-    const createNewCombatfield = (event: any) => {
-        event.preventDefault();
+    const createNewCombatfield = async (event: any) => {
+        //event.preventDefault();
 
         let combatfieldName = event.target.combatfieldName.value;
-        console.log(`trying to add ${combatfieldName} to db`);
+        let grid = new Grid(combatfieldName, gridSize);
+        let combatfieldsCol = await campaignsRef
+            .doc(props.campaignId)
+            .collection("combatfields");
 
-        let playerIDs = players.map((player) => player.uid) as string[];
-
-        //TODO save grid with userID
-        let grid = new Grid(combatfieldName, gridSize, playerIDs);
-        let gridId = combatfields.doc().id;
-        combatfields.doc(gridId).set(Object.assign({}, grid));
-
-        // save gridId to user
-        let userRecord = users.doc(user!.uid);
-        userRecord.collection("combatfields").add({gridId});
+        let combatfieldId = combatfieldsCol.doc().id;
+        combatfieldsCol.doc(combatfieldId).set(Object.assign({}, grid));
     };
 
     const saveSize = (event: any, value: number | number[]) => {
         let size = value as number;
         setGridSize(size * 10);
-    };
-
-    const addPlayer = (player: UserInfo) => {
-        if (!players.some(p => p.uid === player.uid)) {
-            let newPlayerList = [...players, player] as UserInfo[];
-            setPlayers(newPlayerList);
-        }
     };
 
     useEffect(() => {
@@ -58,21 +46,8 @@ const NewCombatfield = () => {
     }, []);
 
     return (
-        <div style={{width: 400, height: 400}}>
-            <GridSizeForm onSubmit={createNewCombatfield} saveSize={saveSize}/>
-
-            <h2>Add players to your combat field!</h2>
-            <UserSearch onAddPlayer={addPlayer}/>
-
-            <br/>
-            <div>
-                <h3>Added players:</h3>
-                {players
-                    ? players.map((player: UserInfo) => (
-                        <UserReference key={player.uid!} userData={player}/>
-                    ))
-                    : "No players added"}
-            </div>
+        <div style={{ width: 400, height: 400 }}>
+            <GridSizeForm onSubmit={createNewCombatfield} saveSize={saveSize} />
         </div>
     );
 };

@@ -3,6 +3,7 @@ import firebase, { firestore } from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import CombatfieldData from "../../model/CombatfieldData";
 import CombatfieldList from "../combat/CombatfieldList";
+import NewCombatfield from "../combat/NewCombatfield";
 import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
 import Button from "@material-ui/core/Button";
@@ -29,9 +30,7 @@ const CampaignDetails = () => {
     const inputRef = useRef(null);
     const [inputVisible, setInputVisible] = useState(false);
 
-    const [originalPlayers, setOriginalPlayers] = useState(
-        state.campaign.playerIds as string[]
-    );
+    const [originalPlayers] = useState(state.campaign.playerIds as string[]);
     const [players, setPlayers] = useState([] as UserInfo[]);
 
     const [batch, setBatch] = useState(
@@ -208,6 +207,7 @@ const CampaignDetails = () => {
                 </span>
             )}
             <CombatfieldList combatfields={combatfieldData} />
+            <NewCombatfield campaignId={campaignId} />
             <h3>Add player to the campaign:</h3>
             <UserSearch onAddPlayer={addPlayerToState} />
             <h3>Players in the campaign:</h3>
