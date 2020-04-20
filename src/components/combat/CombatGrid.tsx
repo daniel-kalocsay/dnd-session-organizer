@@ -22,10 +22,9 @@ const CombatGrid = (props: any) => {
         let tilesRef:QuerySnapshot = await gridRef.collection("tiles").get();
 
         tilesRef.forEach((tile: any) => {
-            console.log(tile);
-            console.log(tile.data());
+            let tileData = tile.data();
 
-            let newTile = new Tile(tile.uid, tile.x, tile.y, tile.occupied_by);
+            let newTile = new Tile(tile.ref.id, tileData.x, tileData.y, tileData.occupied_by);
             setTiles(oldData => [...oldData, newTile]);
         });
 
@@ -39,19 +38,19 @@ const CombatGrid = (props: any) => {
         console.log(tiles);
     }, [tiles]);
 
-    const movePlayer = (currentTile: Tile) => {
-        console.log(currentTile);
-        
-        let playerOnTile = currentTile.occupied_by;
-        let movable:boolean = playerOnTile === "" || playerOnTile === user!.uid;
+    const movePlayer = (selectedTile: Tile) => {
+        let playerOnTile = selectedTile.occupied_by;
+        let movable = playerOnTile === "" || playerOnTile === user!.uid;
 
-        let newTiles = tiles.map((tile) => {
-            return Object.assign({}, currentTile, { occupied_by: movable ? user!.uid : tile.occupied_by });
-        });
+        if (movable) {
+            let newTiles = tiles.map((tile: Tile) => {
+                let newTile = new Tile(tile.uid, tile.x, tile.y, user!.uid);
+                let emptyTile = new Tile(tile.uid, tile.x, tile.y, tile.occupied_by === user!.uid ? "" : tile.occupied_by as string);
+                return tile === selectedTile ? newTile : emptyTile;
+            });
 
-        console.log(newTiles);
-
-        setTiles(newTiles);
+            setTiles(newTiles);
+        }
 
         // gridRef.set({ tiles: newTiles }).then(() => {
         //     // console.log("Update successful")
@@ -63,10 +62,10 @@ const CombatGrid = (props: any) => {
             {tiles
                 ? tiles.map((tile: Tile) => (
                     <div
-                        style={tile.occupied_by !== "" ? styles.inactive : styles.active}
+                        style={tile.occupied_by !== "" ? styles.active : styles.inactive}
                         onClick={() => movePlayer(tile)}
                     >
-                        <Square square={tile} />
+                        <Square square={tile} player={tile.occupied_by}/>
                     </div>
                 ))
                 : null}

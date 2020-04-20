@@ -10,7 +10,7 @@ const Square = (props: any) => {
 
     return (
         <div style={styles.square}>
-            <div style={square.active ? styles.active : styles.inactive} ></div>
+            <div style={square.active ? styles.active : styles.inactive} >{props.player}</div>
         </div>
     )
 };
