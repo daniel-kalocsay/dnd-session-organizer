@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import firebase, { firestore } from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import CombatfieldData from "../../model/CombatfieldData";
@@ -7,22 +8,17 @@ import NewCombatfield from "../combat/NewCombatfield";
 import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
 import Button from "@material-ui/core/Button";
-import { useLocation, Redirect } from "react-router-dom";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 //TODO component too big, refactor
 const CampaignDetails = () => {
-    const combatfieldsRef = useContext(FirebaseContext)!.combatfieldsRef;
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const usersRef = useContext(FirebaseContext)!.usersRef;
 
     //TODO store original and current cmpaign details state in objects
     const [campaignId, setId] = useState("" as string);
-    const [combatfieldData, setCombatfieldData] = useState(
-        [] as CombatfieldData[]
-    );
 
     //Campaign Name variables
     const state = useLocation().state as any;
@@ -32,6 +28,14 @@ const CampaignDetails = () => {
 
     const [originalPlayers] = useState(state.campaign.playerIds as string[]);
     const [players, setPlayers] = useState([] as UserInfo[]);
+
+    const [originalCombatfields, setOriginalCombatfields] = useState(
+        state.campaign.combatfieldIds as string[]
+    );
+
+    const [combatfieldData, setCombatfieldData] = useState(
+        [] as CombatfieldData[]
+    );
 
     const [batch, setBatch] = useState(
         firebase.firestore().batch() as firestore.WriteBatch
@@ -81,44 +85,31 @@ const CampaignDetails = () => {
         };
     });
 
-    const fetchCombatfields = async () => {
-        let campaignsCol: QuerySnapshot = await campaignsRef
-            .doc(campaignId!)
-            .collection("combatfields")
-            .get();
+    const fetchCombatfields = () => {
+        originalCombatfields.forEach(async (combatfieldId: string) => {
+            let combatfieldDoc: DocumentSnapshot = await campaignsRef
+                .doc(campaignId)
+                .collection("combatfields")
+                .doc(combatfieldId)
+                .get();
 
-        campaignsCol.forEach((data: DocumentSnapshot) => {
-            combatfieldsRef
-                .doc(data.id)
-                .get()
-                .then((combatfieldRecord: DocumentSnapshot) => {
-                    if (combatfieldRecord.exists) {
-                        let entry = combatfieldRecord.data();
-                        let data = new CombatfieldData(
-                            combatfieldRecord.id,
-                            entry!.name
-                        );
-                        setCombatfieldData((oldData) => [...oldData, data]);
-                    }
-                });
+            if (combatfieldDoc.exists) {
+                let entry = combatfieldDoc.data();
+                let data = new CombatfieldData(combatfieldDoc.id, entry!.name);
+                setCombatfieldData((oldData) => [...oldData, data]);
+            }
         });
     };
 
     const fetchPlayers = () => {
         //TODO make sure if using async await here is slower
-        originalPlayers.forEach((playerId) => {
-            usersRef
+        originalPlayers.forEach(async (playerId) => {
+            let userRecord: DocumentSnapshot = await usersRef
                 .doc(playerId)
-                .get()
-                .then((userRecord: DocumentSnapshot) => {
-                    let userInfo = new UserInfo(
-                        playerId,
-                        userRecord.data()!.username
-                    );
-                    setPlayers(
-                        (oldData) => [...oldData, userInfo] as UserInfo[]
-                    );
-                });
+                .get();
+
+            let userInfo = new UserInfo(playerId, userRecord.data()!.username);
+            setPlayers((oldData) => [...oldData, userInfo] as UserInfo[]);
         });
     };
 
@@ -140,8 +131,8 @@ const CampaignDetails = () => {
         );
     };
 
-    const deletePlayerFromState = (playerId: string) => {
-        let playerRemoved = players.filter((player) => player.uid !== playerId);
+    const deletePlayerFromState = (userId: string) => {
+        let playerRemoved = players.filter((player) => player.uid !== userId);
         setPlayers(playerRemoved);
     };
 

@@ -52,7 +52,7 @@ const CampaignList = () => {
                     if (campaignDoc.exists) {
                         let entry = campaignDoc.data();
 
-                        const playersCol = await campaignDoc.ref
+                        let playersCol:QuerySnapshot = await campaignDoc.ref
                             .collection("players")
                             .get();
 
@@ -61,11 +61,21 @@ const CampaignList = () => {
                             playerIds.push(player.id);
                         });
 
+                        let combatfieldsCol:QuerySnapshot = await campaignDoc.ref
+                            .collection("combatfields")
+                            .get();
+
+                        let combatfieldIds = [] as string[];
+                        combatfieldsCol.forEach((combatfield: DocumentSnapshot) => {
+                            combatfieldIds.push(combatfield.id);
+                        });
+
                         let data = new CampaignPreviewData(
                             campaignDoc.id,
                             entry!.name,
                             entry!.created_at.toDate(),
-                            playerIds
+                            playerIds,
+                            combatfieldIds
                         );
                         setCampaigns((oldData) => [...oldData, data]);
                     }
@@ -113,6 +123,7 @@ const CampaignList = () => {
                 {campaign.createdAt ? campaign.getDate() : "no date"}
               </p>
               <p>Number of players: {campaign.playerIds.length}</p>
+              <p>Number of combatfields: {campaign.combatfieldIds.length}</p>
               <Link
                 to={{
                   pathname: "/campaign",
