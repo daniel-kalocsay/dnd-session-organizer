@@ -1,24 +1,24 @@
 import React, {useEffect, useState} from "react";
 
-const Square = (props: any) => {
+const GridTile = (props: any) => {
 
-    const [square, setSquare] = useState(props.square);
+    const [square, setSquare] = useState(props.tile);
 
     useEffect(() => {
-        setSquare(props.square)
-    }, [props.square]);
+        setSquare(props.tile)
+    }, [props.tile]);
 
     return (
-        <div style={styles.square}>
+        <div style={styles.tile}>
             <div style={square.active ? styles.active : styles.inactive} >{props.player}</div>
         </div>
     )
 };
 
-export default Square;
+export default GridTile;
 
 const styles = {
-    square: {
+    tile: {
         // overflow: "auto",
         // height: "100%",
     },

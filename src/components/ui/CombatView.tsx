@@ -22,7 +22,7 @@ const CombatView = (props: any) => {
             </div>
 
             <div style={styles.gridContainer}>
-                <CombatGrid campaignId={campaignId} gridData={combatfieldData} />
+                <CombatGrid campaignId={campaignId} gridData={combatfieldData} players={players} />
             </div>
 
             <div style={styles.sideBar}>

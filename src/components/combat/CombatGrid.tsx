@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import firebase from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
-import Square from "./Square";
+import GridTile from "./GridTile";
 import Tile from "../../model/Tile";
 import {useAuthState} from "react-firebase-hooks/auth";
+import UserInfo from "../../model/UserInfo";
 
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
@@ -17,6 +18,7 @@ const CombatGrid = (props: any) => {
     let gridRef = campaignRef.collection("combatfields").doc(props.gridData.uid);
 
     const [tiles, setTiles] = useState<Tile[]>([] as Tile[]);
+    const [players, setPLayers] = useState<UserInfo[]>([]);
 
     const buildGrid = async() => {
         let tilesRef:QuerySnapshot = await gridRef.collection("tiles").get();
@@ -31,12 +33,25 @@ const CombatGrid = (props: any) => {
     };
 
     useEffect(() => {
+        setPLayers(props.players);
         buildGrid();
     }, []);
 
     useEffect(() => {
         console.log(tiles);
     }, [tiles]);
+
+    const getPlayerName = (tile: Tile) => {
+        let player = players.find(p => p.uid === tile.occupied_by);
+
+        if (player) {
+            console.log("found player");
+            console.log(player);
+            return player!.name;
+        }
+
+        return "";
+    };
 
     const movePlayer = (selectedTile: Tile) => {
         let playerOnTile = selectedTile.occupied_by;
@@ -50,11 +65,12 @@ const CombatGrid = (props: any) => {
             });
 
             setTiles(newTiles);
+
+            // gridRef.update({ tiles: newTiles }).then(() => {
+            //     // console.log("Update successful")
+            // });
         }
 
-        // gridRef.set({ tiles: newTiles }).then(() => {
-        //     // console.log("Update successful")
-        // });
     };
 
     return (
@@ -65,7 +81,7 @@ const CombatGrid = (props: any) => {
                         style={tile.occupied_by !== "" ? styles.active : styles.inactive}
                         onClick={() => movePlayer(tile)}
                     >
-                        <Square square={tile} player={tile.occupied_by}/>
+                        <GridTile tile={tile} player={getPlayerName(tile)}/>
                     </div>
                 ))
                 : null}
