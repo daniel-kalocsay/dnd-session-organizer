@@ -1,14 +1,14 @@
-import React, {useState, useContext, useEffect, useRef} from "react";
-import {Link, useLocation} from "react-router-dom";
-import firebase, {firestore} from "firebase";
-import {FirebaseContext} from "../contexts/FirebaseContext";
+import React, { useState, useContext, useEffect, useRef } from "react";
+import { useLocation, Link } from "react-router-dom";
+import firebase, { firestore } from "firebase";
+import { FirebaseContext } from "../contexts/FirebaseContext";
 import CombatfieldData from "../../model/CombatfieldData";
 import CombatfieldList from "../combat/CombatfieldList";
+import NewCombatfield from "../combat/NewCombatfield";
 import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
 import Button from "@material-ui/core/Button";
 
-type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 //TODO component too big, refactor
@@ -25,12 +25,11 @@ const CampaignDetails = () => {
     const inputRef = useRef(null);
     const [inputVisible, setInputVisible] = useState(false);
 
-    const [originalPlayers, setOriginalPlayers] = useState(
-        state.campaign.playerIds as string[]
-    );
+    const [originalPlayers] = useState(state.campaign.playerIds as string[]);
     const [players, setPlayers] = useState([] as UserInfo[]);
 
-    const [originalCombatfields, setOriginalCombatfields] = useState(
+    //TODO do we need the passed down combatfields since we have a listener on the collection?
+    const [originalCombatfields] = useState(
         state.campaign.combatfieldIds as string[]
     );
 
@@ -71,7 +70,7 @@ const CampaignDetails = () => {
     };
 
     const updateCampaignName = () => {
-        batch.update(campaignsRef.doc(campaignId), {name: campaignName});
+        batch.update(campaignsRef.doc(campaignId), { name: campaignName });
     };
 
     useEffect(() => {
@@ -87,30 +86,28 @@ const CampaignDetails = () => {
     });
 
     const fetchCombatfields = () => {
-
-        originalCombatfields.forEach(async (combatfieldId: string) => {
-            let combatfieldDoc:DocumentSnapshot = await
-                campaignsRef
-                    .doc(campaignId)
-                    .collection("combatfields")
-                    .doc(combatfieldId).get();
-
-            if (combatfieldDoc.exists) {
-                let entry = combatfieldDoc.data();
-                let data = new CombatfieldData(combatfieldDoc.id, entry!.name);
-                setCombatFields((oldData) => [...oldData, data]);
-            }
-
-        });
+        campaignsRef
+            .doc(campaignId)
+            .collection("combatfields")
+            .onSnapshot(function (docs) {
+                docs.docChanges().forEach(function (change) {
+                    if (change.type === "added") {
+                        let entry = change.doc.data();
+                        let combatfield = new CombatfieldData(
+                            change.doc.id,
+                            entry!.name
+                        );
+                        setCombatFields((oldData) => [...oldData, combatfield]);
+                    }
+                });
+            });
     };
 
     const fetchPlayers = () => {
-        //TODO make sure if using async await here is slower
         originalPlayers.forEach(async (playerId) => {
-            let userRecord: DocumentSnapshot = await
-                usersRef
-                    .doc(playerId)
-                    .get();
+            let userRecord: DocumentSnapshot = await usersRef
+                .doc(playerId)
+                .get();
 
             let userInfo = new UserInfo(playerId, userRecord.data()!.username);
             setPlayers((oldData) => [...oldData, userInfo] as UserInfo[]);
@@ -166,7 +163,7 @@ const CampaignDetails = () => {
             })
         );
 
-        return {missing: missing, plus: plus};
+        return { missing: missing, plus: plus };
     };
 
     //TODO include campaign name change as well
@@ -216,6 +213,9 @@ const CampaignDetails = () => {
                     </div>
                 )) : ""}
             </div>
+
+            <h3>Add new combatfield</h3>
+            <NewCombatfield />
 
             <h3>Add player to the campaign:</h3>
             <UserSearch onAddPlayer={addPlayerToState}/>
