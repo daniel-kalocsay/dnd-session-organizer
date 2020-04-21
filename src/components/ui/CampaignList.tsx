@@ -131,14 +131,15 @@ const CampaignList = () => {
                   state: { campaign: campaign },
                 }}
               >
-                Details
+                <Button color={"primary"}>Details</Button>
               </Link>
+                <p>no more accidents</p>
               <Button
                 onClick={() => {
                   deleteCampaign(campaign.uid);
                 }}
               >
-                Delete
+                Delete (don't click by accident)
               </Button>
             </CardContent>
           </Card>

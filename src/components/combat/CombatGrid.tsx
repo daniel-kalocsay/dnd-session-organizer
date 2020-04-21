@@ -7,6 +7,8 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import UserInfo from "../../model/UserInfo";
 
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
+type DocumentReference = firebase.firestore.DocumentReference;
+type CollectionReference = firebase.firestore.CollectionReference;
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 
 const CombatGrid = (props: any) => {
@@ -16,25 +18,33 @@ const CombatGrid = (props: any) => {
 
     const campaignRef = useContext(FirebaseContext)!.campaignsRef.doc(props.campaignId);
     let gridRef = campaignRef.collection("combatfields").doc(props.gridData.uid);
+    let tilesRef:CollectionReference = gridRef.collection("tiles");
+
 
     const [tiles, setTiles] = useState<Tile[]>([] as Tile[]);
     const [players, setPLayers] = useState<UserInfo[]>([]);
 
-    const buildGrid = async() => {
-        let tilesRef:QuerySnapshot = await gridRef.collection("tiles").get();
+    const fetchGrid = async() => {
 
-        tilesRef.forEach((tile: any) => {
-            let tileData = tile.data();
+        setTiles([]);
 
-            let newTile = new Tile(tile.ref.id, tileData.x, tileData.y, tileData.occupied_by);
-            setTiles(oldData => [...oldData, newTile]);
-        });
+        tilesRef.onSnapshot((tilesCol: QuerySnapshot) => {
+            let newTiles = [] as Tile[];
+
+            tilesCol.forEach((tile: any) => {
+                let tileData = tile.data();
+
+                let newTile = new Tile(tile.ref.id, tileData.x, tileData.y, tileData.occupied_by);
+                newTiles.push(newTile);
+            });
+            setTiles(newTiles);
+        })
 
     };
 
     useEffect(() => {
         setPLayers(props.players);
-        buildGrid();
+        fetchGrid();
     }, []);
 
     useEffect(() => {
@@ -45,15 +55,13 @@ const CombatGrid = (props: any) => {
         let player = players.find(p => p.uid === tile.occupied_by);
 
         if (player) {
-            console.log("found player");
-            console.log(player);
             return player!.name;
         }
 
         return "";
     };
 
-    const movePlayer = (selectedTile: Tile) => {
+    const movePlayer = async(selectedTile: Tile) => {
         let playerOnTile = selectedTile.occupied_by;
         let movable = playerOnTile === "" || playerOnTile === user!.uid;
 
@@ -61,14 +69,16 @@ const CombatGrid = (props: any) => {
             let newTiles = tiles.map((tile: Tile) => {
                 let newTile = new Tile(tile.uid, tile.x, tile.y, user!.uid);
                 let emptyTile = new Tile(tile.uid, tile.x, tile.y, tile.occupied_by === user!.uid ? "" : tile.occupied_by as string);
+
                 return tile === selectedTile ? newTile : emptyTile;
             });
 
-            setTiles(newTiles);
 
-            // gridRef.update({ tiles: newTiles }).then(() => {
-            //     // console.log("Update successful")
-            // });
+            newTiles.forEach((tile: Tile) => {
+                let tileObject = Object.assign({}, tile);
+                tilesRef.doc(tile.uid).set(tileObject)
+            })
+
         }
 
     };
