@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
-import firebase from "firebase";
-import { FirebaseContext } from "../contexts/FirebaseContext";
+import React, {useContext, useEffect, useState} from "react";
+import firebase, { firestore } from "firebase";
+import {FirebaseContext} from "../contexts/FirebaseContext";
 import GridTile from "./GridTile";
 import Tile from "../../model/Tile";
 import {useAuthState} from "react-firebase-hooks/auth";
 import UserInfo from "../../model/UserInfo";
-import Button from "@material-ui/core/Button";
+import Button from "@material-ui/core/Button"
 
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 type DocumentReference = firebase.firestore.DocumentReference;
@@ -29,13 +29,17 @@ const CombatGrid = (props: any) => {
 
         setTiles([]);
 
-        tilesRef.onSnapshot((tilesCol: QuerySnapshot) => {
+        gridRef.onSnapshot(async (gridSnap: DocumentSnapshot) => {
             let newTiles = [] as Tile[];
 
-            tilesCol.forEach((tile: any) => {
-                let tileData = tile.data();
+            let grid = await gridSnap.data();
 
-                let newTile = new Tile(tile.ref.id, tileData.x, tileData.y, tileData.occupied_by);
+            let tiles = grid!.tiles;
+
+            tiles.forEach((tile: any, index: number) => {
+                let id = index.toString();
+
+                let newTile = new Tile(id, tile.x, tile.y, tile.occupied_by);
                 newTiles.push(newTile);
             });
             setTiles(newTiles);
@@ -63,18 +67,16 @@ const CombatGrid = (props: any) => {
         let movable = playerOnTile === "" || playerOnTile === user!.uid;
 
         if (movable) {
-            let newTiles = tiles.map((tile: Tile) => {
+            let tilesArray = tiles.map((tile: Tile) => {
                 let newTile = new Tile(tile.uid, tile.x, tile.y, user!.uid);
                 let emptyTile = new Tile(tile.uid, tile.x, tile.y, tile.occupied_by === user!.uid ? "" : tile.occupied_by as string);
 
-                return tile === selectedTile ? newTile : emptyTile;
+                let source = tile === selectedTile ? newTile : emptyTile;
+                return Object.assign({}, source);
+
             });
 
-
-            newTiles.forEach((tile: Tile) => {
-                let tileObject = Object.assign({}, tile);
-                tilesRef.doc(tile.uid).set(tileObject);
-            })
+            gridRef.update({tiles: tilesArray})
 
         }
 
