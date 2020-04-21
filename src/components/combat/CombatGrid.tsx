@@ -5,6 +5,7 @@ import GridTile from "./GridTile";
 import Tile from "../../model/Tile";
 import {useAuthState} from "react-firebase-hooks/auth";
 import UserInfo from "../../model/UserInfo";
+import Button from "@material-ui/core/Button";
 
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 type DocumentReference = firebase.firestore.DocumentReference;
@@ -47,10 +48,6 @@ const CombatGrid = (props: any) => {
         fetchGrid();
     }, []);
 
-    useEffect(() => {
-        console.log(tiles);
-    }, [tiles]);
-
     const getPlayerName = (tile: Tile) => {
         let player = players.find(p => p.uid === tile.occupied_by);
 
@@ -76,7 +73,7 @@ const CombatGrid = (props: any) => {
 
             newTiles.forEach((tile: Tile) => {
                 let tileObject = Object.assign({}, tile);
-                tilesRef.doc(tile.uid).set(tileObject)
+                tilesRef.doc(tile.uid).set(tileObject);
             })
 
         }
