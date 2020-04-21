@@ -9,7 +9,6 @@ import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
 import Button from "@material-ui/core/Button";
 
-type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 //TODO component too big, refactor
@@ -29,7 +28,8 @@ const CampaignDetails = () => {
     const [originalPlayers] = useState(state.campaign.playerIds as string[]);
     const [players, setPlayers] = useState([] as UserInfo[]);
 
-    const [originalCombatfields, setOriginalCombatfields] = useState(
+    //TODO do we need the passed down combatfields since we have a listener on the collection?
+    const [originalCombatfields] = useState(
         state.campaign.combatfieldIds as string[]
     );
 
@@ -86,19 +86,24 @@ const CampaignDetails = () => {
     });
 
     const fetchCombatfields = () => {
-        originalCombatfields.forEach(async (combatfieldId: string) => {
-            let combatfieldDoc: DocumentSnapshot = await campaignsRef
-                .doc(campaignId)
-                .collection("combatfields")
-                .doc(combatfieldId)
-                .get();
-
-            if (combatfieldDoc.exists) {
-                let entry = combatfieldDoc.data();
-                let data = new CombatfieldData(combatfieldDoc.id, entry!.name);
-                setCombatfieldData((oldData) => [...oldData, data]);
-            }
-        });
+        campaignsRef
+            .doc(campaignId)
+            .collection("combatfields")
+            .onSnapshot(function (docs) {
+                docs.docChanges().forEach(function (change) {
+                    if (change.type === "added") {
+                        let entry = change.doc.data();
+                        let combatfield = new CombatfieldData(
+                            change.doc.id,
+                            entry!.name
+                        );
+                        setCombatfieldData((oldData) => [
+                            ...oldData,
+                            combatfield,
+                        ]);
+                    }
+                });
+            });
     };
 
     const fetchPlayers = () => {
