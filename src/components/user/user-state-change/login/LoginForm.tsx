@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useContext, useState} from "react";
+import React, {ChangeEvent, useContext, useReducer, useState} from "react";
 
 import firebase from "firebase";
 import { FirebaseContext } from "../../../contexts/FirebaseContext";
@@ -10,18 +10,19 @@ import TextField from "@material-ui/core/TextField";
 
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Lock from "@material-ui/icons/Lock";
+import LoginErrorReducer, {
+    initialState,
+    EMAIL_ERROR,
+    PASSWORD_ERROR,
+    RESET_ERRORS
+} from "../../../reducers/LoginErrorReducer";
 
 const LoginForm = (props: any) => {
 
     const auth = useContext(FirebaseContext)!.auth;
-
     const { hideModal } = useContext(ModalContext)!;
 
-    //TODO use reducer instead
-    const [emailError, setEmailError] = useState<boolean>(false);
-    const [pwError, setPwError] = useState<boolean>(false);
-    const [emailErrorMessage, setEmailErrorMessage] = useState<string>("");
-    const [pwErrorMessage, setPwErrorMessage] = useState<string>("");
+    const [errorState, dispatch] = useReducer(LoginErrorReducer, initialState);
 
     const [loginData, setLoginData] = useState({
         email: "",
@@ -38,19 +39,14 @@ const LoginForm = (props: any) => {
     const handleError = (error: any) => {
         // except for this, all other errors are for the email, no need for switch case
         if (error.code === 'auth/wrong-password') {
-            setPwError(true);
-            setPwErrorMessage(error.message)
+            dispatch({ type: PASSWORD_ERROR, errorMessage: error.message });
         } else {
-            setEmailError(true);
-            setEmailErrorMessage(error.message);
+            dispatch({ type: EMAIL_ERROR, errorMessage: error.message});
         }
     };
 
     const resetErrors = () => {
-        setEmailError(false);
-        setPwError(false);
-        setEmailErrorMessage("");
-        setPwErrorMessage("");
+        dispatch({...errorState, type: RESET_ERRORS});
     };
 
     const handleSubmit = (event: React.SyntheticEvent) => {
@@ -80,8 +76,8 @@ const LoginForm = (props: any) => {
                                    label="E-mail"
                                    onChange={handleChange}
                                    required
-                                   error={emailError}
-                                   helperText={emailErrorMessage}
+                                   error={errorState.emailError}
+                                   helperText={errorState.emailErrorMessage}
                         />
                     </Grid>
                 </Grid>
@@ -97,8 +93,8 @@ const LoginForm = (props: any) => {
                                    type="password"
                                    onChange={handleChange}
                                    required
-                                   error={pwError}
-                                   helperText={pwErrorMessage}
+                                   error={errorState.pwError}
+                                   helperText={errorState.pwErrorMessage}
                         />
                     </Grid>
                 </Grid>

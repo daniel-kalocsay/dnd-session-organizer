@@ -5,7 +5,6 @@ import GridTile from "./GridTile";
 import Tile from "../../model/Tile";
 import {useAuthState} from "react-firebase-hooks/auth";
 import UserInfo from "../../model/UserInfo";
-import Button from "@material-ui/core/Button"
 
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 type DocumentReference = firebase.firestore.DocumentReference;
@@ -29,7 +28,9 @@ const CombatGrid = (props: any) => {
 
         setTiles([]);
 
-        gridRef.onSnapshot(async (gridSnap: DocumentSnapshot) => {
+        gridRef.onSnapshot(async (gridSnap) => {
+
+            console.log("new snap");
             let newTiles = [] as Tile[];
 
             let grid = await gridSnap.data();
@@ -42,6 +43,7 @@ const CombatGrid = (props: any) => {
                 let newTile = new Tile(id, tile.x, tile.y, tile.occupied_by);
                 newTiles.push(newTile);
             });
+
             setTiles(newTiles);
         })
 
@@ -49,6 +51,7 @@ const CombatGrid = (props: any) => {
 
     useEffect(() => {
         setPLayers(props.players);
+        console.log(props.players);
         fetchGrid();
     }, []);
 
