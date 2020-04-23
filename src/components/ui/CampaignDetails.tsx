@@ -16,7 +16,7 @@ const CampaignDetails = () => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const usersRef = useContext(FirebaseContext)!.usersRef;
 
-    //TODO store original and current cmpaign details state in objects
+    //TODO store original and current campaign details state in objects
     const [campaignId, setId] = useState("" as string);
 
     //Campaign Name variables
@@ -33,9 +33,7 @@ const CampaignDetails = () => {
         state.campaign.combatfieldIds as string[]
     );
 
-    const [combatfields, setCombatFields] = useState(
-        [] as CombatfieldData[]
-    );
+    const [combatfields, setCombatFields] = useState([] as CombatfieldData[]);
 
     const [batch, setBatch] = useState(
         firebase.firestore().batch() as firestore.WriteBatch
@@ -98,6 +96,11 @@ const CampaignDetails = () => {
                             entry!.name
                         );
                         setCombatFields((oldData) => [...oldData, combatfield]);
+                    } else if (change.type === "removed") {
+                        let removedId = change.doc.id;
+                        setCombatFields((oldData) =>
+                            oldData.filter((d) => d.uid !== removedId)
+                        );
                     }
                 });
             });
@@ -138,7 +141,11 @@ const CampaignDetails = () => {
     };
 
     const deleteUpdatedPlayers = (playerId: string) => {
-        campaignsRef.doc(campaignId).collection("players").doc(playerId).delete();
+        campaignsRef
+            .doc(campaignId)
+            .collection("players")
+            .doc(playerId)
+            .delete();
         usersRef.doc(playerId).collection("campaigns").doc(campaignId).delete();
     };
 
@@ -194,35 +201,21 @@ const CampaignDetails = () => {
                     {campaignName}
                 </span>
             )}
-
-            <div id="combatfield-list">
-                <h2>Combatfields:</h2>
-                {combatfields && campaignId !== "" ? combatfields.map((combatfield: CombatfieldData) => (
-                    <div>
-                        <Link
-                            to={{
-                                pathname: "/combat",
-                                search: `?id=${combatfield.uid}`,
-                                state: { campaignId: campaignId, combatfieldData: combatfield, players: players },
-                            }}
-                            key={combatfield.uid}
-                        >
-                            {combatfield.name}
-                        </Link>
-                        <br />
-                    </div>
-                )) : ""}
-            </div>
-
-            <h3>Add new combatfield</h3>
-            <NewCombatfield />
-
+            <CombatfieldList
+                combatfields={combatfields}
+                players={players}
+                campaignId={campaignId}
+            />
+            {/* //TODO create button to navigate to another location for combatfield creation*/}
+            <NewCombatfield campaignId={campaignId} />
             <h3>Add player to the campaign:</h3>
-            <UserSearch onAddPlayer={addPlayerToState}/>
+            <UserSearch onAddPlayer={addPlayerToState} />
 
             <h3>Players in the campaign:</h3>
 
-            {players.length === 0 ? <p>Loading players...</p> :
+            {players.length === 0 ? (
+                <p>Loading players...</p>
+            ) : (
                 players.map((player: UserInfo) => (
                     <div key={player.uid!}>
                         <p>{player.name}</p>
@@ -234,7 +227,7 @@ const CampaignDetails = () => {
                             Remove
                         </Button>
                     </div>
-                )
+                ))
             )}
 
             <Button
