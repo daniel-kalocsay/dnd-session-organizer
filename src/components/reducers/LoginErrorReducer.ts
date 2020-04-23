@@ -1,5 +1,4 @@
-export const EMAIL_ERROR = "EMAIL_ERROR";
-export const PASSWORD_ERROR = "PASSWORD_ERROR";
+export const ERROR = "ERROR";
 export const RESET_ERRORS = "RESET_ERRORS";
 
 export const initialState = {
@@ -10,24 +9,19 @@ export const initialState = {
 };
 
 const LoginErrorReducer = (state: any, action: any) => {
+
     switch (action.type) {
-        case EMAIL_ERROR:
-            return {
-                ...state,
-                emailError: true,
-                emailErrorMessage: action.errorMessage
-            };
-        case PASSWORD_ERROR:
-            return {
-                ...state,
-                pwError: true,
-                pwErrorMessage: action.errorMessage
-            };
+        case ERROR:
+            if (action.error.code === "auth/wrong-password") {
+                return { ...state, emailError: true, emailErrorMessage: action.error.message };
+            }
+            return { ...state, pwError: true, pwErrorMessage: action.error.message };
         case RESET_ERRORS:
             return initialState;
         default:
             return state;
     }
+
 };
 
 export default LoginErrorReducer;
