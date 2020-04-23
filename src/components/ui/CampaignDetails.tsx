@@ -25,7 +25,7 @@ const CampaignDetails = () => {
     const [inputVisible, setInputVisible] = useState(false);
 
     const [originalPlayers] = useState(state.campaign.playerIds as string[]);
-    const [players, setPlayers] = useState([] as UserInfo[]);
+    //const [players, setPlayers] = useState([] as UserInfo[]);
 
     //TODO do we need the passed down combatfields since we have a listener on the collection?
     const [originalCombatfields] = useState(
@@ -54,7 +54,7 @@ const CampaignDetails = () => {
 
     useEffect(() => {
         isCampaignDetailsChanged();
-    }, [originalPlayers, players]);
+    }, [originalPlayers, campaignDetails!.players]);
 
     const onClickOutside = (e: any) => {
         // Check if user is clicking outside of <input>
@@ -116,31 +116,45 @@ const CampaignDetails = () => {
                 .get();
 
             let userInfo = new UserInfo(playerId, userRecord.data()!.username);
-            setPlayers((oldData) => [...oldData, userInfo] as UserInfo[]);
+            campaignDetails!.setPlayers(
+                (oldData: UserInfo[]) => [...oldData, userInfo] as UserInfo[]
+            );
+            //setPlayers((oldData) => [...oldData, userInfo] as UserInfo[]);
         });
     };
 
     const addPlayerToState = (player: UserInfo) => {
-        if (!players.some((p) => p.uid === player.uid)) {
-            let newPlayerList = [...players, player] as UserInfo[];
-            setPlayers(newPlayerList);
+        if (!campaignDetails!.players.some((p) => p.uid === player.uid)) {
+            let newPlayerList = [
+                ...campaignDetails!.players,
+                player,
+            ] as UserInfo[];
+            campaignDetails!.setPlayers(newPlayerList);
         }
     };
 
     const saveUpdatedPlayers = (playerId: string) => {
         batch.set(
-            usersRef.doc(playerId).collection("campaigns").doc(campaignDetails!.campaignId),
+            usersRef
+                .doc(playerId)
+                .collection("campaigns")
+                .doc(campaignDetails!.campaignId),
             {}
         );
         batch.set(
-            campaignsRef.doc(campaignDetails!.campaignId).collection("players").doc(playerId),
+            campaignsRef
+                .doc(campaignDetails!.campaignId)
+                .collection("players")
+                .doc(playerId),
             {}
         );
     };
 
     const deletePlayerFromState = (userId: string) => {
-        let playerRemoved = players.filter((player) => player.uid !== userId);
-        setPlayers(playerRemoved);
+        let playerRemoved = campaignDetails!.players.filter(
+            (player) => player.uid !== userId
+        );
+        campaignDetails!.setPlayers(playerRemoved);
     };
 
     const deleteUpdatedPlayers = (playerId: string) => {
@@ -149,7 +163,11 @@ const CampaignDetails = () => {
             .collection("players")
             .doc(playerId)
             .delete();
-        usersRef.doc(playerId).collection("campaigns").doc(campaignDetails!.campaignId).delete();
+        usersRef
+            .doc(playerId)
+            .collection("campaigns")
+            .doc(campaignDetails!.campaignId)
+            .delete();
     };
 
     const prepareDatabaseBatch = () => {
@@ -162,9 +180,9 @@ const CampaignDetails = () => {
 
     const compareOriginalAndRecentPlayers = () => {
         let missing = [...originalPlayers];
-        let plus = [...players.map((player) => player.uid!)];
+        let plus = [...campaignDetails!.players.map((player) => player.uid!)];
 
-        players.forEach((p: UserInfo) =>
+        campaignDetails!.players.forEach((p: UserInfo) =>
             originalPlayers.forEach((op: string) => {
                 if (p.uid === op) {
                     missing = missing.filter((player) => player !== op);
@@ -208,7 +226,7 @@ const CampaignDetails = () => {
 
             <CombatfieldList
                 combatfields={combatfields}
-                players={players}
+                players={campaignDetails!.players}
                 campaignId={campaignDetails!.campaignId}
             />
 
@@ -221,10 +239,10 @@ const CampaignDetails = () => {
 
             <h3>Players in the campaign:</h3>
 
-            {players.length === 0 ? (
+            {campaignDetails!.players.length === 0 ? (
                 <p>Loading players...</p>
             ) : (
-                players.map((player: UserInfo) => (
+                campaignDetails!.players.map((player: UserInfo) => (
                     <div key={player.uid!}>
                         <p>{player.name}</p>
                         <Button
