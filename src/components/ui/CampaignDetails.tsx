@@ -16,7 +16,7 @@ const CampaignDetails = () => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const usersRef = useContext(FirebaseContext)!.usersRef;
 
-    //TODO store original and current cmpaign details state in objects
+    //TODO store original and current campaign details state in objects
     const [campaignId, setId] = useState("" as string);
 
     //Campaign Name variables
@@ -101,6 +101,11 @@ const CampaignDetails = () => {
                             ...oldData,
                             combatfield,
                         ]);
+                    } else if (change.type === "removed") {
+                        let removedId = change.doc.id;
+                        setCombatfieldData((oldData) =>
+                            oldData.filter((d) => d.uid !== removedId)
+                        );
                     }
                 });
             });
@@ -202,7 +207,12 @@ const CampaignDetails = () => {
                     {campaignName}
                 </span>
             )}
-            <CombatfieldList combatfields={combatfieldData} />
+            <CombatfieldList
+                combatfields={combatfieldData}
+                players={players}
+                campaignId={campaignId}
+            />
+            {/* //TODO create button to navigate to another location for combatfield creation*/}
             <NewCombatfield campaignId={campaignId} />
             <h3>Add player to the campaign:</h3>
             <UserSearch onAddPlayer={addPlayerToState} />
