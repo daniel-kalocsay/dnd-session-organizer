@@ -188,6 +188,7 @@ const CampaignDetails = () => {
 
     return (
         <div>
+            {/* Editable Campaign name */}
             {inputVisible ? (
                 <input
                     ref={inputRef}
@@ -206,8 +207,10 @@ const CampaignDetails = () => {
                 players={players}
                 campaignId={campaignId}
             />
-            {/* //TODO create button to navigate to another location for combatfield creation*/}
+            {/* TODO create button to navigate to another location for combatfield creation*/}
             <NewCombatfield campaignId={campaignId} />
+
+            {/* Players */}
             <h3>Add player to the campaign:</h3>
             <UserSearch onAddPlayer={addPlayerToState} />
 
