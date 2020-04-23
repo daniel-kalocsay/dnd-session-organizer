@@ -11,12 +11,13 @@ import CardHeader from "@material-ui/core/CardHeader";
 import Button from "@material-ui/core/Button";
 
 import CampaignPreviewData from "../../model/CampaignPreviewData";
+import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 const CampaignList = () => {
-
+    const campaignDetails = useContext(SelectedCampaignContext);
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const usersRef = useContext(FirebaseContext)!.usersRef;
     const [campaigns, setCampaigns] = useState([] as CampaignPreviewData[]);
@@ -26,20 +27,16 @@ const CampaignList = () => {
 
     useEffect(() => {
         if (user) {
-            fetchCampaigns()
+            fetchCampaigns();
         }
     }, [user]);
 
     const sortCampaignList = () => {
-        return campaigns.sort(
-            (a, b) => (a.createdAt < b.createdAt ? 1 : -1)
-        );
+        return campaigns.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
     };
 
-    const fetchCampaigns = async() => {
-
-        let campaignsCol:QuerySnapshot = await
-            usersRef
+    const fetchCampaigns = async () => {
+        let campaignsCol: QuerySnapshot = await usersRef
             .doc(user!.uid)
             .collection("campaigns")
             .get();
@@ -52,7 +49,7 @@ const CampaignList = () => {
                     if (campaignDoc.exists) {
                         let entry = campaignDoc.data();
 
-                        let playersCol:QuerySnapshot = await campaignDoc.ref
+                        let playersCol: QuerySnapshot = await campaignDoc.ref
                             .collection("players")
                             .get();
 
@@ -61,14 +58,16 @@ const CampaignList = () => {
                             playerIds.push(player.id);
                         });
 
-                        let combatfieldsCol:QuerySnapshot = await campaignDoc.ref
+                        let combatfieldsCol: QuerySnapshot = await campaignDoc.ref
                             .collection("combatfields")
                             .get();
 
                         let combatfieldIds = [] as string[];
-                        combatfieldsCol.forEach((combatfield: DocumentSnapshot) => {
-                            combatfieldIds.push(combatfield.id);
-                        });
+                        combatfieldsCol.forEach(
+                            (combatfield: DocumentSnapshot) => {
+                                combatfieldIds.push(combatfield.id);
+                            }
+                        );
 
                         let data = new CampaignPreviewData(
                             campaignDoc.id,
@@ -83,10 +82,8 @@ const CampaignList = () => {
         });
     };
 
-    const deleteCampaign = async(campaignId: string) => {
-
-        let playersCol:QuerySnapshot = await
-            campaignsRef
+    const deleteCampaign = async (campaignId: string) => {
+        let playersCol: QuerySnapshot = await campaignsRef
             .doc(campaignId)
             .collection("players")
             .get();
@@ -102,7 +99,11 @@ const CampaignList = () => {
 
         campaignsRef.doc(campaignId).delete();
 
-        usersRef.doc(user!.uid).collection("campaigns").doc(campaignId).delete();
+        usersRef
+            .doc(user!.uid)
+            .collection("campaigns")
+            .doc(campaignId)
+            .delete();
 
         let updatedCampaigns = campaigns.filter(
             (campaign: CampaignPreviewData) => campaign.uid !== campaignId
@@ -111,42 +112,49 @@ const CampaignList = () => {
         setCampaigns(updatedCampaigns);
     };
 
-  return (
-    <div style={styles.campaignListContainer}>
-      {sortCampaignList().map((campaign: CampaignPreviewData) => (
-        <div style={styles.cardContainer} key={campaign.uid}>
-          <Card style={styles.card}>
-            <CardHeader title={campaign.name} />
-            <CardContent>
-              <p>
-                created at:{" "}
-                {campaign.createdAt ? campaign.getDate() : "no date"}
-              </p>
-              <p>Number of players: {campaign.playerIds.length}</p>
-              <p>Number of combatfields: {campaign.combatfieldIds.length}</p>
-              <Link
-                to={{
-                  pathname: "/campaign",
-                  search: `?id=${campaign.uid}`,
-                  state: { campaign: campaign },
-                }}
-              >
-                <Button color={"primary"}>Details</Button>
-              </Link>
-                <p>no more accidents</p>
-              <Button
-                onClick={() => {
-                  deleteCampaign(campaign.uid);
-                }}
-              >
-                Delete (don't click by accident)
-              </Button>
-            </CardContent>
-          </Card>
+    return (
+        <div style={styles.campaignListContainer}>
+            {sortCampaignList().map((campaign: CampaignPreviewData) => (
+                <div style={styles.cardContainer} key={campaign.uid}>
+                    <Card style={styles.card}>
+                        <CardHeader title={campaign.name} />
+                        <CardContent>
+                            <p>
+                                created at:{" "}
+                                {campaign.createdAt
+                                    ? campaign.getDate()
+                                    : "no date"}
+                            </p>
+                            <p>
+                                Number of players: {campaign.playerIds.length}
+                            </p>
+                            <p>
+                                Number of combatfields:{" "}
+                                {campaign.combatfieldIds.length}
+                            </p>
+                            <Link
+                                to={{
+                                    pathname: "/campaign",
+                                    search: `?id=${campaign.uid}`,
+                                    state: { campaign: campaign },
+                                }}
+                            >
+                                <Button color={"primary"}>Details</Button>
+                            </Link>
+                            <p>no more accidents</p>
+                            <Button
+                                onClick={() => {
+                                    deleteCampaign(campaign.uid);
+                                }}
+                            >
+                                Delete (don't click by accident)
+                            </Button>
+                        </CardContent>
+                    </Card>
+                </div>
+            ))}
         </div>
-      ))}
-    </div>
-  );
+    );
 };
 
 export default CampaignList;

@@ -8,6 +8,7 @@ import NewCombatfield from "./NewCombatfield";
 import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
 import Button from "@material-ui/core/Button";
+import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
 
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
@@ -15,8 +16,8 @@ type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 const CampaignDetails = () => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const usersRef = useContext(FirebaseContext)!.usersRef;
+    //const campaignDetails = useContext(SelectedCampaignContext);
 
-    //TODO store original and current campaign details state in objects
     const [campaignId, setId] = useState("" as string);
 
     //Campaign Name variables
@@ -44,6 +45,7 @@ const CampaignDetails = () => {
         const params = new URLSearchParams(window.location.search);
         const campaignId = params.get("id");
         setId(campaignId!);
+        console.log("id set");
     }, []);
 
     useEffect(() => {
@@ -68,7 +70,9 @@ const CampaignDetails = () => {
     };
 
     const updateCampaignName = () => {
-        batch.update(campaignsRef.doc(campaignId), { name: campaignName });
+        batch.update(campaignsRef.doc(campaignId), {
+            name: campaignName,
+        });
     };
 
     useEffect(() => {
@@ -83,6 +87,7 @@ const CampaignDetails = () => {
         };
     });
 
+    //TODO put into context
     const fetchCombatfields = () => {
         campaignsRef
             .doc(campaignId)
@@ -106,6 +111,7 @@ const CampaignDetails = () => {
             });
     };
 
+    //TODO put into context
     const fetchPlayers = () => {
         originalPlayers.forEach(async (playerId) => {
             let userRecord: DocumentSnapshot = await usersRef
@@ -202,11 +208,13 @@ const CampaignDetails = () => {
                     {campaignName}
                 </span>
             )}
+
             <CombatfieldList
                 combatfields={combatfields}
                 players={players}
                 campaignId={campaignId}
             />
+
             {/* TODO create button to navigate to another location for combatfield creation*/}
             <NewCombatfield campaignId={campaignId} />
 
@@ -232,7 +240,6 @@ const CampaignDetails = () => {
                     </div>
                 ))
             )}
-
             <Button
                 disabled={isCampaignDetailsChanged()}
                 onClick={handleSubmit}
