@@ -25,12 +25,6 @@ const CampaignDetails = () => {
     const [inputVisible, setInputVisible] = useState(false);
 
     const [originalPlayers] = useState(state.campaign.playerIds as string[]);
-    //const [players, setPlayers] = useState([] as UserInfo[]);
-
-    //TODO do we need the passed down combatfields since we have a listener on the collection?
-    const [originalCombatfields] = useState(
-        state.campaign.combatfieldIds as string[]
-    );
 
     const [combatfields, setCombatFields] = useState([] as CombatfieldData[]);
 
@@ -119,18 +113,7 @@ const CampaignDetails = () => {
             campaignDetails!.setPlayers(
                 (oldData: UserInfo[]) => [...oldData, userInfo] as UserInfo[]
             );
-            //setPlayers((oldData) => [...oldData, userInfo] as UserInfo[]);
         });
-    };
-
-    const addPlayerToState = (player: UserInfo) => {
-        if (!campaignDetails!.players.some((p) => p.uid === player.uid)) {
-            let newPlayerList = [
-                ...campaignDetails!.players,
-                player,
-            ] as UserInfo[];
-            campaignDetails!.setPlayers(newPlayerList);
-        }
     };
 
     const saveUpdatedPlayers = (playerId: string) => {
@@ -231,11 +214,11 @@ const CampaignDetails = () => {
             />
 
             {/* TODO create button to navigate to another location for combatfield creation*/}
-            <NewCombatfield campaignId={campaignDetails!.campaignId} />
+            <NewCombatfield />
 
             {/* Players */}
             <h3>Add player to the campaign:</h3>
-            <UserSearch onAddPlayer={addPlayerToState} />
+            <UserSearch />
 
             <h3>Players in the campaign:</h3>
 

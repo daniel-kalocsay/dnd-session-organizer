@@ -5,9 +5,11 @@ import CombatfieldData from "../../model/CombatfieldData";
 import { Button } from "@material-ui/core";
 import CombatFieldListProps from "../../model/CombatFieldListProps";
 import { FirebaseContext } from "../contexts/FirebaseContext";
+import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
 
 const CombatfieldList = (props: CombatFieldListProps) => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
+    const campaignDetails = useContext(SelectedCampaignContext);
 
     const handleClick = (combatfieldId: string) => {
         campaignsRef
@@ -20,17 +22,18 @@ const CombatfieldList = (props: CombatFieldListProps) => {
     return (
         <div id="combatfield-list">
             <h2>Combatfields:</h2>
-            {props.combatfields && props.campaignId !== ""
+            {props.combatfields && campaignDetails!.campaignId !== ""
                 ? props.combatfields.map((combatfield: CombatfieldData) => (
                       <div>
                           <Link
                               to={{
                                   pathname: "/combat",
                                   search: `?id=${combatfield.uid}`,
+                                  // TODO: use context!
                                   state: {
-                                      campaignId: props.campaignId,
+                                      campaignId: campaignDetails!.campaignId,
                                       combatfieldData: combatfield,
-                                      players: props.players,
+                                      players: campaignDetails!.players,
                                   },
                               }}
                               key={combatfield.uid}
@@ -45,25 +48,6 @@ const CombatfieldList = (props: CombatFieldListProps) => {
                   ))
                 : ""}
         </div>
-        // <div id="combatfield-list">
-        //     <h2>Combatfields:</h2>
-        //     {props.combatfields
-        //         ? props.combatfields.map((combatfield: CombatfieldData) => (
-        //               <div>
-        //                   <Link
-        //                       to={`/combat?id=${combatfield.uid}`}
-        //                       key={combatfield.uid}
-        //                   >
-        //                       {combatfield.name}
-        //                   </Link>
-        //                   <Button onClick={() => handleClick(combatfield.uid)}>
-        //                       Delete
-        //                   </Button>
-        //                   <br />
-        //               </div>
-        //           ))
-        //         : ""}
-        // </div>
     );
 };
 
