@@ -10,12 +10,7 @@ import TextField from "@material-ui/core/TextField";
 
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Lock from "@material-ui/icons/Lock";
-import LoginErrorReducer, {
-    initialState,
-    EMAIL_ERROR,
-    PASSWORD_ERROR,
-    RESET_ERRORS
-} from "../../../reducers/LoginErrorReducer";
+import LoginErrorReducer, { initialState, ERROR, RESET_ERRORS } from "../../../reducers/LoginErrorReducer";
 
 const LoginForm = (props: any) => {
 
@@ -33,21 +28,8 @@ const LoginForm = (props: any) => {
         });
     };
 
-    const handleError = (error: any) => {
-        // except for this, all other errors are for the email, no need for switch case
-        if (error.code === 'auth/wrong-password') {
-            dispatch({ type: PASSWORD_ERROR, errorMessage: error.message });
-        } else {
-            dispatch({ type: EMAIL_ERROR, errorMessage: error.message});
-        }
-    };
-
-    const resetErrors = () => {
-        dispatch({...errorState, type: RESET_ERRORS});
-    };
-
     const handleSubmit = (event: React.SyntheticEvent) => {
-        resetErrors();
+        dispatch({...errorState, type: RESET_ERRORS});
 
         auth.signInWithEmailAndPassword(loginData.email, loginData.password)
             .then((cred: firebase.auth.UserCredential) => {
@@ -55,7 +37,7 @@ const LoginForm = (props: any) => {
                 hideModal();
             })
             .catch((error: any) => {
-                handleError(error);
+                dispatch({type: ERROR, error: error});
             })
     };
 
