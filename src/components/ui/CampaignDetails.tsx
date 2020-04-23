@@ -26,7 +26,7 @@ const CampaignDetails = () => {
 
     const [originalPlayers] = useState(state.campaign.playerIds as string[]);
 
-    const [combatfields, setCombatFields] = useState([] as CombatfieldData[]);
+    //const [combatfields, setCombatFields] = useState([] as CombatfieldData[]);
 
     const [batch, setBatch] = useState(
         firebase.firestore().batch() as firestore.WriteBatch
@@ -91,11 +91,17 @@ const CampaignDetails = () => {
                             change.doc.id,
                             entry!.name
                         );
-                        setCombatFields((oldData) => [...oldData, combatfield]);
+                        campaignDetails!.setCombatFields(
+                            (oldData: CombatfieldData[]) => [
+                                ...oldData,
+                                combatfield,
+                            ]
+                        );
                     } else if (change.type === "removed") {
                         let removedId = change.doc.id;
-                        setCombatFields((oldData) =>
-                            oldData.filter((d) => d.uid !== removedId)
+                        campaignDetails!.setCombatFields(
+                            (oldData: CombatfieldData[]) =>
+                                oldData.filter((d) => d.uid !== removedId)
                         );
                     }
                 });
@@ -207,11 +213,7 @@ const CampaignDetails = () => {
                 </span>
             )}
 
-            <CombatfieldList
-                combatfields={combatfields}
-                players={campaignDetails!.players}
-                campaignId={campaignDetails!.campaignId}
-            />
+            <CombatfieldList />
 
             {/* TODO create button to navigate to another location for combatfield creation*/}
             <NewCombatfield />
