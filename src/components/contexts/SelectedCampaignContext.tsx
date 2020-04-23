@@ -18,8 +18,8 @@ export const SelectedCampaignProvider = (props: any) => {
     };
 
     return (
-        <SelectedCampaignProvider value={campaignHandler}>
+        <SelectedCampaignContext.Provider value={campaignHandler}>
             {props.children}
-        </SelectedCampaignProvider>
+        </SelectedCampaignContext.Provider>
     );
 };

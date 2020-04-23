@@ -16,9 +16,7 @@ type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 const CampaignDetails = () => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const usersRef = useContext(FirebaseContext)!.usersRef;
-    //const campaignDetails = useContext(SelectedCampaignContext);
-
-    const [campaignId, setId] = useState("" as string);
+    const campaignDetails = useContext(SelectedCampaignContext);
 
     //Campaign Name variables
     const state = useLocation().state as any;
@@ -42,18 +40,17 @@ const CampaignDetails = () => {
 
     //TODO use specialized hook for this
     useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const campaignId = params.get("id");
-        setId(campaignId!);
-        console.log("id set");
+        let params = new URLSearchParams(window.location.search);
+        let id = params.get("id");
+        campaignDetails!.setId(id);
     }, []);
 
     useEffect(() => {
-        if (campaignId) {
+        if (campaignDetails!.campaignId) {
             fetchCombatfields();
             fetchPlayers();
         }
-    }, [campaignId]);
+    }, [campaignDetails!.campaignId]);
 
     useEffect(() => {
         isCampaignDetailsChanged();
@@ -70,7 +67,7 @@ const CampaignDetails = () => {
     };
 
     const updateCampaignName = () => {
-        batch.update(campaignsRef.doc(campaignId), {
+        batch.update(campaignsRef.doc(campaignDetails!.campaignId), {
             name: campaignName,
         });
     };
@@ -90,7 +87,7 @@ const CampaignDetails = () => {
     //TODO put into context
     const fetchCombatfields = () => {
         campaignsRef
-            .doc(campaignId)
+            .doc(campaignDetails!.campaignId)
             .collection("combatfields")
             .onSnapshot(function (docs) {
                 docs.docChanges().forEach(function (change) {
@@ -132,11 +129,11 @@ const CampaignDetails = () => {
 
     const saveUpdatedPlayers = (playerId: string) => {
         batch.set(
-            usersRef.doc(playerId).collection("campaigns").doc(campaignId),
+            usersRef.doc(playerId).collection("campaigns").doc(campaignDetails!.campaignId),
             {}
         );
         batch.set(
-            campaignsRef.doc(campaignId).collection("players").doc(playerId),
+            campaignsRef.doc(campaignDetails!.campaignId).collection("players").doc(playerId),
             {}
         );
     };
@@ -148,11 +145,11 @@ const CampaignDetails = () => {
 
     const deleteUpdatedPlayers = (playerId: string) => {
         campaignsRef
-            .doc(campaignId)
+            .doc(campaignDetails!.campaignId)
             .collection("players")
             .doc(playerId)
             .delete();
-        usersRef.doc(playerId).collection("campaigns").doc(campaignId).delete();
+        usersRef.doc(playerId).collection("campaigns").doc(campaignDetails!.campaignId).delete();
     };
 
     const prepareDatabaseBatch = () => {
@@ -212,11 +209,11 @@ const CampaignDetails = () => {
             <CombatfieldList
                 combatfields={combatfields}
                 players={players}
-                campaignId={campaignId}
+                campaignId={campaignDetails!.campaignId}
             />
 
             {/* TODO create button to navigate to another location for combatfield creation*/}
-            <NewCombatfield campaignId={campaignId} />
+            <NewCombatfield campaignId={campaignDetails!.campaignId} />
 
             {/* Players */}
             <h3>Add player to the campaign:</h3>

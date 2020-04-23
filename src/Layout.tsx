@@ -53,10 +53,9 @@ const Layout = () => {
                             loadingMsg={"Loading campaign details..."}
                             unauthorizedMsg={"Log in to continue"}
                         >
-                            {/* <SelectedCampaignProvider>
+                            <SelectedCampaignProvider>
                                 <CampaignDetails />
-                            </SelectedCampaignProvider> */}
-                            <CampaignDetails />
+                            </SelectedCampaignProvider>
                         </WithAuth>
                     </Route>
 
