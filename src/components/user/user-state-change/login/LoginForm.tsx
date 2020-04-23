@@ -24,10 +24,7 @@ const LoginForm = (props: any) => {
 
     const [errorState, dispatch] = useReducer(LoginErrorReducer, initialState);
 
-    const [loginData, setLoginData] = useState({
-        email: "",
-        password: ""
-    });
+    const [loginData, setLoginData] = useState({email: "", password: ""});
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setLoginData({
