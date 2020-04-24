@@ -26,8 +26,6 @@ const CampaignDetails = () => {
 
     const [originalPlayers] = useState(state.campaign.playerIds as string[]);
 
-    //const [combatfields, setCombatFields] = useState([] as CombatfieldData[]);
-
     const [batch, setBatch] = useState(
         firebase.firestore().batch() as firestore.WriteBatch
     );
