@@ -12,7 +12,7 @@ export const PlayerOptions = (props: any) => {
             <h3>Players in the campaign:</h3>
 
             {props.players.length === 0 ? (
-                <p>Loading players...</p>
+                <p>No players yet, add some!</p>
             ) : (
                 props.players.map((player: UserInfo) => (
                     <div key={player.uid!}>

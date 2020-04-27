@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router-dom";
 
 const NewCampaign = () => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
@@ -12,6 +13,8 @@ const NewCampaign = () => {
     const auth = useContext(FirebaseContext)!.auth;
     const [user, initializing, authError] = useAuthState(auth);
 
+    let history = useHistory();
+
     const addCampaignIdToPlayer = (campaignId: string) => {
         usersRef.doc(user!.uid).collection("campaigns").doc(campaignId).set({});
     };
@@ -20,6 +23,7 @@ const NewCampaign = () => {
         campaignsRef.doc(campaignId).set(Object.assign({}, session));
     };
 
+    //TODO break into smaller methods
     const createNewCampaign = (event: any) => {
         event.preventDefault();
 
@@ -35,8 +39,19 @@ const NewCampaign = () => {
             .collection("campaigns")
             .doc().id;
 
+        let campaignData = {
+            name: campaignName,
+            playerIds: [],
+        };
+
         addCampaignIdToPlayer(generatedCampaignId);
         addDMToCampaign(generatedCampaignId, campaign);
+
+        history.push({
+            pathname: "/campaign",
+            search: `?id=${generatedCampaignId}`,
+            state: { campaign: campaignData },
+        });
     };
 
     return (

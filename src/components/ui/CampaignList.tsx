@@ -11,7 +11,6 @@ import CardHeader from "@material-ui/core/CardHeader";
 import Button from "@material-ui/core/Button";
 
 import CampaignPreviewData from "../../model/CampaignPreviewData";
-import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
