@@ -5,6 +5,8 @@ import CombatfieldData from "../../model/CombatfieldData";
 export interface CampaignContextInterface {
     campaignId: string;
     setId: any;
+    campaignName: string;
+    setName: any;
     players: UserInfo[];
     setPlayers: any;
     combatfields: CombatfieldData[];
@@ -17,12 +19,15 @@ export const SelectedCampaignContext = createContext<CampaignContextInterface | 
 
 export const SelectedCampaignProvider = (props: any) => {
     const [campaignId, setId] = useState("" as string);
+    const [campaignName, setName] = useState("" as string);
     const [players, setPlayers] = useState([] as UserInfo[]);
     const [combatfields, setCombatFields] = useState([] as CombatfieldData[]);
 
     const campaignHandler: CampaignContextInterface = {
         campaignId,
         setId,
+        campaignName,
+        setName,
         players,
         setPlayers,
         combatfields,

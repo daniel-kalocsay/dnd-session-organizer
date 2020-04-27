@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
-import { useLocation, Link } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import firebase, { firestore } from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import CombatfieldData from "../../model/CombatfieldData";
@@ -9,6 +9,7 @@ import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
 import Button from "@material-ui/core/Button";
 import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
+import { EditableText } from "./EditableText";
 
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
@@ -18,12 +19,7 @@ const CampaignDetails = () => {
     const usersRef = useContext(FirebaseContext)!.usersRef;
     const campaignDetails = useContext(SelectedCampaignContext);
 
-    //Campaign Name variables
     const state = useLocation().state as any;
-    const [campaignName, setName] = useState(state.campaign.name as string);
-    const inputRef = useRef(null);
-    const [inputVisible, setInputVisible] = useState(false);
-
     const [originalPlayers] = useState(state.campaign.playerIds as string[]);
 
     const [batch, setBatch] = useState(
@@ -35,6 +31,8 @@ const CampaignDetails = () => {
         let params = new URLSearchParams(window.location.search);
         let id = params.get("id");
         campaignDetails!.setId(id);
+
+        campaignDetails!.setName(state.campaign.name);
     }, []);
 
     useEffect(() => {
@@ -48,33 +46,11 @@ const CampaignDetails = () => {
         isCampaignDetailsChanged();
     }, [originalPlayers, campaignDetails!.players]);
 
-    const onClickOutside = (e: any) => {
-        // Check if user is clicking outside of <input>
-        if (inputRef.current) {
-            let input = inputRef.current as any;
-            if (!input.contains(e.target)) {
-                setInputVisible(false);
-            }
-        }
-    };
-
     const updateCampaignName = () => {
         batch.update(campaignsRef.doc(campaignDetails!.campaignId), {
-            name: campaignName,
+            name: campaignDetails!.campaignName,
         });
     };
-
-    useEffect(() => {
-        // Handle outside clicks on mounted state
-        if (inputVisible) {
-            document.addEventListener("mousedown", onClickOutside);
-        }
-
-        // This is a necessary step to "dismount" unnecessary events when we destroy the component
-        return () => {
-            document.removeEventListener("mousedown", onClickOutside);
-        };
-    });
 
     //TODO put into context
     const fetchCombatfields = () => {
@@ -196,20 +172,7 @@ const CampaignDetails = () => {
 
     return (
         <div>
-            {/* Editable Campaign name */}
-            {inputVisible ? (
-                <input
-                    ref={inputRef}
-                    value={campaignName}
-                    onChange={(e) => {
-                        setName(e.target.value);
-                    }}
-                />
-            ) : (
-                <span onClick={() => setInputVisible(true)}>
-                    {campaignName}
-                </span>
-            )}
+            <EditableText />
 
             <CombatfieldList />
 
