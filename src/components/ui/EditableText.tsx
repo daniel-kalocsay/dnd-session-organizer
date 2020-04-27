@@ -1,9 +1,6 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
-import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
+import React, { useState, useEffect, useRef } from "react";
 
 export const EditableText = (props: any) => {
-    const campaignDetails = useContext(SelectedCampaignContext);
-
     const inputRef = useRef(null);
     const [inputVisible, setInputVisible] = useState(false);
 

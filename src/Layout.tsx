@@ -66,7 +66,9 @@ const Layout = () => {
                                 "You need to be logged in to create a new campaign"
                             }
                         >
-                            <NewCampaign />
+                            <SelectedCampaignProvider>
+                                <NewCampaign />
+                            </SelectedCampaignProvider>
                         </WithAuth>
                     </Route>
 
