@@ -172,7 +172,10 @@ const CampaignDetails = () => {
 
     return (
         <div>
-            <EditableText />
+            <EditableText
+                saveText={campaignDetails!.setName}
+                initialText={campaignDetails!.campaignName}
+            />
 
             <CombatfieldList />
 
