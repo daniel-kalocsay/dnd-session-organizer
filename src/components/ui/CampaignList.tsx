@@ -17,7 +17,6 @@ type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 const CampaignList = () => {
-    const campaignDetails = useContext(SelectedCampaignContext);
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const usersRef = useContext(FirebaseContext)!.usersRef;
     const [campaigns, setCampaigns] = useState([] as CampaignPreviewData[]);

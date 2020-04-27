@@ -4,7 +4,6 @@ import firebase, { firestore } from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import CombatfieldData from "../../model/CombatfieldData";
 import CombatfieldList from "./CombatfieldList";
-import NewCombatfield from "./NewCombatfield";
 import UserInfo from "../../model/UserInfo";
 import Button from "@material-ui/core/Button";
 import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
@@ -13,7 +12,6 @@ import { PlayerOptions } from "./PlayerOptions";
 
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
-//TODO component too big, refactor
 const CampaignDetails = () => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const usersRef = useContext(FirebaseContext)!.usersRef;
@@ -89,7 +87,7 @@ const CampaignDetails = () => {
             });
     };
 
-    //TODO put into context
+    //TODO put into PlayersOptions
     const fetchPlayers = () => {
         originalPlayers.forEach(async (playerId) => {
             let userRecord: DocumentSnapshot = await usersRef
@@ -166,7 +164,6 @@ const CampaignDetails = () => {
 
     const hasCampaignDetailsChanged = () => {
         let playersResult = compareOriginalAndRecentPlayers();
-        console.log(campaignDetails!.campaignName);
         return (
             playersResult.missing.length === 0 &&
             playersResult.plus.length === 0 &&
@@ -174,11 +171,13 @@ const CampaignDetails = () => {
         );
     };
 
+    //TODO show result of commit
     const handleSubmit = () => {
         prepareDatabaseBatch();
-        batch.commit().then(() => {
+        let result = batch.commit().then(() => {
             setBatch(firebase.firestore().batch());
         });
+        result ? console.log("done") : console.log("nope");
     };
 
     return (
