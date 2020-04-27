@@ -10,6 +10,7 @@ import UserInfo from "../../model/UserInfo";
 import Button from "@material-ui/core/Button";
 import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
 import { EditableText } from "./EditableText";
+import { PlayerOptions } from "./PlayerOptions";
 
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
@@ -118,9 +119,9 @@ const CampaignDetails = () => {
         );
     };
 
-    const deletePlayerFromState = (userId: string) => {
+    const deletePlayerFromState = (playerId: string) => {
         let playerRemoved = campaignDetails!.players.filter(
-            (player) => player.uid !== userId
+            (player) => player.uid !== playerId
         );
         campaignDetails!.setPlayers(playerRemoved);
     };
@@ -191,28 +192,11 @@ const CampaignDetails = () => {
             {/* TODO create button to navigate to another location for combatfield creation*/}
             <NewCombatfield />
 
-            {/* Players */}
-            <h3>Add player to the campaign:</h3>
-            <UserSearch />
+            <PlayerOptions
+                players={campaignDetails!.players}
+                deletePlayer={deletePlayerFromState}
+            />
 
-            <h3>Players in the campaign:</h3>
-
-            {campaignDetails!.players.length === 0 ? (
-                <p>Loading players...</p>
-            ) : (
-                campaignDetails!.players.map((player: UserInfo) => (
-                    <div key={player.uid!}>
-                        <p>{player.name}</p>
-                        <Button
-                            onClick={() => {
-                                deletePlayerFromState(player.uid!);
-                            }}
-                        >
-                            Remove
-                        </Button>
-                    </div>
-                ))
-            )}
             <Button
                 disabled={hasCampaignDetailsChanged()}
                 onClick={handleSubmit}
