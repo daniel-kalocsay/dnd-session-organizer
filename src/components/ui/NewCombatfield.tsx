@@ -1,15 +1,15 @@
 import React, { useContext, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import Grid from "../../model/Grid";
 import GridSizeForm from "./GridSizeForm";
-import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
 
 //TODO move component to a different directory, "combat" should only handle the combat itself
 
 const NewCombatfield = (props: any) => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
-    const campaignDetails = useContext(SelectedCampaignContext);
     const [gridSize, setGridSize] = useState<number>(100);
+    const state = useLocation().state as any;
 
     const createNewCombatfield = async (event: any) => {
         event.preventDefault();
@@ -17,7 +17,7 @@ const NewCombatfield = (props: any) => {
         let combatfieldName = event.target.combatfieldName.value;
         let grid = new Grid(combatfieldName, gridSize);
         let combatfieldsCol = await campaignsRef
-            .doc(campaignDetails!.campaignId)
+            .doc(state.campaignId)
             .collection("combatfields");
 
         let combatfieldId = combatfieldsCol.doc().id;

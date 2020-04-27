@@ -1,11 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import firebase, { firestore } from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import CombatfieldData from "../../model/CombatfieldData";
 import CombatfieldList from "./CombatfieldList";
 import NewCombatfield from "./NewCombatfield";
-import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
 import Button from "@material-ui/core/Button";
 import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
@@ -60,6 +59,8 @@ const CampaignDetails = () => {
 
     //TODO put into context
     const fetchCombatfields = () => {
+        campaignDetails!.setCombatFields([]);
+
         campaignsRef
             .doc(campaignDetails!.campaignId)
             .collection("combatfields")
@@ -189,8 +190,14 @@ const CampaignDetails = () => {
 
             <CombatfieldList />
 
-            {/* TODO create button to navigate to another location for combatfield creation*/}
-            <NewCombatfield />
+            <Link
+                to={{
+                    pathname: "/new-combatfield",
+                    state: { campaignId: campaignDetails!.campaignId },
+                }}
+            >
+                <Button>Create new Combatfield</Button>
+            </Link>
 
             <PlayerOptions
                 players={campaignDetails!.players}

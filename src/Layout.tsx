@@ -9,6 +9,7 @@ import CampaignList from "./components/ui/CampaignList";
 import CombatView from "./components/ui/CombatView";
 import CampaignDetails from "./components/ui/CampaignDetails";
 import { SelectedCampaignProvider } from "./components/contexts/SelectedCampaignContext";
+import NewCombatfield from "./components/ui/NewCombatfield";
 
 const Layout = () => {
     //TODO use react-swipeable views?
@@ -66,6 +67,16 @@ const Layout = () => {
                             }
                         >
                             <NewCampaign />
+                        </WithAuth>
+                    </Route>
+
+                    <Route path={"/new-combatfield"}>
+                        <WithAuth
+                            unauthorizedMsg={
+                                "You need to be logged in to create a new combatfield"
+                            }
+                        >
+                            <NewCombatfield />
                         </WithAuth>
                     </Route>
                 </div>
