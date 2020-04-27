@@ -21,6 +21,7 @@ const CampaignDetails = () => {
 
     const state = useLocation().state as any;
     const [originalPlayers] = useState(state.campaign.playerIds as string[]);
+    const [originalCampaignName] = useState(state.campaign.name as string);
 
     const [batch, setBatch] = useState(
         firebase.firestore().batch() as firestore.WriteBatch
@@ -43,8 +44,12 @@ const CampaignDetails = () => {
     }, [campaignDetails!.campaignId]);
 
     useEffect(() => {
-        isCampaignDetailsChanged();
-    }, [originalPlayers, campaignDetails!.players]);
+        hasCampaignDetailsChanged();
+    }, [
+        originalPlayers,
+        campaignDetails!.players,
+        campaignDetails!.campaignName,
+    ]);
 
     const updateCampaignName = () => {
         batch.update(campaignsRef.doc(campaignDetails!.campaignId), {
@@ -157,10 +162,14 @@ const CampaignDetails = () => {
         return { missing: missing, plus: plus };
     };
 
-    //TODO include campaign name change as well
-    const isCampaignDetailsChanged = () => {
-        let result = compareOriginalAndRecentPlayers();
-        return result.missing.length === 0 && result.plus.length === 0;
+    const hasCampaignDetailsChanged = () => {
+        let playersResult = compareOriginalAndRecentPlayers();
+        console.log(campaignDetails!.campaignName);
+        return (
+            playersResult.missing.length === 0 &&
+            playersResult.plus.length === 0 &&
+            originalCampaignName === campaignDetails!.campaignName
+        );
     };
 
     const handleSubmit = () => {
@@ -205,7 +214,7 @@ const CampaignDetails = () => {
                 ))
             )}
             <Button
-                disabled={isCampaignDetailsChanged()}
+                disabled={hasCampaignDetailsChanged()}
                 onClick={handleSubmit}
             >
                 Submit
