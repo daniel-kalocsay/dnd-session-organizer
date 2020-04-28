@@ -13,6 +13,8 @@ import { PlayerOptions } from "./PlayerOptions";
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 const CampaignDetails = () => {
+    //TODO show DM
+
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const usersRef = useContext(FirebaseContext)!.usersRef;
     const campaignDetails = useContext(SelectedCampaignContext);
