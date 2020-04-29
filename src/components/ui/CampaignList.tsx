@@ -87,6 +87,7 @@ const CampaignList = () => {
                             entry!.name,
                             entry!.created_at.toDate(),
                             DM,
+                            entry!.created_by,
                             playerIds,
                             combatfieldIds
                         );
@@ -133,7 +134,7 @@ const CampaignList = () => {
                     <Card style={styles.card}>
                         <CardHeader title={campaign.name} />
                         <CardContent>
-                            <p>Dungeon master: {campaign.createdBy}</p>
+                            <p>Dungeon master: {campaign.DMName}</p>
                             <p>
                                 created at:{" "}
                                 {campaign.createdAt

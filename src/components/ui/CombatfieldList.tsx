@@ -30,12 +30,13 @@ const CombatfieldList = () => {
                                   to={{
                                       pathname: "/combat",
                                       search: `?id=${combatfield.uid}`,
-                                      // TODO: use context!
+                                      // TODO: use context?
                                       state: {
                                           campaignId: campaignDetails!
                                               .campaignId,
                                           combatfieldData: combatfield,
-                                          DM: campaignDetails?.DM,
+                                          DMName: campaignDetails?.DM.name,
+                                          DMId: campaignDetails?.DM.uid,
                                           players: campaignDetails!.players,
                                       },
                                   }}

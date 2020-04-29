@@ -24,6 +24,8 @@ const CombatView = (props: any) => {
                 <CombatGrid
                     campaignId={campaignId}
                     gridData={combatfieldData}
+                    DMName={state.DMName}
+                    DMId={state.DMId}
                     players={players}
                 />
             </div>

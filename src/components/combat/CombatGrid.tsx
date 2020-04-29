@@ -1,9 +1,9 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import firebase, { firestore } from "firebase";
-import {FirebaseContext} from "../contexts/FirebaseContext";
+import { FirebaseContext } from "../contexts/FirebaseContext";
 import GridTile from "./GridTile";
 import Tile from "../../model/Tile";
-import {useAuthState} from "react-firebase-hooks/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 import UserInfo from "../../model/UserInfo";
 
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
@@ -12,24 +12,27 @@ type CollectionReference = firebase.firestore.CollectionReference;
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 
 const CombatGrid = (props: any) => {
-
     const auth = useContext(FirebaseContext)!.auth;
     const [user, initializing, authError] = useAuthState(auth);
 
-    const campaignRef = useContext(FirebaseContext)!.campaignsRef.doc(props.campaignId);
-    let gridRef = campaignRef.collection("combatfields").doc(props.gridData.uid);
-    let tilesRef:CollectionReference = gridRef.collection("tiles");
+    const campaignRef = useContext(FirebaseContext)!.campaignsRef.doc(
+        props.campaignId
+    );
+    let gridRef = campaignRef
+        .collection("combatfields")
+        .doc(props.gridData.uid);
+    let tilesRef: CollectionReference = gridRef.collection("tiles");
 
+    const [amITheDM, setDM] = useState(false);
+    let [DMSelectedPlayerTile, setDMSelectedPlayerTile] = useState({} as Tile);
 
     const [tiles, setTiles] = useState<Tile[]>([] as Tile[]);
     const [players, setPLayers] = useState<UserInfo[]>([]);
 
-    const fetchGrid = async() => {
-
+    const fetchGrid = async () => {
         setTiles([]);
 
         gridRef.onSnapshot(async (gridSnap) => {
-
             console.log("new snap");
             let newTiles = [] as Tile[];
 
@@ -45,18 +48,21 @@ const CombatGrid = (props: any) => {
             });
 
             setTiles(newTiles);
-        })
-
+        });
     };
 
     useEffect(() => {
         setPLayers(props.players);
         console.log(props.players);
         fetchGrid();
+
+        if (user?.uid === props.DMId) {
+            console.log("DM arrived!");
+        }
     }, []);
 
     const getPlayerName = (tile: Tile) => {
-        let player = players.find(p => p.uid === tile.occupied_by);
+        let player = players.find((p) => p.uid === tile.occupied_by);
 
         if (player) {
             return player!.name;
@@ -65,37 +71,63 @@ const CombatGrid = (props: any) => {
         return "";
     };
 
-    const movePlayer = async(selectedTile: Tile) => {
+    const movePlayer = async (selectedTile: Tile) => {
         let playerOnTile = selectedTile.occupied_by;
         let movable = playerOnTile === "" || playerOnTile === user!.uid;
 
         if (movable) {
             let tilesArray = tiles.map((tile: Tile) => {
                 let newTile = new Tile(tile.uid, tile.x, tile.y, user!.uid);
-                let emptyTile = new Tile(tile.uid, tile.x, tile.y, tile.occupied_by === user!.uid ? "" : tile.occupied_by as string);
+                let emptyTile = new Tile(
+                    tile.uid,
+                    tile.x,
+                    tile.y,
+                    tile.occupied_by === user!.uid
+                        ? ""
+                        : (tile.occupied_by as string)
+                );
 
                 let source = tile === selectedTile ? newTile : emptyTile;
                 return Object.assign({}, source);
-
             });
 
-            gridRef.update({tiles: tilesArray})
-
+            gridRef.update({ tiles: tilesArray });
         }
+    };
 
+    const DMMovesPlayer = (selectedTile: Tile) => {
+        let playerOnTile = selectedTile.occupied_by;
+
+        // first click: tile clicked has player on it?
+        let playerTileClicked = playerOnTile !== "";
+
+        // second click: did we have selected a player before?
+        let playerStored = DMSelectedPlayerTile.occupied_by !== "";
+
+        if (playerTileClicked && !playerStored) {
+            setDMSelectedPlayerTile(selectedTile);
+            console.log("player selected");
+        } else if (!playerTileClicked && playerStored) {
+            setDMSelectedPlayerTile({} as Tile);
+            console.log("player moved");
+        }
     };
 
     return (
         <div style={styles.grid}>
             {tiles
                 ? tiles.map((tile: Tile) => (
-                    <div
-                        style={tile.occupied_by !== "" ? styles.active : styles.inactive}
-                        onClick={() => movePlayer(tile)}
-                    >
-                        <GridTile tile={tile} player={getPlayerName(tile)}/>
-                    </div>
-                ))
+                      <div
+                          style={
+                              tile.occupied_by !== ""
+                                  ? styles.active
+                                  : styles.inactive
+                          }
+                          onClick={() => movePlayer(tile)}
+                      >
+                          <GridTile tile={tile} player={getPlayerName(tile)} />
+                      </div>
+                  ))
                 : null}
         </div>
     );

@@ -2,7 +2,8 @@ class CampaignPreviewData {
     uid: string;
     name: string;
     createdAt: Date;
-    createdBy: string;
+    DMName: string;
+    DMId: string;
     playerIds: string[];
     combatfieldIds: string[];
 
@@ -10,14 +11,16 @@ class CampaignPreviewData {
         uid: string,
         name: string,
         createdAt: Date,
-        createdBy: string,
+        DMName: string,
+        DMId: string,
         playerIds: string[],
         combatfieldIds: string[]
     ) {
         this.uid = uid;
         this.name = name;
         this.createdAt = createdAt;
-        this.createdBy = createdBy;
+        this.DMName = DMName;
+        this.DMId = DMId;
         this.playerIds = playerIds;
         this.combatfieldIds = combatfieldIds;
     }

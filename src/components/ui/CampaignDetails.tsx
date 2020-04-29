@@ -32,7 +32,9 @@ const CampaignDetails = () => {
         campaignDetails!.setId(id);
 
         campaignDetails!.setName(state.campaign.name);
-        campaignDetails!.setDM(state.campaign.createdBy);
+
+        let DM = new UserInfo(state.campaign.DMId, state.campaign.DMName);
+        campaignDetails!.setDM(DM);
     }, []);
 
     useEffect(() => {
