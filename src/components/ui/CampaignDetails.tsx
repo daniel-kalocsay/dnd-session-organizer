@@ -190,7 +190,7 @@ const CampaignDetails = () => {
                 initialText={campaignDetails!.campaignName}
             />
 
-            <p>Dungeon master: {state.campaign.createdBy}</p>
+            <p>Dungeon master: {state.campaign.DMName}</p>
 
             <CombatfieldList />
 

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import CombatGrid from "../combat/CombatGrid";
 import Players from "../combat/Players";
 import Menu from "../combat/Menu";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import UserInfo from "../../model/UserInfo";
+import { Button } from "@material-ui/core";
 
 const CombatView = (props: any) => {
     const params = new URLSearchParams(window.location.search);
@@ -14,10 +15,12 @@ const CombatView = (props: any) => {
     const players = state.players as UserInfo[];
     const campaignId = state.campaignId;
 
+    let history = useHistory();
+
     return (
         <div style={styles.combatViewWrapper}>
             <div style={styles.playersContainer}>
-                <Players players={players} DM={state.DM} />
+                <Players players={players} DM={state.DMName} />
             </div>
 
             <div style={styles.gridContainer}>
@@ -32,6 +35,9 @@ const CombatView = (props: any) => {
 
             <div style={styles.sideBar}>
                 <div>This is the sidebar</div>
+                <Button onClick={() => history.goBack()}>
+                    Go back to Campaign details
+                </Button>
             </div>
 
             <div style={styles.menuContainer}>

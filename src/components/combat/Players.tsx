@@ -44,14 +44,20 @@ const Players = (props: any) => {
     return (
         <div style={styles.container}>
             <div style={styles.players}>
-                <div style={styles.player}>
-                    <div style={styles.name}>Dungeon Master: {props.DM}</div>
-                </div>
+                {props.DM ? (
+                    <div style={styles.player}>
+                        <div style={styles.name}>
+                            Dungeon Master: {props.DM}
+                        </div>
+                    </div>
+                ) : (
+                    ""
+                )}
 
                 {players
                     ? players.map((player: UserInfo) => {
                           return (
-                              <div style={styles.player}>
+                              <div key={player!.uid!} style={styles.player}>
                                   <div style={styles.name}>{player.name}</div>
                                   <div style={styles.status}>
                                       <div>

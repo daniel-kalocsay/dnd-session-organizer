@@ -25,7 +25,7 @@ const CombatfieldList = () => {
             {campaignDetails!.combatfields && campaignDetails!.campaignId !== ""
                 ? campaignDetails!.combatfields.map(
                       (combatfield: CombatfieldData) => (
-                          <div>
+                          <div key={combatfield.uid}>
                               <Link
                                   to={{
                                       pathname: "/combat",

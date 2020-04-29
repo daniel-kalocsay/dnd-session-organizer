@@ -53,11 +53,10 @@ const CombatGrid = (props: any) => {
 
     useEffect(() => {
         setPLayers(props.players);
-        console.log(props.players);
         fetchGrid();
 
         if (user?.uid === props.DMId) {
-            console.log("DM arrived!");
+            setDM(true);
         }
     }, []);
 
@@ -98,18 +97,42 @@ const CombatGrid = (props: any) => {
     const DMMovesPlayer = (selectedTile: Tile) => {
         let playerOnTile = selectedTile.occupied_by;
 
-        // first click: tile clicked has player on it?
+        // player clicked?
         let playerTileClicked = playerOnTile !== "";
 
-        // second click: did we have selected a player before?
-        let playerStored = DMSelectedPlayerTile.occupied_by !== "";
+        // player stored in state?
+        let playerStored = DMSelectedPlayerTile.uid !== undefined;
 
         if (playerTileClicked && !playerStored) {
             setDMSelectedPlayerTile(selectedTile);
-            console.log("player selected");
         } else if (!playerTileClicked && playerStored) {
+            let newTiles = tiles.map((tile) => {
+                if (tile.uid === DMSelectedPlayerTile.uid) {
+                    return Object.assign(
+                        {},
+                        new Tile(
+                            DMSelectedPlayerTile.uid,
+                            DMSelectedPlayerTile.x,
+                            DMSelectedPlayerTile.y,
+                            ""
+                        )
+                    );
+                } else if (tile.uid === selectedTile.uid) {
+                    return Object.assign(
+                        {},
+                        new Tile(
+                            selectedTile.uid,
+                            selectedTile.x,
+                            selectedTile.y,
+                            DMSelectedPlayerTile.occupied_by
+                        )
+                    );
+                } else {
+                    return Object.assign({}, tile);
+                }
+            });
+            gridRef.update({ tiles: newTiles });
             setDMSelectedPlayerTile({} as Tile);
-            console.log("player moved");
         }
     };
 
@@ -123,7 +146,9 @@ const CombatGrid = (props: any) => {
                                   ? styles.active
                                   : styles.inactive
                           }
-                          onClick={() => movePlayer(tile)}
+                          onClick={() =>
+                              amITheDM ? DMMovesPlayer(tile) : movePlayer(tile)
+                          }
                       >
                           <GridTile tile={tile} player={getPlayerName(tile)} />
                       </div>
