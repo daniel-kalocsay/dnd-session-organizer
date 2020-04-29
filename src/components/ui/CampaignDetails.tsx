@@ -13,8 +13,6 @@ import { PlayerOptions } from "./PlayerOptions";
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 const CampaignDetails = () => {
-    //TODO show DM
-
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const usersRef = useContext(FirebaseContext)!.usersRef;
     const campaignDetails = useContext(SelectedCampaignContext);
@@ -34,6 +32,7 @@ const CampaignDetails = () => {
         campaignDetails!.setId(id);
 
         campaignDetails!.setName(state.campaign.name);
+        campaignDetails!.setDM(state.campaign.createdBy);
     }, []);
 
     useEffect(() => {
@@ -188,6 +187,8 @@ const CampaignDetails = () => {
                 saveText={campaignDetails!.setName}
                 initialText={campaignDetails!.campaignName}
             />
+
+            <p>Dungeon master: {state.campaign.createdBy}</p>
 
             <CombatfieldList />
 

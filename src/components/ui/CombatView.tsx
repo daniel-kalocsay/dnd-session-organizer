@@ -3,11 +3,10 @@ import React from "react";
 import CombatGrid from "../combat/CombatGrid";
 import Players from "../combat/Players";
 import Menu from "../combat/Menu";
-import {Link, useLocation} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import UserInfo from "../../model/UserInfo";
 
 const CombatView = (props: any) => {
-
     const params = new URLSearchParams(window.location.search);
 
     const state = useLocation().state as any;
@@ -18,11 +17,15 @@ const CombatView = (props: any) => {
     return (
         <div style={styles.combatViewWrapper}>
             <div style={styles.playersContainer}>
-                <Players players={players} />
+                <Players players={players} DM={state.DM} />
             </div>
 
             <div style={styles.gridContainer}>
-                <CombatGrid campaignId={campaignId} gridData={combatfieldData} players={players} />
+                <CombatGrid
+                    campaignId={campaignId}
+                    gridData={combatfieldData}
+                    players={players}
+                />
             </div>
 
             <div style={styles.sideBar}>
@@ -42,7 +45,7 @@ const styles = {
     combatViewWrapper: {
         display: "grid",
         gridTemplate: "repeat(auto-fit, 1fr)",
-        gridGap: "1em"
+        gridGap: "1em",
         // margin: "1em",
         // width: "95vw",
         // height: "95vh",
@@ -51,25 +54,25 @@ const styles = {
         gridColumn: "1/2",
         gridRow: "1/8",
         border: "2px solid gray",
-        background: "#eee"
+        background: "#eee",
         // resize: "horizontal",
     },
     gridContainer: {
         gridColumn: "2/8",
         gridRow: "1/8",
         border: "2px solid gray",
-        background: "#eee"
+        background: "#eee",
     },
     sideBar: {
         gridColumn: "8/10",
         gridRow: "1/8",
         border: "2px solid gray",
-        background: "#eee"
+        background: "#eee",
     },
     menuContainer: {
         gridColumn: "1/10",
         gridRow: "8/10",
         border: "2px solid gray",
-        background: "#eee"
-    }
+        background: "#eee",
+    },
 };

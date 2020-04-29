@@ -7,6 +7,8 @@ export interface CampaignContextInterface {
     setId: any;
     campaignName: string;
     setName: any;
+    DM: string;
+    setDM: any;
     players: UserInfo[];
     setPlayers: any;
     combatfields: CombatfieldData[];
@@ -20,6 +22,7 @@ export const SelectedCampaignContext = createContext<CampaignContextInterface | 
 export const SelectedCampaignProvider = (props: any) => {
     const [campaignId, setId] = useState("" as string);
     const [campaignName, setName] = useState("" as string);
+    const [DM, setDM] = useState("" as string);
     const [players, setPlayers] = useState([] as UserInfo[]);
     const [combatfields, setCombatFields] = useState([] as CombatfieldData[]);
 
@@ -28,6 +31,8 @@ export const SelectedCampaignProvider = (props: any) => {
         setId,
         campaignName,
         setName,
+        DM,
+        setDM,
         players,
         setPlayers,
         combatfields,

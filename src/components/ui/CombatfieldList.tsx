@@ -35,6 +35,7 @@ const CombatfieldList = () => {
                                           campaignId: campaignDetails!
                                               .campaignId,
                                           combatfieldData: combatfield,
+                                          DM: campaignDetails?.DM,
                                           players: campaignDetails!.players,
                                       },
                                   }}

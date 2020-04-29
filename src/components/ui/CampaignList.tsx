@@ -33,6 +33,19 @@ const CampaignList = () => {
         return campaigns.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
     };
 
+    const fetchPlayerName = (playerId: string) => {
+        let DM = usersRef
+            .doc(playerId)
+            .get()
+            .then((userDoc: DocumentSnapshot) => {
+                if (userDoc.exists) {
+                    return userDoc.data()!.username;
+                }
+            });
+
+        return DM;
+    };
+
     const fetchCampaigns = async () => {
         let campaignsCol: QuerySnapshot = await usersRef
             .doc(user!.uid)
@@ -67,10 +80,13 @@ const CampaignList = () => {
                             }
                         );
 
+                        let DM = await fetchPlayerName(entry!.created_by);
+
                         let data = new CampaignPreviewData(
                             campaignDoc.id,
                             entry!.name,
                             entry!.created_at.toDate(),
+                            DM,
                             playerIds,
                             combatfieldIds
                         );
@@ -117,6 +133,7 @@ const CampaignList = () => {
                     <Card style={styles.card}>
                         <CardHeader title={campaign.name} />
                         <CardContent>
+                            <p>Dungeon master: {campaign.createdBy}</p>
                             <p>
                                 created at:{" "}
                                 {campaign.createdAt
