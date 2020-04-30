@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import firebase, { firestore } from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import GridTile from "./GridTile";
 import Tile from "../../model/Tile";
 import { useAuthState } from "react-firebase-hooks/auth";
 import UserInfo from "../../model/UserInfo";
+import { useDrag, useDrop } from "react-dnd";
+import { ItemTypes } from "../../util/Items";
+import { TileWrapper } from "./TileWrapper";
 
-type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
-type DocumentReference = firebase.firestore.DocumentReference;
 type CollectionReference = firebase.firestore.CollectionReference;
-type QuerySnapshot = firebase.firestore.QuerySnapshot;
 
 const CombatGrid = (props: any) => {
     const auth = useContext(FirebaseContext)!.auth;
@@ -29,11 +29,31 @@ const CombatGrid = (props: any) => {
     const [tiles, setTiles] = useState<Tile[]>([] as Tile[]);
     const [players, setPLayers] = useState<UserInfo[]>([]);
 
+    const [tileRefs, setTileRefs] = useState([] as any[]);
+
+    const [{ isDragging }, drag] = useDrag({
+        item: { type: ItemTypes.GRIDTILE, occupied_by: props.player },
+        //item: { type: ItemTypes.GRIDTILE },
+        collect: (monitor) => ({
+            isDragging: !!monitor.isDragging(),
+        }),
+    });
+
+    const [{ isOver }, drop] = useDrop({
+        accept: ItemTypes.GRIDTILE,
+        hover(item, monitor) {
+            console.log("hover");
+        },
+        drop: () => console.log("dropped"),
+        collect: (monitor) => ({
+            isOver: !!monitor.isOver(),
+        }),
+    });
+
     const fetchGrid = async () => {
         setTiles([]);
 
         gridRef.onSnapshot(async (gridSnap) => {
-            console.log("new snap");
             let newTiles = [] as Tile[];
 
             let grid = await gridSnap.data();
@@ -139,19 +159,29 @@ const CombatGrid = (props: any) => {
     return (
         <div style={styles.grid}>
             {tiles
-                ? tiles.map((tile: Tile) => (
-                      <div
-                          style={
-                              tile.occupied_by !== ""
-                                  ? styles.active
-                                  : styles.inactive
-                          }
-                          onClick={() =>
-                              amITheDM ? DMMovesPlayer(tile) : movePlayer(tile)
-                          }
-                      >
-                          <GridTile tile={tile} player={getPlayerName(tile)} />
-                      </div>
+                ? tiles.map((tile: Tile, index: number) => (
+                      <TileWrapper
+                          key={tile.uid}
+                          tile={tile}
+                          getPlayerName={getPlayerName}
+                      />
+                      //   <div
+                      //       key={tile.uid}
+                      //       style={
+                      //           tile.occupied_by !== ""
+                      //               ? styles.active
+                      //               : styles.inactive
+                      //       }
+                      //       //   onClick={() =>
+                      //       //       amITheDM ? DMMovesPlayer(tile) : movePlayer(tile)
+                      //       //   }
+                      //   >
+                      //       <GridTile
+                      //           id={tile.uid}
+                      //           tile={tile}
+                      //           player={getPlayerName(tile)}
+                      //       />
+                      //   </div>
                   ))
                 : null}
         </div>
@@ -179,5 +209,8 @@ const styles = {
     inactive: {
         border: "2px solid black",
         backgroundColor: "lightgreen",
+    },
+    dragged: {
+        opacity: "0.5",
     },
 };
