@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import React, {useState, useEffect, useContext} from "react";
+import {Link} from "react-router-dom";
 
 import firebase from "firebase";
-import { FirebaseContext } from "../contexts/FirebaseContext";
-import { useAuthState } from "react-firebase-hooks/auth";
+import {FirebaseContext} from "../contexts/FirebaseContext";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -130,7 +130,7 @@ const CampaignList = () => {
 
     const newCampaignCard = (
         <Card style={styles.card.container}>
-            <CardHeader title={"Create new"} style={styles.card.header} />
+            <CardHeader title={"Create new"} style={styles.card.header}/>
             <CardContent style={styles.card.content}>
 
                 <Link to={"/new-campaign"}>
@@ -167,11 +167,12 @@ const CampaignList = () => {
                                 to={{
                                     pathname: "/campaign",
                                     search: `?id=${campaign.uid}`,
-                                    state: { campaign: campaign },
+                                    state: {campaign: campaign},
                                 }}
                                 style={{marginLeft: "auto", marginRight: "auto"}}
                             >
-                                <Button color={"primary"} variant={"outlined"} style={styles.button}>More details</Button>
+                                <Button color={"primary"} variant={"outlined"} style={styles.button}>More
+                                    details</Button>
                             </Link>
 
                         </CardContent>
@@ -230,11 +231,10 @@ const styles = {
         }
     },
     plusSign: {
-        height: "10em",
-        width: "10em"
+        fontSize: "8em",
     },
     button: {
-            width: "15em"
+        width: "15em"
     }
 
 };

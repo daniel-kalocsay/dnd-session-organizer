@@ -141,11 +141,7 @@ const CombatGrid = (props: any) => {
             {tiles
                 ? tiles.map((tile: Tile) => (
                       <div
-                          style={
-                              tile.occupied_by !== ""
-                                  ? styles.active
-                                  : styles.inactive
-                          }
+                          style={tile.occupied_by !== "" ? styles.active : styles.inactive}
                           onClick={() =>
                               amITheDM ? DMMovesPlayer(tile) : movePlayer(tile)
                           }
