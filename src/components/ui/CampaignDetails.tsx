@@ -45,7 +45,7 @@ const CampaignDetails = () => {
     }, [campaignDetails!.campaignId]);
 
     useEffect(() => {
-        hasCampaignDetailsChanged();
+        // hasCampaignDetailsChanged();
     }, [
         originalPlayers,
         campaignDetails!.players,
