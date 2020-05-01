@@ -1,30 +1,29 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { ItemTypes } from "../../util/Items";
 import GridTile from "./GridTile";
 
 export const TileWrapper = (props: any) => {
-    const [{ isDragging }, drag] = useDrag({
-        item: { type: ItemTypes.GRIDTILE, occupied_by: props.player },
-        collect: (monitor) => ({
-            isDragging: !!monitor.isDragging(),
-        }),
-    });
+    const ref = useRef(null);
 
-    const [{ isOver }, drop] = useDrop({
+    const [{ isOver }, connectDrop] = useDrop({
         accept: ItemTypes.GRIDTILE,
-        hover(item, monitor) {
-            console.log("hover");
+
+        hover(item) {
+            console.log(item);
         },
+
         drop: () => console.log("dropped"),
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
         }),
     });
 
+    connectDrop(ref);
+
     return (
         <div
-            ref={drop}
+            ref={ref}
             style={
                 props.tile.occupied_by !== "" ? styles.active : styles.inactive
             }

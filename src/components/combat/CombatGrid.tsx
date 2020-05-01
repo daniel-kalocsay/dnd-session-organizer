@@ -5,8 +5,6 @@ import GridTile from "./GridTile";
 import Tile from "../../model/Tile";
 import { useAuthState } from "react-firebase-hooks/auth";
 import UserInfo from "../../model/UserInfo";
-import { useDrag, useDrop } from "react-dnd";
-import { ItemTypes } from "../../util/Items";
 import { TileWrapper } from "./TileWrapper";
 
 type CollectionReference = firebase.firestore.CollectionReference;
@@ -28,27 +26,6 @@ const CombatGrid = (props: any) => {
 
     const [tiles, setTiles] = useState<Tile[]>([] as Tile[]);
     const [players, setPLayers] = useState<UserInfo[]>([]);
-
-    const [tileRefs, setTileRefs] = useState([] as any[]);
-
-    const [{ isDragging }, drag] = useDrag({
-        item: { type: ItemTypes.GRIDTILE, occupied_by: props.player },
-        //item: { type: ItemTypes.GRIDTILE },
-        collect: (monitor) => ({
-            isDragging: !!monitor.isDragging(),
-        }),
-    });
-
-    const [{ isOver }, drop] = useDrop({
-        accept: ItemTypes.GRIDTILE,
-        hover(item, monitor) {
-            console.log("hover");
-        },
-        drop: () => console.log("dropped"),
-        collect: (monitor) => ({
-            isOver: !!monitor.isOver(),
-        }),
-    });
 
     const fetchGrid = async () => {
         setTiles([]);

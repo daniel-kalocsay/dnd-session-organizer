@@ -6,7 +6,11 @@ const GridTile = (props: any) => {
     const [square, setSquare] = useState(props.tile);
 
     const [{ isDragging }, drag] = useDrag({
-        item: { type: ItemTypes.GRIDTILE, occupied_by: props.player },
+        item: {
+            type: ItemTypes.GRIDTILE,
+            occupied_by: props.player,
+            index: props.tile.uid,
+        },
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging(),
         }),
