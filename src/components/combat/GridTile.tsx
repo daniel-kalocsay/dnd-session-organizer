@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { ItemTypes } from "../../util/Items";
 
@@ -16,25 +16,42 @@ const GridTile = (props: any) => {
         }),
     });
 
-    const [, connectDrop] = useDrop({
+    const [{ isOver }, connectDrop] = useDrop({
         accept: ItemTypes.GRIDTILE,
-        // hover(item) {
-        //     console.log("hover");
-        // },
         drop: (item) => props.movePlayer(item, props.tile),
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
         }),
     });
 
-    return (
-        <div
-            style={
-                props.tile.occupied_by !== "" ? styles.active : styles.inactive
+    const chooseStyle = () => {
+        if (props.tile.occupied_by === "") {
+            if (isOver) {
+                return styles.hovered;
             }
-            ref={props.player !== "" ? connectDrag : connectDrop}
-        >
-            {props.player}
+            return styles.inactive;
+        } else {
+            if (isDragging) {
+                return styles.dragged;
+            } else {
+                return styles.active;
+            }
+        }
+    };
+
+    const chooseRef = () => {
+        if (props.playerOnTile === "") {
+            return connectDrop;
+        } else {
+            if (props.IamTheDM || props.tile.occupied_by === props.user) {
+                return connectDrag;
+            }
+        }
+    };
+
+    return (
+        <div style={chooseStyle()} ref={chooseRef()}>
+            {props.playerOnTile}
         </div>
     );
 };
@@ -56,6 +73,12 @@ const styles = {
         backgroundColor: "lightgreen",
     },
     dragged: {
+        border: "2px solid black",
+        backgroundColor: "red",
         opacity: "0.5",
+    },
+    hovered: {
+        border: "2px solid black",
+        backgroundColor: "yellow",
     },
 };

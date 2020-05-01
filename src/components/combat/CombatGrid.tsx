@@ -21,8 +21,6 @@ const CombatGrid = (props: any) => {
     let tilesRef: CollectionReference = gridRef.collection("tiles");
 
     const [amITheDM, setDM] = useState(false);
-    let [DMSelectedPlayerTile, setDMSelectedPlayerTile] = useState({} as Tile);
-
     const [tiles, setTiles] = useState<Tile[]>([] as Tile[]);
     const [players, setPLayers] = useState<UserInfo[]>([]);
 
@@ -66,31 +64,7 @@ const CombatGrid = (props: any) => {
         return "";
     };
 
-    const movePlayer = async (selectedTile: Tile) => {
-        let playerOnTile = selectedTile.occupied_by;
-        let movable = playerOnTile === "" || playerOnTile === user!.uid;
-
-        if (movable) {
-            let tilesArray = tiles.map((tile: Tile) => {
-                let newTile = new Tile(tile.uid, tile.x, tile.y, user!.uid);
-                let emptyTile = new Tile(
-                    tile.uid,
-                    tile.x,
-                    tile.y,
-                    tile.occupied_by === user!.uid
-                        ? ""
-                        : (tile.occupied_by as string)
-                );
-
-                let source = tile === selectedTile ? newTile : emptyTile;
-                return Object.assign({}, source);
-            });
-
-            gridRef.update({ tiles: tilesArray });
-        }
-    };
-
-    const dragNDropMovePlayer = (draggedTile: Tile, droppedTile: Tile) => {
+    const movePlayer = (draggedTile: Tile, droppedTile: Tile) => {
         let newTiles = tiles.map((tile) => {
             if (tile.uid === draggedTile.uid) {
                 return Object.assign(
@@ -114,48 +88,6 @@ const CombatGrid = (props: any) => {
         gridRef.update({ tiles: newTiles });
     };
 
-    const DMMovesPlayer = (selectedTile: Tile) => {
-        let playerOnTile = selectedTile.occupied_by;
-
-        // player clicked?
-        let playerTileClicked = playerOnTile !== "";
-
-        // player stored in state?
-        let playerStored = DMSelectedPlayerTile.uid !== undefined;
-
-        if (playerTileClicked && !playerStored) {
-            setDMSelectedPlayerTile(selectedTile);
-        } else if (!playerTileClicked && playerStored) {
-            let newTiles = tiles.map((tile) => {
-                if (tile.uid === DMSelectedPlayerTile.uid) {
-                    return Object.assign(
-                        {},
-                        new Tile(
-                            DMSelectedPlayerTile.uid,
-                            DMSelectedPlayerTile.x,
-                            DMSelectedPlayerTile.y,
-                            ""
-                        )
-                    );
-                } else if (tile.uid === selectedTile.uid) {
-                    return Object.assign(
-                        {},
-                        new Tile(
-                            selectedTile.uid,
-                            selectedTile.x,
-                            selectedTile.y,
-                            DMSelectedPlayerTile.occupied_by
-                        )
-                    );
-                } else {
-                    return Object.assign({}, tile);
-                }
-            });
-            gridRef.update({ tiles: newTiles });
-            setDMSelectedPlayerTile({} as Tile);
-        }
-    };
-
     return (
         <div style={styles.grid}>
             {tiles
@@ -163,21 +95,11 @@ const CombatGrid = (props: any) => {
                       <GridTile
                           key={tile.uid}
                           tile={tile}
-                          player={getPlayerName(tile)}
-                          movePlayer={dragNDropMovePlayer}
+                          playerOnTile={getPlayerName(tile)}
+                          movePlayer={movePlayer}
+                          IamTheDM={amITheDM}
+                          user={user?.uid}
                       />
-                      //   <div
-                      //       key={tile.uid}
-                      //       style={
-                      //           tile.occupied_by !== ""
-                      //               ? styles.active
-                      //               : styles.inactive
-                      //       }
-                      //       //   onClick={() =>
-                      //       //       amITheDM ? DMMovesPlayer(tile) : movePlayer(tile)
-                      //       //   }
-                      //   >
-                      //   </div>
                   ))
                 : null}
         </div>
@@ -194,19 +116,5 @@ const styles = {
         backgroundColor: "lightgreen",
         //TODO don't use this magic number
         height: "30em",
-    },
-    tile: {
-        //TODO resolve styling of tiles, use active/inactive to change color
-    },
-    active: {
-        border: "2px solid black",
-        backgroundColor: "red",
-    },
-    inactive: {
-        border: "2px solid black",
-        backgroundColor: "lightgreen",
-    },
-    dragged: {
-        opacity: "0.5",
     },
 };
