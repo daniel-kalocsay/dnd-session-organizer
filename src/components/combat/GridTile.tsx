@@ -3,14 +3,13 @@ import { useDrag, useDrop } from "react-dnd";
 import { ItemTypes } from "../../util/Items";
 
 const GridTile = (props: any) => {
-    const [square, setSquare] = useState(props.tile);
-    const ref = useRef(null);
-
     const [{ isDragging }, connectDrag] = useDrag({
         item: {
             type: ItemTypes.GRIDTILE,
-            occupied_by: props.player,
-            index: props.tile.uid,
+            occupied_by: props.tile.occupied_by,
+            uid: props.tile.uid,
+            x: props.tile.x,
+            y: props.tile.y,
         },
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging(),
@@ -19,32 +18,21 @@ const GridTile = (props: any) => {
 
     const [, connectDrop] = useDrop({
         accept: ItemTypes.GRIDTILE,
-
-        hover(item) {
-            console.log(item);
-        },
-
-        drop: () => console.log("dropped"),
+        // hover(item) {
+        //     console.log("hover");
+        // },
+        drop: (item) => props.movePlayer(item, props.tile),
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
         }),
     });
-
-    useEffect(() => {
-        setSquare(props.tile);
-    }, [props.tile]);
-
-    connectDrag(ref);
-    connectDrop(ref);
 
     return (
         <div
             style={
                 props.tile.occupied_by !== "" ? styles.active : styles.inactive
             }
-            //style={isDragging ? styles.dragged : styles.tile}
-            //ref={props.player !== "" ? drag : drop}
-            ref={ref}
+            ref={props.player !== "" ? connectDrag : connectDrop}
         >
             {props.player}
         </div>

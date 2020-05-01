@@ -90,6 +90,30 @@ const CombatGrid = (props: any) => {
         }
     };
 
+    const dragNDropMovePlayer = (draggedTile: Tile, droppedTile: Tile) => {
+        let newTiles = tiles.map((tile) => {
+            if (tile.uid === draggedTile.uid) {
+                return Object.assign(
+                    {},
+                    new Tile(draggedTile.uid, draggedTile.x, draggedTile.y, "")
+                );
+            } else if (tile.uid === droppedTile.uid) {
+                return Object.assign(
+                    {},
+                    new Tile(
+                        droppedTile.uid,
+                        droppedTile.x,
+                        droppedTile.y,
+                        draggedTile.occupied_by
+                    )
+                );
+            } else {
+                return Object.assign({}, tile);
+            }
+        });
+        gridRef.update({ tiles: newTiles });
+    };
+
     const DMMovesPlayer = (selectedTile: Tile) => {
         let playerOnTile = selectedTile.occupied_by;
 
@@ -140,6 +164,7 @@ const CombatGrid = (props: any) => {
                           key={tile.uid}
                           tile={tile}
                           player={getPlayerName(tile)}
+                          movePlayer={dragNDropMovePlayer}
                       />
                       //   <div
                       //       key={tile.uid}
