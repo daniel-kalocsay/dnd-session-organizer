@@ -4,8 +4,9 @@ import { ItemTypes } from "../../util/Items";
 
 const GridTile = (props: any) => {
     const [square, setSquare] = useState(props.tile);
+    const ref = useRef(null);
 
-    const [{ isDragging }, drag] = useDrag({
+    const [{ isDragging }, connectDrag] = useDrag({
         item: {
             type: ItemTypes.GRIDTILE,
             occupied_by: props.player,
@@ -16,26 +17,36 @@ const GridTile = (props: any) => {
         }),
     });
 
-    const [, drop] = useDrop({
+    const [, connectDrop] = useDrop({
         accept: ItemTypes.GRIDTILE,
-        hover(item, monitor) {
-            console.log("dnd");
+
+        hover(item) {
+            console.log(item);
         },
+
+        drop: () => console.log("dropped"),
+        collect: (monitor) => ({
+            isOver: !!monitor.isOver(),
+        }),
     });
 
     useEffect(() => {
         setSquare(props.tile);
     }, [props.tile]);
 
+    connectDrag(ref);
+    connectDrop(ref);
+
     return (
         <div
-            style={isDragging ? styles.dragged : styles.tile}
+            style={
+                props.tile.occupied_by !== "" ? styles.active : styles.inactive
+            }
+            //style={isDragging ? styles.dragged : styles.tile}
             //ref={props.player !== "" ? drag : drop}
-            ref={drag}
+            ref={ref}
         >
-            <div style={square.active ? styles.active : styles.inactive}>
-                {props.player}
-            </div>
+            {props.player}
         </div>
     );
 };
@@ -49,10 +60,12 @@ const styles = {
         opacity: "1.0",
     },
     active: {
+        border: "2px solid black",
         backgroundColor: "red",
     },
     inactive: {
-        backgroundColor: "white",
+        border: "2px solid black",
+        backgroundColor: "lightgreen",
     },
     dragged: {
         opacity: "0.5",

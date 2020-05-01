@@ -5,7 +5,6 @@ import GridTile from "./GridTile";
 import Tile from "../../model/Tile";
 import { useAuthState } from "react-firebase-hooks/auth";
 import UserInfo from "../../model/UserInfo";
-import { TileWrapper } from "./TileWrapper";
 
 type CollectionReference = firebase.firestore.CollectionReference;
 
@@ -136,11 +135,11 @@ const CombatGrid = (props: any) => {
     return (
         <div style={styles.grid}>
             {tiles
-                ? tiles.map((tile: Tile, index: number) => (
-                      <TileWrapper
+                ? tiles.map((tile: Tile) => (
+                      <GridTile
                           key={tile.uid}
                           tile={tile}
-                          getPlayerName={getPlayerName}
+                          player={getPlayerName(tile)}
                       />
                       //   <div
                       //       key={tile.uid}
@@ -153,11 +152,6 @@ const CombatGrid = (props: any) => {
                       //       //       amITheDM ? DMMovesPlayer(tile) : movePlayer(tile)
                       //       //   }
                       //   >
-                      //       <GridTile
-                      //           id={tile.uid}
-                      //           tile={tile}
-                      //           player={getPlayerName(tile)}
-                      //       />
                       //   </div>
                   ))
                 : null}
