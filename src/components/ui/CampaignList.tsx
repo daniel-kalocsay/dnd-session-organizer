@@ -18,16 +18,44 @@ type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 const CampaignList = () => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const usersRef = useContext(FirebaseContext)!.usersRef;
-    const [campaigns, setCampaigns] = useState([] as CampaignPreviewData[]);
 
+    const [campaigns, setCampaigns] = useState([] as CampaignPreviewData[]);
     const auth = useContext(FirebaseContext)!.auth;
+
     const [user, initializing, authError] = useAuthState(auth);
+
+    const getCampaignsCache = () => localStorage.getItem("campaignList");
 
     useEffect(() => {
         if (user) {
-            fetchCampaigns();
+            let campaignsCache = getCampaignsCache();
+
+            if (campaignsCache !== null) {
+                loadCampaignsFromCache(campaignsCache)
+            } else {
+                localStorage.setItem("campaignList", JSON.stringify([]));
+                fetchCampaigns();
+            }
         }
+
     }, [user]);
+
+    const loadCampaignsFromCache = (campaignsCache: any) => {
+        let cObjects = JSON.parse(campaignsCache);
+        console.log(cObjects);
+
+        let serialized = cObjects.map((elem: any) => {
+            let newPreviewData = new CampaignPreviewData(
+                elem.uid, elem.name, new Date(elem.createdAt), elem.DMName,
+                elem.DMId, elem.playerIds, elem.combatfieldIds
+            );
+            console.log(newPreviewData);
+            return newPreviewData;
+        });
+        setCampaigns(serialized);
+        console.log(serialized);
+
+    };
 
     const sortCampaignList = () => {
         return campaigns.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
@@ -51,6 +79,8 @@ const CampaignList = () => {
             .doc(user!.uid)
             .collection("campaigns")
             .get();
+
+        let cache = JSON.parse(getCampaignsCache()!);
 
         campaignsCol.forEach((campaignRef: DocumentSnapshot) => {
             campaignsRef
@@ -91,7 +121,11 @@ const CampaignList = () => {
                             playerIds,
                             combatfieldIds
                         );
+
                         setCampaigns((oldData) => [...oldData, data]);
+
+                        cache.push(data);
+                        localStorage.setItem("campaignList", JSON.stringify(cache));
                     }
                 });
         });
@@ -125,6 +159,8 @@ const CampaignList = () => {
         );
 
         setCampaigns(updatedCampaigns);
+
+        let cache = getCampaignsCache()
     };
 
 
@@ -157,11 +193,11 @@ const CampaignList = () => {
                                     : "no date"}
                             </p>
                             <p>
-                                Number of players: {campaign.playerIds.length}
+                                Number of players: {campaign.playerIds ? campaign.playerIds.length : ""}
                             </p>
                             <p>
                                 Number of combatfields:{" "}
-                                {campaign.combatfieldIds.length}
+                                {campaign.combatfieldIds ? campaign.combatfieldIds.length : ""}
                             </p>
                             <Link
                                 to={{
@@ -204,7 +240,7 @@ const styles = {
         display: "grid",
         gridGap: "1em",
         gridTemplateColumns: "repeat(auto-fill, minmax(100px, 300px))",
-        gridTemplateRows: "repeat(3, 1fr)",
+        gridTemplateRows: "repeat(auto-fill, 1fr)",
     },
     cardContainer: {
         // maxWidth: 350,
