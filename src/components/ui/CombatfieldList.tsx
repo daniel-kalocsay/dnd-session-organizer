@@ -49,7 +49,6 @@ const CombatfieldList = () => {
                               >
                                   Delete
                               </Button>
-                              <br />
                           </div>
                       )
                   )
