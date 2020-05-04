@@ -182,14 +182,14 @@ const CampaignDetails = () => {
 
                 <CombatfieldList />
 
-                <Link
-                    to={{
-                        pathname: "/new-combatfield",
-                        state: {campaignId: campaignDetails!.campaignId},
-                    }}
-                >
-                    <Button>Create new Combatfield</Button>
-                </Link>
+                {/*<Link*/}
+                {/*    to={{*/}
+                {/*        pathname: "/new-combatfield",*/}
+                {/*        state: {campaignId: campaignDetails!.campaignId},*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    <Button>Create new Combatfield</Button>*/}
+                {/*</Link>*/}
             </div>
 
             <div style={styles.campaignInfoWrapper}>
@@ -242,29 +242,24 @@ const styles = {
         gridGap: "1em",
     },
     campaignInfoWrapper: {
-        display: "grid",
         gridColumn: "3/7",
         gridRow: "1/2",
         border: "1px solid black"
     },
     combatfieldsWrapper: {
-        display: "grid",
         gridColumn: "2/5",
         gridRow: "2/3",
         border: "1px solid black"
     },
     playersWrapper: {
-        display: "grid",
         gridColumn: "5/8",
         gridRow: "2/3",
         border: "1px solid black"
-
     },
     saveChangesButton: {
         gridColumn: "2/8",
         gridRow: "3/4",
         border: "1px solid black"
-
     }
 
 };

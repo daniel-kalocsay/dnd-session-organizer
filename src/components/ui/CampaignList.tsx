@@ -171,8 +171,9 @@ const CampaignList = () => {
                                 }}
                                 style={{marginLeft: "auto", marginRight: "auto"}}
                             >
-                                <Button color={"primary"} variant={"outlined"} style={styles.button}>More
-                                    details</Button>
+                                <Button color={"primary"} variant={"outlined"} style={styles.button}>
+                                    More details
+                                </Button>
                             </Link>
 
                         </CardContent>
