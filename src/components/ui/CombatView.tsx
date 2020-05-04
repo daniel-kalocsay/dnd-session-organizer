@@ -35,6 +35,7 @@ const CombatView = (props: any) => {
 
             <div style={styles.sideBar}>
                 <div>This is the sidebar</div>
+                {/* TODO what if user doesnt arrive from details? */}
                 <Button onClick={() => history.goBack()}>
                     Go back to Campaign details
                 </Button>

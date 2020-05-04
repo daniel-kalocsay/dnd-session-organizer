@@ -44,14 +44,6 @@ const CampaignDetails = () => {
         }
     }, [campaignDetails!.campaignId]);
 
-    useEffect(() => {
-        // hasCampaignDetailsChanged();
-    }, [
-        originalPlayers,
-        campaignDetails!.players,
-        campaignDetails!.campaignName,
-    ]);
-
     const updateCampaignName = () => {
         batch.update(campaignsRef.doc(campaignDetails!.campaignId), {
             name: campaignDetails!.campaignName,
