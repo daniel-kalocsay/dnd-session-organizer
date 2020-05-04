@@ -35,7 +35,11 @@ const Menu = () => {
         <div style={styles.container}>
             {menuItems
                 ? menuItems.map((item: any) => {
-                      return <div style={styles.item}>{item.title}</div>;
+                      return (
+                          <div key={item.id} style={styles.item}>
+                              {item.title}
+                          </div>
+                      );
                   })
                 : "No menu items"}
         </div>

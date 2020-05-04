@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import CombatGrid from "../combat/CombatGrid";
 import Players from "../combat/Players";
 import Menu from "../combat/Menu";
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import UserInfo from "../../model/UserInfo";
 import { Button } from "@material-ui/core";
 

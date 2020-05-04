@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
-import firebase, { firestore } from "firebase";
+import React, { useContext, useEffect, useState } from "react";
+import firebase from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import GridTile from "./GridTile";
 import Tile from "../../model/Tile";
@@ -27,22 +27,32 @@ const CombatGrid = (props: any) => {
     const fetchGrid = async () => {
         setTiles([]);
 
-        gridRef.onSnapshot(async (gridSnap) => {
-            let newTiles = [] as Tile[];
-
-            let grid = await gridSnap.data();
-
+        gridRef.onSnapshot((gridSnap) => {
+            let grid = gridSnap.data();
             let tiles = grid!.tiles;
 
-            tiles.forEach((tile: any, index: number) => {
+            let newTiles = tiles.map((tile: any, index: number) => {
                 let id = index.toString();
-
-                let newTile = new Tile(id, tile.x, tile.y, tile.occupied_by);
-                newTiles.push(newTile);
+                return new Tile(id, tile.x, tile.y, tile.occupied_by);
             });
-
             setTiles(newTiles);
+            initialPlayerPlacement(newTiles);
         });
+    };
+
+    const initialPlayerPlacement = (localTiles: Tile[]) => {
+        props.players.forEach((player: any) => {
+            if (localTiles.every((tile) => tile.occupied_by !== player.uid)) {
+                let emptyTile = localTiles.find(
+                    (tile) => tile.occupied_by === ""
+                );
+                emptyTile!.occupied_by = player.uid;
+            }
+        });
+        localTiles.forEach(
+            (tile, index) => (localTiles[index] = Object.assign({}, tile))
+        );
+        gridRef.update({ tiles: localTiles });
     };
 
     useEffect(() => {
