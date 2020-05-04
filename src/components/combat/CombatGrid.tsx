@@ -8,6 +8,7 @@ import UserInfo from "../../model/UserInfo";
 
 type CollectionReference = firebase.firestore.CollectionReference;
 
+
 const CombatGrid = (props: any) => {
     const auth = useContext(FirebaseContext)!.auth;
     const [user, initializing, authError] = useAuthState(auth);
@@ -111,8 +112,8 @@ export default CombatGrid;
 const styles = {
     grid: {
         display: "grid",
-        gridTemplateRows: "repeat(10, 1fr)",
-        gridTemplateColumns: "repeat(10, 1fr)",
+        gridTemplateRows: `repeat(10, 1fr)`,
+        gridTemplateColumns: `repeat(10, 1fr)`,
         backgroundColor: "lightgreen",
         //TODO don't use this magic number
         height: "30em",

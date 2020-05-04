@@ -29,12 +29,12 @@ const GridTile = (props: any) => {
             if (isOver) {
                 return styles.hovered;
             }
-            return styles.inactive;
+            return styles.unoccupied;
         } else {
             if (isDragging) {
                 return styles.dragged;
             } else {
-                return styles.active;
+                return styles.occupied;
             }
         }
     };
@@ -62,23 +62,24 @@ const styles = {
     tile: {
         // overflow: "auto",
         // height: "100%",
-        opacity: "1.0",
+        opacity: 1,
     },
-    active: {
+    occupied: {
         border: "2px solid black",
-        backgroundColor: "red",
+        backgroundColor: "#ff8547",
     },
-    inactive: {
+    unoccupied: {
         border: "2px solid black",
-        backgroundColor: "lightgreen",
+        backgroundColor: "#90EE90",
     },
     dragged: {
         border: "2px solid black",
-        backgroundColor: "red",
-        opacity: "0.5",
+        backgroundColor: "#ff8547",
+        opacity: 0.5
     },
     hovered: {
         border: "2px solid black",
-        backgroundColor: "yellow",
+        backgroundColor: "#c5ffc3",
+        transform: "scale(1.15)"
     },
 };
