@@ -15,20 +15,24 @@ const CombatGrid = (props: any) => {
 
     const campaignRef = useContext(FirebaseContext)!.campaignsRef.doc(
         props.campaignId
+
     );
     let gridRef = campaignRef
         .collection("combatfields")
         .doc(props.gridData.uid);
+
     let tilesRef: CollectionReference = gridRef.collection("tiles");
 
     const [amITheDM, setDM] = useState(false);
     const [tiles, setTiles] = useState<Tile[]>([] as Tile[]);
     const [players, setPLayers] = useState<UserInfo[]>([]);
 
+    let unSubscribe = () => {};
+
     const fetchGrid = async () => {
         setTiles([]);
 
-        gridRef.onSnapshot(async (gridSnap) => {
+        unSubscribe = gridRef.onSnapshot(async (gridSnap) => {
             let newTiles = [] as Tile[];
 
             let grid = await gridSnap.data();
@@ -53,6 +57,9 @@ const CombatGrid = (props: any) => {
         if (user?.uid === props.DMId) {
             setDM(true);
         }
+
+        return () => unSubscribe();
+        
         //TODO detach realtime listener if combatgrid is deleted from db
     }, []);
 

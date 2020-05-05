@@ -36,25 +36,29 @@ const GridSizeForm = (props: any) => {
             <form onSubmit={props.onSubmit}>
                 <FormControl>
                     <TextField variant={"outlined"} name='combatfieldName'/>
-                    <Button type={"submit"} variant={"outlined"}>Create New Combatfield</Button>
                 </FormControl>
+
+                <Typography id="discrete-slider-restrict" gutterBottom>
+                    Choose the ize of your combat field
+                </Typography>
+
+                {/*width*/}
+                <Slider
+                    defaultValue={10}
+                    valueLabelFormat={valueLabelFormat}
+                    getAriaValueText={valuetext}
+                    onChangeCommitted={props.saveSize}
+                    aria-labelledby="discrete-slider-restrict"
+                    step={null}
+                    valueLabelDisplay="auto"
+                    marks={marks}
+                />
+
+                <Button type={"submit"} variant={"outlined"}>Create New Combatfield</Button>
+
+
             </form>
 
-            <Typography id="discrete-slider-restrict" gutterBottom>
-                Choose the grid size of your combat field
-            </Typography>
-
-            {/*width*/}
-            <Slider
-                defaultValue={10}
-                valueLabelFormat={valueLabelFormat}
-                getAriaValueText={valuetext}
-                onChangeCommitted={props.saveSize}
-                aria-labelledby="discrete-slider-restrict"
-                step={null}
-                valueLabelDisplay="auto"
-                marks={marks}
-            />
 
             {/*height*/}
             {/*<Slider*/}
