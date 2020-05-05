@@ -127,7 +127,7 @@ const CombatGrid = (props: any) => {
                           modifyIcon={modifyIcon}
                       />
                   ))
-                : null}
+                : null} 
         </div>
     );
 };

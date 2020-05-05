@@ -2,6 +2,8 @@ import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { ItemTypes } from "../../util/Items";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
+import { isAbsolute } from "path";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 const GridTile = (props: any) => {
     const [{ isDragging }, connectDrag] = useDrag({
@@ -51,9 +53,11 @@ const GridTile = (props: any) => {
     };
 
     const DMOptions = (
-        <div>
+        <div style={chooseStyle()}>
             <ContextMenuTrigger id={props.tile.uid}>
-                <div>{props.playerOnTile ? props.playerOnTile : "hallo"}</div>
+                <div className={"player-name"} style={styles.fixedSize}>
+                    {props.playerOnTile}
+                </div>
             </ContextMenuTrigger>
 
             <ContextMenu id={props.tile.uid}>
@@ -78,10 +82,10 @@ const GridTile = (props: any) => {
         </div>
     );
 
-    const playerOptions = <div>{props.playerOnTile}</div>;
+    const playerOptions = <div style={chooseStyle()}>{props.playerOnTile}</div>;
 
     return (
-        <div className={"field"} style={chooseStyle()} ref={chooseRef()}>
+        <div className={"field"} style={styles.tile} ref={chooseRef()}>
             {props.amITheDM ? DMOptions : playerOptions}
         </div>
     );
@@ -94,27 +98,45 @@ const styles = {
         // overflow: "auto",
         // height: "100%",
         opacity: 1,
-    },
+        position: "relative",
+        zIndex: 1,
+        top: "0px",
+        left: "0px",
+        // height: "10px",
+        // width: "10px",
+    } as CSSProperties,
     occupied: {
         border: "2px solid black",
         backgroundColor: "#ff8547",
+        width: "100%",
+        height: "100%",
     },
     unoccupied: {
         border: "2px solid black",
         backgroundColor: "#90EE90",
+        width: "100%",
+        height: "100%",
     },
     dragged: {
         border: "2px solid black",
         backgroundColor: "#ff8547",
         opacity: 0.5,
+        width: "100%",
+        height: "100%",
     },
     hovered: {
         border: "2px solid black",
         backgroundColor: "#c5ffc3",
         transform: "scale(1.15)",
+        width: "100%",
+        height: "100%",
     },
     menu: {
         backgroundColor: "blue",
         color: "white",
+    },
+    fixedSize: {
+        width: "5em",
+        height: "3em",
     },
 };
