@@ -38,9 +38,7 @@ const NewCombatfield = (props: any) => {
     };
 
     return (
-        <div style={{ width: 400, height: 400 }}>
-            <GridSizeForm onSubmit={createNewCombatfield} saveSize={saveSize} />
-        </div>
+        <GridSizeForm onSubmit={createNewCombatfield} saveSize={saveSize} />
     );
 };
 

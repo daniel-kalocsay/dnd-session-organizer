@@ -32,17 +32,16 @@ const GridSizeForm = (props: any) => {
     };
 
     return (
-        <div>
-            <form onSubmit={props.onSubmit}>
-                <FormControl>
-                    <TextField variant={"outlined"} name='combatfieldName'/>
-                </FormControl>
+        <form onSubmit={props.onSubmit} style={styles.container}>
+            <FormControl style={styles.input}>
+                <TextField variant={"outlined"} name='combatfieldName' placeholder={"Combatfield name"}/>
+            </FormControl>
 
-                <Typography id="discrete-slider-restrict" gutterBottom>
-                    Choose the ize of your combat field
+            <div style={styles.slider}>
+                <Typography id="discrete-slider-restrict" gutterBottom={true} >
+                    Choose the size of your combat field
                 </Typography>
 
-                {/*width*/}
                 <Slider
                     defaultValue={10}
                     valueLabelFormat={valueLabelFormat}
@@ -53,27 +52,37 @@ const GridSizeForm = (props: any) => {
                     valueLabelDisplay="auto"
                     marks={marks}
                 />
+            </div>
 
-                <Button type={"submit"} variant={"outlined"}>Create New Combatfield</Button>
+            <Button style={styles.button}
+                    type={"submit"}
+                    variant={"outlined"}
+            >
+                Create New Combatfield
+            </Button>
 
-
-            </form>
-
-
-            {/*height*/}
-            {/*<Slider*/}
-            {/*    orientation={"vertical"}*/}
-            {/*    defaultValue={10}*/}
-            {/*    valueLabelFormat={valueLabelFormat}*/}
-            {/*    getAriaValueText={valuetext}*/}
-            {/*    onChangeCommitted={saveSize}*/}
-            {/*    aria-labelledby="discrete-slider-restrict"*/}
-            {/*    step={null}*/}
-            {/*    valueLabelDisplay="auto"*/}
-            {/*    marks={marks}*/}
-            {/*/>*/}
-        </div>
+        </form>
     )
 };
 
 export default GridSizeForm;
+
+const styles = {
+
+    // define grid
+    container: {
+        display: "grid",
+        gridTemplateRows: "repeat(3, 1fr)"
+    },
+
+    // grid cell positioning
+    input: {
+        gridRow: "1/2"
+    },
+    slider: {
+        gridRow: "2/3"
+    },
+    button: {
+        gridRow: "3/4"
+    }
+};

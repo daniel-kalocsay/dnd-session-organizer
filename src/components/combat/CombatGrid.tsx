@@ -59,7 +59,7 @@ const CombatGrid = (props: any) => {
         }
 
         return () => unSubscribe();
-        
+
         //TODO detach realtime listener if combatgrid is deleted from db
     }, []);
 
