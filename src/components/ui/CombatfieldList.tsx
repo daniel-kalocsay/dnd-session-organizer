@@ -1,11 +1,21 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import UserInfo from "../../model/UserInfo";
-import CombatfieldData from "../../model/CombatfieldData";
-import { Button } from "@material-ui/core";
-import CombatFieldListProps from "../../model/CombatFieldListProps";
+
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
+
+import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardActions from "@material-ui/core/CardActions";
+import List from "@material-ui/core/List"
+import ListItem from "@material-ui/core/ListItem"
+import Paper from "@material-ui/core/Paper"
+
+import CombatfieldData from "../../model/CombatfieldData";
+import UserInfo from "../../model/UserInfo";
+import CombatFieldListProps from "../../model/CombatFieldListProps";
 
 const CombatfieldList = () => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
@@ -20,39 +30,38 @@ const CombatfieldList = () => {
     };
 
     return (
-        <div id="combatfield-list" style={styles.mainWrapper}>
+        <Card id="combatfield-list" style={styles.mainWrapper}>
 
-            <h2 style={styles.title}>
-                Combatfields
-            </h2>
+            <CardHeader title={"Combatfields"} style={styles.title}/>
 
-            <div style={styles.listContainer}>
+            <Paper style={styles.scrollableWindow}>
+                <List style={styles.listContainer}>
                 {campaignDetails!.combatfields && campaignDetails!.campaignId !== ""
                     ? campaignDetails!.combatfields.map(
                         (combatfield: CombatfieldData) => (
-                            <div key={combatfield.uid} style={styles.combatfieldInfo}>
+                            <ListItem key={combatfield.uid} style={styles.combatfieldInfo}>
                                 <div style={styles.fieldName}>
                                     {/*//TODO little card divs instead of buttons/links*/}
 
                                     {/*<Button color={"primary"} variant={"outlined"}>*/}
-                                        <Link
-                                            to={{
-                                                pathname: "/combat",
-                                                search: `?id=${combatfield.uid}`,
-                                                // TODO: use context?
-                                                state: {
-                                                    campaignId: campaignDetails!
-                                                        .campaignId,
-                                                    combatfieldData: combatfield,
-                                                    DMName: campaignDetails?.DM.name,
-                                                    DMId: campaignDetails?.DM.uid,
-                                                    players: campaignDetails!.players,
-                                                },
-                                            }}
-                                            key={combatfield.uid}
-                                        >
-                                            {combatfield.name}
-                                        </Link>
+                                    <Link
+                                        to={{
+                                            pathname: "/combat",
+                                            search: `?id=${combatfield.uid}`,
+                                            // TODO: use context?
+                                            state: {
+                                                campaignId: campaignDetails!
+                                                    .campaignId,
+                                                combatfieldData: combatfield,
+                                                DMName: campaignDetails?.DM.name,
+                                                DMId: campaignDetails?.DM.uid,
+                                                players: campaignDetails!.players,
+                                            },
+                                        }}
+                                        key={combatfield.uid}
+                                    >
+                                        {combatfield.name}
+                                    </Link>
                                     {/*</Button>*/}
                                 </div>
 
@@ -61,7 +70,7 @@ const CombatfieldList = () => {
                                     Size: null :(
                                 </div>
 
-                                <div style={styles.fieldDelete}>
+                                <CardActions style={styles.fieldDelete}>
                                     <Button
                                         color={"secondary"}
                                         variant={"outlined"}
@@ -69,27 +78,34 @@ const CombatfieldList = () => {
                                     >
                                         Delete
                                     </Button>
-                                </div>
+                                </CardActions>
 
-                            </div>
+                            </ListItem>
                         )
                     )
                     : ""}
-            </div>
+                </List>
+            </Paper>
 
-            <div style={styles.createNewButton}>
-                {/*//TODO not sure if this really should be on a separate page, seems it would fit better here*/}
+            {/*//TODO not sure if this really should be on a separate page, seems it would fit better here*/}
+            <div style={styles.addNewButton}>
                 <Link
                     to={{
                         pathname: "/new-combatfield",
                         state: {campaignId: campaignDetails!.campaignId},
                     }}
                 >
-                    <Button color={"primary"} variant={"outlined"}>Create new Combatfield</Button>
+                    <Button color={"primary"} variant={"outlined"}>&#8853; Add</Button>
                 </Link>
             </div>
 
-        </div>
+            {/*<Paper style={styles.createNewButton}>*/}
+            {/*    <CardActions>*/}
+            {/*        */}
+            {/*    </CardActions>*/}
+            {/*</Paper>*/}
+
+        </Card>
     );
 };
 
@@ -97,40 +113,71 @@ export default CombatfieldList;
 
 const styles = {
     mainWrapper: {
+        // define grid
         display: "grid",
         gridTemplateColumns: "repeat(2, 1fr)",
-        gridTemplateRows: "repeat(5, 1fr)",
+        gridTemplateRows: "repeat(7, 1fr)",
         gridGap: "1em",
+
+        // adjustment
         padding: "1em"
     },
     title: {
-        border: "1px solid black",
+        // cell positioning
         gridColumn: "1/3",
-        gridRow: "1/2"
+        gridRow: "1/2",
+
+        // adjustments
+        justifySelf: "center"
+    },
+    addNewButton: {
+        // border: "1px solid black",
+
+        // cell positioning
+        gridColumn: "1/3",
+        gridRow: "7/8",
+    },
+    scrollableWindow: {
+        border: "1px solid black",
+        backgroundColor: "#f4f4f4",
+
+        // cell positioning
+        gridColumn: "1/3",
+        gridRow: "2/7",
+
+        // make it scrollable
+        maxHeight: "25em",
+        overflow: "auto",
     },
     listContainer: {
-        border: "1px solid black",
-        gridColumn: "1/3",
-        gridRow: "2/5"
-    },
-    createNewButton: {
-        border: "1px solid black",
-        gridColumn: "1/3",
-        gridRow: "5/6"
+        // border: "1px solid black",
+
+        // define grid
+        display: "grid",
+        gridTemplateRows: "repeat(auto-fill, 1fr)",
+        gridGap: "1em",
+
+        // adjustment
+        padding: "1em",
     },
     combatfieldInfo: {
         border: "1px solid black",
+
+        // define grid
         display: "grid",
-        padding: "0.2em",
-        gridTemplateColumns: "repeat(3, 1fr)"
+        gridTemplateColumns: "repeat(3, 1fr)",
+
     },
     fieldName: {
+        // cell positioning
         gridColumn: "1/3"
     },
     fieldSize: {
+        // cell positioning
         gridColumn: "3/4"
     },
     fieldDelete: {
+        // cell positioning
         gridColumn: "4/5"
     }
 };

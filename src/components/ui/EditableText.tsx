@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-export const EditableText = (props: any) => {
+const EditableText = (props: any) => {
     const inputRef = useRef(null);
     const [inputVisible, setInputVisible] = useState(false);
 
@@ -44,3 +44,5 @@ export const EditableText = (props: any) => {
         </div>
     );
 };
+
+export default EditableText;

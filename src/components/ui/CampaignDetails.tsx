@@ -1,14 +1,19 @@
 import React, {useState, useContext, useEffect} from "react";
 import {useLocation, Link} from "react-router-dom";
+
 import firebase, {firestore} from "firebase";
 import {FirebaseContext} from "../contexts/FirebaseContext";
-import CombatfieldData from "../../model/CombatfieldData";
-import CombatfieldList from "./CombatfieldList";
-import UserInfo from "../../model/UserInfo";
-import Button from "@material-ui/core/Button";
 import {SelectedCampaignContext} from "../contexts/SelectedCampaignContext";
-import {EditableText} from "./EditableText";
-import {PlayerOptions} from "./PlayerOptions";
+
+import PlayerOptions from "./PlayerOptions";
+import EditableText from "./EditableText";
+import CombatfieldList from "./CombatfieldList";
+
+import CombatfieldData from "../../model/CombatfieldData";
+import UserInfo from "../../model/UserInfo";
+
+import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper"
 
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
@@ -178,7 +183,7 @@ const CampaignDetails = () => {
     return (
         <div style={styles.mainWrapper}>
 
-            <div style={styles.combatfieldsWrapper}>
+            <Paper style={styles.combatfieldsWrapper}>
 
                 <CombatfieldList />
 
@@ -190,9 +195,9 @@ const CampaignDetails = () => {
                 {/*>*/}
                 {/*    <Button>Create new Combatfield</Button>*/}
                 {/*</Link>*/}
-            </div>
+            </Paper>
 
-            <div style={styles.campaignInfoWrapper}>
+            <Paper style={styles.campaignInfoWrapper}>
                 <span>
                     <EditableText
                         saveText={campaignDetails!.setName}
@@ -203,14 +208,14 @@ const CampaignDetails = () => {
                 <p>(Click to edit)</p>
 
                 <p>Dungeon master: {state.campaign.DMName}</p>
-            </div>
+            </Paper>
 
-            <div style={styles.playersWrapper}>
+            <Paper style={styles.playersWrapper}>
                 <PlayerOptions
                     players={campaignDetails!.players}
                     deletePlayer={deletePlayerFromState}
                 />
-            </div>
+            </Paper>
 
 
             <Button
@@ -236,30 +241,39 @@ export default CampaignDetails;
 
 const styles = {
     mainWrapper: {
+        // define grid
         display: "grid",
         gridTemplateRows: "repeat(auto-fit, 1fr)",
         gridTemplateColumns: "repeat(8, 1fr)",
         gridGap: "1em",
     },
     campaignInfoWrapper: {
+        border: "1px solid black",
+
+        // cell positioning
         gridColumn: "3/7",
-        gridRow: "1/2",
-        border: "1px solid black"
+        gridRow: "1/2"
     },
     combatfieldsWrapper: {
+        border: "1px solid black",
+
+        // cell positioning
         gridColumn: "2/5",
-        gridRow: "2/3",
-        border: "1px solid black"
+        gridRow: "2/3"
     },
     playersWrapper: {
+        border: "1px solid black",
+
+        // cell positioning
         gridColumn: "5/8",
-        gridRow: "2/3",
-        border: "1px solid black"
+        gridRow: "2/3"
     },
     saveChangesButton: {
+        border: "1px solid black",
+
+        // cell positioning
         gridColumn: "2/8",
-        gridRow: "3/4",
-        border: "1px solid black"
+        gridRow: "3/4"
     }
 
 };
