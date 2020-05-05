@@ -18,11 +18,14 @@ const CombatGrid = (props: any) => {
     let gridRef = campaignRef
         .collection("combatfields")
         .doc(props.gridData.uid);
+
     let tilesRef: CollectionReference = gridRef.collection("tiles");
 
     const [amITheDM, setDM] = useState(false);
     const [tiles, setTiles] = useState<Tile[]>([] as Tile[]);
     const [players, setPLayers] = useState<UserInfo[]>([]);
+
+    let unSubscribe = () => {};
 
     const fetchGrid = async () => {
         setTiles([]);
@@ -62,6 +65,10 @@ const CombatGrid = (props: any) => {
         if (user?.uid === props.DMId) {
             setDM(true);
         }
+
+        return () => unSubscribe();
+
+        //TODO detach realtime listener if combatgrid is deleted from db
     }, []);
 
     const getPlayerName = (tile: Tile) => {
@@ -130,8 +137,8 @@ export default CombatGrid;
 const styles = {
     grid: {
         display: "grid",
-        gridTemplateRows: "repeat(10, 1fr)",
-        gridTemplateColumns: "repeat(10, 1fr)",
+        gridTemplateRows: `repeat(10, 1fr)`,
+        gridTemplateColumns: `repeat(10, 1fr)`,
         backgroundColor: "lightgreen",
         //TODO don't use this magic number
         height: "30em",

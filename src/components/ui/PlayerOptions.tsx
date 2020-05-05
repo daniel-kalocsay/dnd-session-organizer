@@ -3,7 +3,7 @@ import UserSearch from "../user/UserSearch";
 import Button from "@material-ui/core/Button";
 import UserInfo from "../../model/UserInfo";
 
-export const PlayerOptions = (props: any) => {
+const PlayerOptions = (props: any) => {
     return (
         <div>
             <h3>Add player to the campaign:</h3>
@@ -30,3 +30,5 @@ export const PlayerOptions = (props: any) => {
         </div>
     );
 };
+
+export default PlayerOptions;

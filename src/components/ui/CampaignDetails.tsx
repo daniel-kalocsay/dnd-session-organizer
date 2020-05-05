@@ -1,14 +1,19 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
-import firebase, { firestore } from "firebase";
-import { FirebaseContext } from "../contexts/FirebaseContext";
-import CombatfieldData from "../../model/CombatfieldData";
+import React, {useState, useContext, useEffect} from "react";
+import {useLocation, Link} from "react-router-dom";
+
+import firebase, {firestore} from "firebase";
+import {FirebaseContext} from "../contexts/FirebaseContext";
+import {SelectedCampaignContext} from "../contexts/SelectedCampaignContext";
+
+import PlayerOptions from "./PlayerOptions";
+import EditableText from "./EditableText";
 import CombatfieldList from "./CombatfieldList";
+
+import CombatfieldData from "../../model/CombatfieldData";
 import UserInfo from "../../model/UserInfo";
+
 import Button from "@material-ui/core/Button";
-import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
-import { EditableText } from "./EditableText";
-import { PlayerOptions } from "./PlayerOptions";
+import Paper from "@material-ui/core/Paper"
 
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
@@ -154,7 +159,7 @@ const CampaignDetails = () => {
             })
         );
 
-        return { missing: missing, plus: plus };
+        return {missing: missing, plus: plus};
     };
 
     const hasCampaignDetailsChanged = () => {
@@ -176,38 +181,99 @@ const CampaignDetails = () => {
     };
 
     return (
-        <div>
-            <EditableText
-                saveText={campaignDetails!.setName}
-                initialText={campaignDetails!.campaignName}
-            />
+        <div style={styles.mainWrapper}>
 
-            <p>Dungeon master: {state.campaign.DMName}</p>
+            <Paper style={styles.combatfieldsWrapper}>
 
-            <CombatfieldList />
+                <CombatfieldList />
 
-            <Link
-                to={{
-                    pathname: "/new-combatfield",
-                    state: { campaignId: campaignDetails!.campaignId },
-                }}
-            >
-                <Button>Create new Combatfield</Button>
-            </Link>
+                {/*<Link*/}
+                {/*    to={{*/}
+                {/*        pathname: "/new-combatfield",*/}
+                {/*        state: {campaignId: campaignDetails!.campaignId},*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    <Button>Create new Combatfield</Button>*/}
+                {/*</Link>*/}
+            </Paper>
 
-            <PlayerOptions
-                players={campaignDetails!.players}
-                deletePlayer={deletePlayerFromState}
-            />
+            <Paper style={styles.campaignInfoWrapper}>
+                <span>
+                    <EditableText
+                        saveText={campaignDetails!.setName}
+                        initialText={campaignDetails!.campaignName}
+                    />
+                </span>
+
+                <p>(Click to edit)</p>
+
+                <p>Dungeon master: {state.campaign.DMName}</p>
+            </Paper>
+
+            <Paper style={styles.playersWrapper}>
+                <PlayerOptions
+                    players={campaignDetails!.players}
+                    deletePlayer={deletePlayerFromState}
+                />
+            </Paper>
+
 
             <Button
+                style={styles.saveChangesButton}
                 disabled={hasCampaignDetailsChanged()}
                 onClick={handleSubmit}
             >
-                Submit
+                Save changes
             </Button>
+
+            {/*available info:*/}
+
+            {/*campaignId: string;*/}
+            {/*campaignName: string;*/}
+            {/*DM: UserInfo;*/}
+            {/*players: UserInfo[];*/}
+            {/*combatfields: CombatfieldData[];*/}
         </div>
     );
 };
 
 export default CampaignDetails;
+
+const styles = {
+    mainWrapper: {
+        // define grid
+        display: "grid",
+        gridTemplateRows: "repeat(auto-fit, 1fr)",
+        gridTemplateColumns: "repeat(8, 1fr)",
+        gridGap: "1em",
+    },
+    campaignInfoWrapper: {
+        border: "1px solid black",
+
+        // cell positioning
+        gridColumn: "3/7",
+        gridRow: "1/2"
+    },
+    combatfieldsWrapper: {
+        border: "1px solid black",
+
+        // cell positioning
+        gridColumn: "2/5",
+        gridRow: "2/3"
+    },
+    playersWrapper: {
+        border: "1px solid black",
+
+        // cell positioning
+        gridColumn: "5/8",
+        gridRow: "2/3"
+    },
+    saveChangesButton: {
+        border: "1px solid black",
+
+        // cell positioning
+        gridColumn: "2/8",
+        gridRow: "3/4"
+    }
+
+};
