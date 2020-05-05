@@ -44,31 +44,45 @@ const GridTile = (props: any) => {
         if (props.playerOnTile === "") {
             return connectDrop;
         } else {
-            if (props.IamTheDM || props.tile.occupied_by === props.user) {
+            if (props.amITheDM || props.tile.occupied_by === props.user) {
                 return connectDrag;
             }
         }
     };
 
-    const handleClick = () => {
-        if (props.IamTheDM && !props.tile.occupied_by) {
-            props.modifyIcon(props.tile.uid, props.user);
-        } else if (props.tile.occupied_by) {
-            props.modifyIcon(props.tile.uid, "");
-        }
-    };
-
-    return (
-        <div style={chooseStyle()} ref={chooseRef()} onClick={handleClick}>
+    const DMOptions = (
+        <div>
             <ContextMenuTrigger id={props.tile.uid}>
-                <div>{props.playerOnTile}</div>
+                <div>{props.playerOnTile ? props.playerOnTile : "hallo"}</div>
             </ContextMenuTrigger>
 
             <ContextMenu id={props.tile.uid}>
-                <MenuItem onClick={handleClick} data={{ tile: props.tile }}>
-                    <div style={styles.menu}>Delete</div>
-                </MenuItem>
+                {props.tile.occupied_by ? (
+                    <MenuItem
+                        onClick={() => props.modifyIcon(props.tile.uid, "")}
+                        data={{ tile: props.tile }}
+                    >
+                        <div style={styles.menu}>Delete</div>
+                    </MenuItem>
+                ) : (
+                    <MenuItem
+                        onClick={() =>
+                            props.modifyIcon(props.tile.uid, props.user)
+                        }
+                        data={{ tile: props.tile }}
+                    >
+                        <div style={styles.menu}>Create</div>
+                    </MenuItem>
+                )}
             </ContextMenu>
+        </div>
+    );
+
+    const playerOptions = <div>{props.playerOnTile}</div>;
+
+    return (
+        <div className={"field"} style={chooseStyle()} ref={chooseRef()}>
+            {props.amITheDM ? DMOptions : playerOptions}
         </div>
     );
 };
@@ -92,12 +106,12 @@ const styles = {
     dragged: {
         border: "2px solid black",
         backgroundColor: "#ff8547",
-        opacity: 0.5
+        opacity: 0.5,
     },
     hovered: {
         border: "2px solid black",
         backgroundColor: "#c5ffc3",
-        transform: "scale(1.15)"
+        transform: "scale(1.15)",
     },
     menu: {
         backgroundColor: "blue",

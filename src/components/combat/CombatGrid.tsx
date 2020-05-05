@@ -122,7 +122,7 @@ const CombatGrid = (props: any) => {
                           tile={tile}
                           playerOnTile={getPlayerName(tile)}
                           movePlayer={movePlayer}
-                          IamTheDM={amITheDM}
+                          amITheDM={amITheDM}
                           user={user?.uid}
                           modifyIcon={modifyIcon}
                       />
