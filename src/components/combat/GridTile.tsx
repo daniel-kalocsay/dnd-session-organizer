@@ -1,8 +1,13 @@
 import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { ItemTypes } from "../../util/Items";
+import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 const GridTile = (props: any) => {
+    const handleMenu = (event: MouseEvent, data: any) => {
+        console.log(data.tile);
+    };
+
     const [{ isDragging }, connectDrag] = useDrag({
         item: {
             type: ItemTypes.GRIDTILE,
@@ -49,16 +54,25 @@ const GridTile = (props: any) => {
         }
     };
 
-    //TODO show Gabor
     const handleClick = () => {
-        if (props.IamTheDM) {
+        if (props.IamTheDM && !props.tile.occupied_by) {
             props.onClick(props.tile.uid);
+        } else if (props.tile.occupied_by) {
+            props.deletePlayerIcon(props.tile.uid);
         }
     };
 
     return (
         <div style={chooseStyle()} ref={chooseRef()} onClick={handleClick}>
-            {props.playerOnTile}
+            <ContextMenuTrigger id={props.tile.uid}>
+                <div>{props.playerOnTile}</div>
+            </ContextMenuTrigger>
+
+            <ContextMenu id={props.tile.uid}>
+                <MenuItem onClick={handleClick} data={{ tile: props.tile }}>
+                    <div style={styles.menu}>Delete</div>
+                </MenuItem>
+            </ContextMenu>
         </div>
     );
 };
@@ -87,5 +101,9 @@ const styles = {
     hovered: {
         border: "2px solid black",
         backgroundColor: "yellow",
+    },
+    menu: {
+        backgroundColor: "blue",
+        color: "white",
     },
 };

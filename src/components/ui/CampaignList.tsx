@@ -97,6 +97,7 @@ const CampaignList = () => {
         });
     };
 
+    //TODO delete combatfields collection as well
     const deleteCampaign = async (campaignId: string) => {
         let playersCol: QuerySnapshot = await campaignsRef
             .doc(campaignId)
