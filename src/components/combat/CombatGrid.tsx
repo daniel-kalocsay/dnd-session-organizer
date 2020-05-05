@@ -53,6 +53,7 @@ const CombatGrid = (props: any) => {
         if (user?.uid === props.DMId) {
             setDM(true);
         }
+        //TODO detach realtime listener if combatgrid is deleted from db
     }, []);
 
     const getPlayerName = (tile: Tile) => {

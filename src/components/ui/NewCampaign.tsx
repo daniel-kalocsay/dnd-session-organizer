@@ -68,6 +68,7 @@ const NewCampaign = () => {
             search: `?id=${campaignData.id}`,
             state: { campaign: campaignData },
         });
+        //TODO fix this so we don't need another doc read to get the DM name
     };
 
     return (
