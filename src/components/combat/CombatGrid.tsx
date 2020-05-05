@@ -100,21 +100,10 @@ const CombatGrid = (props: any) => {
         gridRef.update({ tiles: newTiles });
     };
 
-    //TODO merge this two method
-    const createDMIcon = (clickedTileId: string) => {
-        console.log("create");
+    const modifyIcon = (clickedTileId: string, newOccupant: string) => {
         let clickedTile = tiles.find((tile) => tile.uid === clickedTileId);
-        clickedTile!.occupied_by = user!.uid;
+        clickedTile!.occupied_by = newOccupant;
         gridRef.update({ tiles: tiles });
-        return;
-    };
-
-    const deletePlayerIcon = (clickedTileId: string) => {
-        console.log("delete");
-        let clickedTile = tiles.find((tile) => tile.uid === clickedTileId);
-        clickedTile!.occupied_by = "";
-        gridRef.update({ tiles: tiles });
-        return;
     };
 
     return (
@@ -128,8 +117,7 @@ const CombatGrid = (props: any) => {
                           movePlayer={movePlayer}
                           IamTheDM={amITheDM}
                           user={user?.uid}
-                          onClick={createDMIcon}
-                          deletePlayerIcon={deletePlayerIcon}
+                          modifyIcon={modifyIcon}
                       />
                   ))
                 : null}

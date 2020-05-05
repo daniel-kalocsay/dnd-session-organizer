@@ -4,10 +4,6 @@ import { ItemTypes } from "../../util/Items";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 const GridTile = (props: any) => {
-    const handleMenu = (event: MouseEvent, data: any) => {
-        console.log(data.tile);
-    };
-
     const [{ isDragging }, connectDrag] = useDrag({
         item: {
             type: ItemTypes.GRIDTILE,
@@ -56,9 +52,9 @@ const GridTile = (props: any) => {
 
     const handleClick = () => {
         if (props.IamTheDM && !props.tile.occupied_by) {
-            props.onClick(props.tile.uid);
+            props.modifyIcon(props.tile.uid, props.user);
         } else if (props.tile.occupied_by) {
-            props.deletePlayerIcon(props.tile.uid);
+            props.modifyIcon(props.tile.uid, "");
         }
     };
 
