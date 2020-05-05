@@ -29,7 +29,7 @@ const ModalWrapper = (props: any) => {
 
     return (
         <div>
-            <Button variant={"contained"}
+            <Button variant={props.variant ? props.variant : "contained"}
                     color={"primary"}
                     onClick={showModal}
             >

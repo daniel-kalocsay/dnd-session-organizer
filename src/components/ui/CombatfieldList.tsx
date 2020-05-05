@@ -14,8 +14,8 @@ import ListItem from "@material-ui/core/ListItem"
 import Paper from "@material-ui/core/Paper"
 
 import CombatfieldData from "../../model/CombatfieldData";
-import UserInfo from "../../model/UserInfo";
-import CombatFieldListProps from "../../model/CombatFieldListProps";
+import ModalWrapper from "../../wrappers/ModalWrapper";
+import NewCombatfield from "./NewCombatfield";
 
 const CombatfieldList = () => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
@@ -29,6 +29,11 @@ const CombatfieldList = () => {
             .delete();
     };
 
+    const sortCombatfieldList = () => {
+        //TODO should sort by createdAt instead (which is something a CombatfieldData doesn't have atm)
+        return campaignDetails!.combatfields.sort((a, b) => (a.name > b.name ? 1 : -1));
+    };
+
     return (
         <Card id="combatfield-list" style={styles.mainWrapper}>
 
@@ -37,21 +42,17 @@ const CombatfieldList = () => {
             <Paper style={styles.scrollableWindow}>
                 <List style={styles.listContainer}>
                 {campaignDetails!.combatfields && campaignDetails!.campaignId !== ""
-                    ? campaignDetails!.combatfields.map(
+                    ? sortCombatfieldList().map(
                         (combatfield: CombatfieldData) => (
                             <ListItem key={combatfield.uid} style={styles.combatfieldInfo}>
                                 <div style={styles.fieldName}>
-                                    {/*//TODO little card divs instead of buttons/links*/}
-
-                                    {/*<Button color={"primary"} variant={"outlined"}>*/}
                                     <Link
                                         to={{
                                             pathname: "/combat",
                                             search: `?id=${combatfield.uid}`,
                                             // TODO: use context?
                                             state: {
-                                                campaignId: campaignDetails!
-                                                    .campaignId,
+                                                campaignId: campaignDetails!.campaignId,
                                                 combatfieldData: combatfield,
                                                 DMName: campaignDetails?.DM.name,
                                                 DMId: campaignDetails?.DM.uid,
@@ -62,7 +63,6 @@ const CombatfieldList = () => {
                                     >
                                         {combatfield.name}
                                     </Link>
-                                    {/*</Button>*/}
                                 </div>
 
                                 <div style={styles.fieldSize}>
@@ -87,23 +87,11 @@ const CombatfieldList = () => {
                 </List>
             </Paper>
 
-            {/*//TODO not sure if this really should be on a separate page, seems it would fit better here*/}
             <div style={styles.addNewButton}>
-                <Link
-                    to={{
-                        pathname: "/new-combatfield",
-                        state: {campaignId: campaignDetails!.campaignId},
-                    }}
-                >
-                    <Button color={"primary"} variant={"outlined"}>&#8853; Add</Button>
-                </Link>
+                <ModalWrapper buttonName={"Add new"} variant={"outlined"}>
+                    <NewCombatfield campaignId={campaignDetails!.campaignId} />
+                </ModalWrapper>
             </div>
-
-            {/*<Paper style={styles.createNewButton}>*/}
-            {/*    <CardActions>*/}
-            {/*        */}
-            {/*    </CardActions>*/}
-            {/*</Paper>*/}
 
         </Card>
     );
@@ -166,6 +154,7 @@ const styles = {
         // define grid
         display: "grid",
         gridTemplateColumns: "repeat(3, 1fr)",
+        gridGap: "0.2em"
 
     },
     fieldName: {
