@@ -49,8 +49,15 @@ const GridTile = (props: any) => {
         }
     };
 
+    //TODO show Gabor
+    const handleClick = () => {
+        if (props.IamTheDM) {
+            props.onClick(props.tile.uid);
+        }
+    };
+
     return (
-        <div style={chooseStyle()} ref={chooseRef()}>
+        <div style={chooseStyle()} ref={chooseRef()} onClick={handleClick}>
             {props.playerOnTile}
         </div>
     );

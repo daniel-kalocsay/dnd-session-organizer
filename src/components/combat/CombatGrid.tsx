@@ -68,7 +68,9 @@ const CombatGrid = (props: any) => {
         let player = players.find((p) => p.uid === tile.occupied_by);
 
         if (player) {
-            return player!.name;
+            return player.name;
+        } else if (!player && user!.uid === tile.occupied_by) {
+            return props.DMName;
         }
 
         return "";
@@ -98,6 +100,12 @@ const CombatGrid = (props: any) => {
         gridRef.update({ tiles: newTiles });
     };
 
+    const createDMIcon = (clickedTileId: string) => {
+        let clickedTile = tiles.find((tile) => tile.uid === clickedTileId);
+        clickedTile!.occupied_by = user!.uid;
+        gridRef.update({ tiles: tiles });
+    };
+
     return (
         <div style={styles.grid}>
             {tiles
@@ -109,6 +117,7 @@ const CombatGrid = (props: any) => {
                           movePlayer={movePlayer}
                           IamTheDM={amITheDM}
                           user={user?.uid}
+                          onClick={createDMIcon}
                       />
                   ))
                 : null}
