@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useContext} from "react";
-import {Link} from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 
 import firebase from "firebase";
-import {FirebaseContext} from "../contexts/FirebaseContext";
-import {useAuthState} from "react-firebase-hooks/auth";
+import { FirebaseContext } from "../contexts/FirebaseContext";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -128,16 +128,13 @@ const CampaignList = () => {
         setCampaigns(updatedCampaigns);
     };
 
-
     const newCampaignCard = (
         <Card style={styles.card.container}>
-            <CardHeader title={"Create new"} style={styles.card.header}/>
+            <CardHeader title={"Create new"} style={styles.card.header} />
             <CardContent style={styles.card.content}>
-
                 <Link to={"/new-campaign"}>
                     <div style={styles.plusSign}>&#8853;</div>
                 </Link>
-
             </CardContent>
         </Card>
     );
@@ -148,7 +145,10 @@ const CampaignList = () => {
             {sortCampaignList().map((campaign: CampaignPreviewData) => (
                 <div style={styles.cardContainer} key={campaign.uid}>
                     <Card style={styles.card.container}>
-                        <CardHeader title={campaign.name} style={styles.card.header}/>
+                        <CardHeader
+                            title={campaign.name}
+                            style={styles.card.header}
+                        />
                         <CardContent style={styles.card.content}>
                             <p>Dungeon master: {campaign.DMName}</p>
                             <p>
@@ -168,18 +168,26 @@ const CampaignList = () => {
                                 to={{
                                     pathname: "/campaign",
                                     search: `?id=${campaign.uid}`,
-                                    state: {campaign: campaign},
+                                    state: {
+                                        campaign: campaign,
+                                        previousLocation: "campaign-list",
+                                    },
                                 }}
-                                style={{marginLeft: "auto", marginRight: "auto"}}
+                                style={{
+                                    marginLeft: "auto",
+                                    marginRight: "auto",
+                                }}
                             >
-                                <Button color={"primary"} variant={"outlined"} style={styles.button}>
+                                <Button
+                                    color={"primary"}
+                                    variant={"outlined"}
+                                    style={styles.button}
+                                >
                                     More details
                                 </Button>
                             </Link>
-
                         </CardContent>
                         <div style={styles.card.bottom}>
-
                             <Button
                                 onClick={() => {
                                     deleteCampaign(campaign.uid);
@@ -187,7 +195,6 @@ const CampaignList = () => {
                                 color={"secondary"}
                                 variant={"outlined"}
                                 style={styles.button}
-
                             >
                                 Delete
                             </Button>
@@ -221,22 +228,21 @@ const styles = {
         },
         header: {
             gridRow: "1/2",
-            margin: "0.5em auto"
+            margin: "0.5em auto",
         },
         content: {
             gridRow: "3/6",
-            margin: "0 auto"
+            margin: "0 auto",
         },
         bottom: {
             gridRow: "8/9",
-            margin: "1em auto"
-        }
+            margin: "1em auto",
+        },
     },
     plusSign: {
         fontSize: "8em",
     },
     button: {
-        width: "15em"
-    }
-
+        width: "15em",
+    },
 };

@@ -79,7 +79,6 @@ const CombatGrid = (props: any) => {
         } else if (!player && user!.uid === tile.occupied_by) {
             return props.DMName;
         }
-
         return "";
     };
 
@@ -127,7 +126,7 @@ const CombatGrid = (props: any) => {
                           modifyIcon={modifyIcon}
                       />
                   ))
-                : null} 
+                : null}
         </div>
     );
 };

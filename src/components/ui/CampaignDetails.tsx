@@ -1,9 +1,9 @@
-import React, {useState, useContext, useEffect} from "react";
-import {useLocation, Link} from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
-import firebase, {firestore} from "firebase";
-import {FirebaseContext} from "../contexts/FirebaseContext";
-import {SelectedCampaignContext} from "../contexts/SelectedCampaignContext";
+import firebase, { firestore } from "firebase";
+import { FirebaseContext } from "../contexts/FirebaseContext";
+import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
 
 import PlayerOptions from "./PlayerOptions";
 import EditableText from "./EditableText";
@@ -13,8 +13,9 @@ import CombatfieldData from "../../model/CombatfieldData";
 import UserInfo from "../../model/UserInfo";
 
 import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper"
+import Paper from "@material-ui/core/Paper";
 
+type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 const CampaignDetails = () => {
@@ -23,7 +24,9 @@ const CampaignDetails = () => {
     const campaignDetails = useContext(SelectedCampaignContext);
 
     const state = useLocation().state as any;
-    const [originalPlayers] = useState(state.campaign.playerIds as string[]);
+    const [originalPlayers, setOriginalPlayers] = useState(
+        state.campaign.playerIds as string[]
+    );
     const [originalCampaignName] = useState(state.campaign.name as string);
 
     const [batch, setBatch] = useState(
@@ -42,10 +45,16 @@ const CampaignDetails = () => {
         campaignDetails!.setDM(DM);
     }, []);
 
+    //TODO when new campaign is created player fetch shouldnt occur
     useEffect(() => {
         if (campaignDetails!.campaignId) {
             fetchCombatfields();
-            fetchPlayers();
+
+            if (state.previousLocation === "campaign-list") {
+                fetchPlayersWithId(originalPlayers);
+            } else {
+                fetchPlayersWithoutId();
+            }
         }
     }, [campaignDetails!.campaignId]);
 
@@ -88,8 +97,8 @@ const CampaignDetails = () => {
     };
 
     //TODO put into PlayersOptions
-    const fetchPlayers = () => {
-        originalPlayers.forEach(async (playerId) => {
+    const fetchPlayersWithId = (playerIds: string[]) => {
+        playerIds.forEach(async (playerId) => {
             let userRecord: DocumentSnapshot = await usersRef
                 .doc(playerId)
                 .get();
@@ -99,6 +108,29 @@ const CampaignDetails = () => {
                 (oldData: UserInfo[]) => [...oldData, userInfo] as UserInfo[]
             );
         });
+    };
+
+    const fetchPlayersWithoutId = () => {
+        campaignsRef
+            .doc(campaignDetails!.campaignId)
+            .get()
+            .then(async (campaignDoc: DocumentSnapshot) => {
+                if (campaignDoc.exists) {
+                    let playersCol: QuerySnapshot = await campaignDoc.ref
+                        .collection("players")
+                        .get();
+
+                    let playerIds = [] as string[];
+                    playersCol.forEach((player: DocumentSnapshot) => {
+                        playerIds.push(player.id);
+                    });
+
+                    if (playerIds.length > 0) {
+                        setOriginalPlayers(playerIds);
+                        fetchPlayersWithId(playerIds);
+                    }
+                }
+            });
     };
 
     const saveUpdatedPlayers = (playerId: string) => {
@@ -159,7 +191,7 @@ const CampaignDetails = () => {
             })
         );
 
-        return {missing: missing, plus: plus};
+        return { missing: missing, plus: plus };
     };
 
     const hasCampaignDetailsChanged = () => {
@@ -182,19 +214,8 @@ const CampaignDetails = () => {
 
     return (
         <div style={styles.mainWrapper}>
-
             <Paper style={styles.combatfieldsWrapper}>
-
                 <CombatfieldList />
-
-                {/*<Link*/}
-                {/*    to={{*/}
-                {/*        pathname: "/new-combatfield",*/}
-                {/*        state: {campaignId: campaignDetails!.campaignId},*/}
-                {/*    }}*/}
-                {/*>*/}
-                {/*    <Button>Create new Combatfield</Button>*/}
-                {/*</Link>*/}
             </Paper>
 
             <Paper style={styles.campaignInfoWrapper}>
@@ -217,7 +238,6 @@ const CampaignDetails = () => {
                 />
             </Paper>
 
-
             <Button
                 style={styles.saveChangesButton}
                 disabled={hasCampaignDetailsChanged()}
@@ -225,14 +245,6 @@ const CampaignDetails = () => {
             >
                 Save changes
             </Button>
-
-            {/*available info:*/}
-
-            {/*campaignId: string;*/}
-            {/*campaignName: string;*/}
-            {/*DM: UserInfo;*/}
-            {/*players: UserInfo[];*/}
-            {/*combatfields: CombatfieldData[];*/}
         </div>
     );
 };
@@ -252,28 +264,27 @@ const styles = {
 
         // cell positioning
         gridColumn: "3/7",
-        gridRow: "1/2"
+        gridRow: "1/2",
     },
     combatfieldsWrapper: {
         border: "1px solid black",
 
         // cell positioning
         gridColumn: "2/5",
-        gridRow: "2/3"
+        gridRow: "2/3",
     },
     playersWrapper: {
         border: "1px solid black",
 
         // cell positioning
         gridColumn: "5/8",
-        gridRow: "2/3"
+        gridRow: "2/3",
     },
     saveChangesButton: {
         border: "1px solid black",
 
         // cell positioning
         gridColumn: "2/8",
-        gridRow: "3/4"
-    }
-
+        gridRow: "3/4",
+    },
 };
