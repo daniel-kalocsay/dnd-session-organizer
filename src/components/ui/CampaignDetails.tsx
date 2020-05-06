@@ -275,7 +275,7 @@ const styles = {
         gridRow: "2/3",
     },
     playersWrapper: {
-        border: "1px solid black",
+        // border: "1px solid black",
 
         // cell positioning
         gridColumn: "5/8",
