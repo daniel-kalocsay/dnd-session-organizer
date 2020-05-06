@@ -261,13 +261,14 @@ const styles = {
     },
     campaignInfoWrapper: {
         border: "1px solid black",
+        //TODO this maybe shouldn't be a Paper
 
         // cell positioning
         gridColumn: "3/7",
         gridRow: "1/2",
     },
     combatfieldsWrapper: {
-        border: "1px solid black",
+        // border: "1px solid black",
 
         // cell positioning
         gridColumn: "2/5",
@@ -282,6 +283,7 @@ const styles = {
     },
     saveChangesButton: {
         border: "1px solid black",
+        //TODO make it clear that this only saves changes to the name and the players
 
         // cell positioning
         gridColumn: "2/8",

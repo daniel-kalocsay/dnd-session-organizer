@@ -143,7 +143,7 @@ const CampaignList = () => {
         <div style={styles.campaignListContainer}>
             {campaigns ? newCampaignCard : ""}
             {sortCampaignList().map((campaign: CampaignPreviewData) => (
-                <div style={styles.cardContainer} key={campaign.uid}>
+                <div key={campaign.uid}>
                     <Card style={styles.card.container}>
                         <CardHeader
                             title={campaign.name}
@@ -152,7 +152,7 @@ const CampaignList = () => {
                         <CardContent style={styles.card.content}>
                             <p>Dungeon master: {campaign.DMName}</p>
                             <p>
-                                created at:{" "}
+                                {"Created: "}
                                 {campaign.createdAt
                                     ? campaign.getDate()
                                     : "no date"}
@@ -212,13 +212,8 @@ const styles = {
     campaignListContainer: {
         display: "grid",
         gridGap: "1em",
-        gridTemplateColumns: "repeat(auto-fill, minmax(100px, 300px))",
-        gridTemplateRows: "repeat(3, 1fr)",
-    },
-    cardContainer: {
-        // maxWidth: 350,
-        // cursor: "pointer"
-        // backgroundColor: "#eee",
+        gridTemplateColumns: "repeat(auto-fit, minmax(100px, 300px))",
+        gridTemplateRows: "repeat(auto-fit, 1fr)",
     },
     card: {
         container: {

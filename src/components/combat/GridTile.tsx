@@ -55,7 +55,7 @@ const GridTile = (props: any) => {
     const DMOptions = (
         <div style={chooseStyle()}>
             <ContextMenuTrigger id={props.tile.uid}>
-                <div className={"player-name"} style={styles.fixedSize}>
+                <div className={"player-name"} style={styles.tile}>
                     {props.playerOnTile}
                 </div>
             </ContextMenuTrigger>
@@ -85,7 +85,7 @@ const GridTile = (props: any) => {
     const playerOptions = <div style={chooseStyle()}>{props.playerOnTile}</div>;
 
     return (
-        <div className={"field"} style={styles.tile} ref={chooseRef()}>
+        <div className={"field"}  ref={chooseRef()}>
             {props.amITheDM ? DMOptions : playerOptions}
         </div>
     );
@@ -98,45 +98,29 @@ const styles = {
         // overflow: "auto",
         // height: "100%",
         opacity: 1,
-        position: "relative",
-        zIndex: 1,
-        top: "0px",
-        left: "0px",
-        // height: "10px",
-        // width: "10px",
-    } as CSSProperties,
+        width: "5em",
+        height: "3em",
+    },
     occupied: {
         border: "2px solid black",
         backgroundColor: "#ff8547",
-        width: "100%",
-        height: "100%",
     },
     unoccupied: {
         border: "2px solid black",
         backgroundColor: "#90EE90",
-        width: "100%",
-        height: "100%",
     },
     dragged: {
         border: "2px solid black",
         backgroundColor: "#ff8547",
         opacity: 0.5,
-        width: "100%",
-        height: "100%",
     },
     hovered: {
         border: "2px solid black",
         backgroundColor: "#c5ffc3",
         transform: "scale(1.15)",
-        width: "100%",
-        height: "100%",
     },
     menu: {
         backgroundColor: "blue",
         color: "white",
-    },
-    fixedSize: {
-        width: "5em",
-        height: "3em",
     },
 };
