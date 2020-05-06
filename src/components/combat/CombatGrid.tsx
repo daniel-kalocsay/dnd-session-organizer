@@ -30,7 +30,7 @@ const CombatGrid = (props: any) => {
     const fetchGrid = async () => {
         setTiles([]);
 
-        gridRef.onSnapshot((gridSnap) => {
+        unSubscribe = gridRef.onSnapshot((gridSnap) => {
             let grid = gridSnap.data();
             let tiles = grid!.tiles;
 
@@ -141,6 +141,6 @@ const styles = {
         gridTemplateColumns: `repeat(10, 1fr)`,
         backgroundColor: "lightgreen",
         //TODO don't use this magic number
-        height: "30em",
+        // height: "30em",
     },
 };

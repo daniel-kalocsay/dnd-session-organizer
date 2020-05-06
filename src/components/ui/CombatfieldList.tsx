@@ -44,41 +44,41 @@ const CombatfieldList = () => {
                 {campaignDetails!.combatfields && campaignDetails!.campaignId !== ""
                     ? sortCombatfieldList().map(
                         (combatfield: CombatfieldData) => (
-                            <ListItem key={combatfield.uid} style={styles.combatfieldInfo}>
-                                <div style={styles.fieldName}>
-                                    <Link
-                                        to={{
-                                            pathname: "/combat",
-                                            search: `?id=${combatfield.uid}`,
-                                            // TODO: use context?
-                                            state: {
-                                                campaignId: campaignDetails!.campaignId,
-                                                combatfieldData: combatfield,
-                                                DMName: campaignDetails?.DM.name,
-                                                DMId: campaignDetails?.DM.uid,
-                                                players: campaignDetails!.players,
-                                            },
-                                        }}
-                                        key={combatfield.uid}
-                                    >
-                                        {combatfield.name}
-                                    </Link>
-                                </div>
+                            <ListItem key={combatfield.uid}  style={styles.combatfieldInfo}>
+                                    <div style={styles.fieldName}>
+                                        <Link
+                                            to={{
+                                                pathname: "/combat",
+                                                search: `?id=${combatfield.uid}`,
+                                                // TODO: use context?
+                                                state: {
+                                                    campaignId: campaignDetails!.campaignId,
+                                                    combatfieldData: combatfield,
+                                                    DMName: campaignDetails?.DM.name,
+                                                    DMId: campaignDetails?.DM.uid,
+                                                    players: campaignDetails!.players,
+                                                },
+                                            }}
+                                            key={combatfield.uid}
+                                        >
+                                            {combatfield.name}
+                                        </Link>
+                                    </div>
 
-                                <div style={styles.fieldSize}>
-                                    {/*//TODO store size in db and in CombatfieldData model class */}
-                                    Size: null :(
-                                </div>
+                                    <div style={styles.fieldSize}>
+                                        {/*//TODO store size in db and in CombatfieldData model class */}
+                                        Size: null :(
+                                    </div>
 
-                                <CardActions style={styles.fieldDelete}>
-                                    <Button
-                                        color={"secondary"}
-                                        variant={"outlined"}
-                                        onClick={() => handleClick(combatfield.uid)}
-                                    >
-                                        Delete
-                                    </Button>
-                                </CardActions>
+                                    <CardActions style={styles.fieldDelete}>
+                                        <Button
+                                            color={"secondary"}
+                                            variant={"outlined"}
+                                            onClick={() => handleClick(combatfield.uid)}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </CardActions>
 
                             </ListItem>
                         )
@@ -150,6 +150,7 @@ const styles = {
     },
     combatfieldInfo: {
         border: "1px solid black",
+        borderRadius: "0.25em",
 
         // define grid
         display: "grid",

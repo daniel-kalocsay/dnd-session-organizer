@@ -72,13 +72,13 @@ const Layout = () => {
                         </WithAuth>
                     </Route>
 
-                    <Route path={"/new-combatfield"}>
+                    <Route path={"/my-profile"}>
                         <WithAuth
                             unauthorizedMsg={
-                                "You need to be logged in to create a new combatfield"
+                                "You need to be logged in"
                             }
                         >
-                            <NewCombatfield />
+                            <div>Work in progress</div>
                         </WithAuth>
                     </Route>
                 </div>

@@ -16,7 +16,7 @@ const Navbar = () => {
 
       <Link to={"/my-campaigns"}>My Campaigns</Link>
 
-      <Link to={"/new-campaign"}>Create new Campaign</Link>
+      <Link to={"/my-profile"}>My profile</Link>
 
       <UserProfile />
     </MDBNavbar>
