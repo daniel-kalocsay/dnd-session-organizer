@@ -67,7 +67,7 @@ const RegisterForm = (props: any) => {
     };
 
     return (
-        <div className="grey-text">
+        <div className="grey-text" style={styles.wrapper}>
             <h2>Register</h2>
             <form>
                 {/* username */}
@@ -131,34 +131,20 @@ const RegisterForm = (props: any) => {
                         </FormControl>
                     </Grid>
                 </Grid>
-
-                {/*confirm password*/}
-                {/*<Grid container spacing={1} alignItems="flex-end">*/}
-                {/*    <Grid item>*/}
-                {/*        <Lock/>*/}
-                {/*    </Grid>*/}
-
-                {/*    <Grid item>*/}
-                {/*        <FormControl>*/}
-                {/*            <TextField id="register-confirm-pw"*/}
-                {/*                   name="password"*/}
-                {/*                   label="Confirm password"*/}
-                {/*                   type="password"*/}
-                {/*                   required*/}
-                {/*            />*/}
-                {/*        </FormControl>*/}
-                {/*    </Grid>*/}
-                {/*</Grid>*/}
-
-                <Button variant={"contained"} color="secondary" onClick={hideModal}>
-                    Close
-                </Button>
-                <Button variant={"contained"} onClick={handleSubmit} color="primary">
-                    Register
-                </Button>
             </form>
+
+            <Button variant={"contained"} onClick={handleSubmit} color="primary">
+                Register
+            </Button>
         </div>
     );
 };
 
 export default RegisterForm;
+
+const styles = {
+    wrapper: {
+        display: "grid",
+        gridGap: "2em"
+    }
+};

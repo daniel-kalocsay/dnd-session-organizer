@@ -82,7 +82,11 @@ const GridTile = (props: any) => {
         </div>
     );
 
-    const playerOptions = <div style={chooseStyle()}>{props.playerOnTile}</div>;
+    const playerOptions = <div style={chooseStyle()}>
+        <div className={"player-name"} style={styles.tile}>
+            {props.playerOnTile}
+        </div>
+    </div>;
 
     return (
         <div className={"field"}  ref={chooseRef()}>

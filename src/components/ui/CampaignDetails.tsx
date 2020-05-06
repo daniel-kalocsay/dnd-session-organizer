@@ -213,10 +213,16 @@ const CampaignDetails = () => {
     };
 
     return (
-        <div style={styles.mainWrapper}>
-            <Paper style={styles.combatfieldsWrapper}>
+        <Paper style={styles.mainWrapper}>
+
+            {/*<Paper style={styles.combatfieldsWrapper}>*/}
+            {/*    <CombatfieldList />*/}
+            {/*</Paper>*/}
+            {/*//TODO this maybe shouldn't be a Paper*/}
+
+            <div style={styles.combatfieldsWrapper}>
                 <CombatfieldList />
-            </Paper>
+            </div>
 
             <Paper style={styles.campaignInfoWrapper}>
                 <span>
@@ -231,12 +237,14 @@ const CampaignDetails = () => {
                 <p>Dungeon master: {state.campaign.DMName}</p>
             </Paper>
 
-            <Paper style={styles.playersWrapper}>
+            {/*<Paper style={styles.playersWrapper}>*/}
+            <div style={styles.playersWrapper}>
                 <PlayerOptions
                     players={campaignDetails!.players}
                     deletePlayer={deletePlayerFromState}
                 />
-            </Paper>
+            </div>
+            {/*</Paper>*/}
 
             <Button
                 style={styles.saveChangesButton}
@@ -245,7 +253,7 @@ const CampaignDetails = () => {
             >
                 Save changes
             </Button>
-        </div>
+        </Paper>
     );
 };
 
@@ -260,23 +268,16 @@ const styles = {
         gridGap: "1em",
     },
     campaignInfoWrapper: {
-        border: "1px solid black",
-        //TODO this maybe shouldn't be a Paper
-
         // cell positioning
         gridColumn: "3/7",
         gridRow: "1/2",
     },
     combatfieldsWrapper: {
-        // border: "1px solid black",
-
         // cell positioning
         gridColumn: "2/5",
         gridRow: "2/3",
     },
     playersWrapper: {
-        border: "1px solid black",
-
         // cell positioning
         gridColumn: "5/8",
         gridRow: "2/3",

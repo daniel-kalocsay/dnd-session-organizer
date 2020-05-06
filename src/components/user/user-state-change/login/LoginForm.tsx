@@ -42,7 +42,7 @@ const LoginForm = (props: any) => {
     };
 
     return (
-        <div className="grey-text">
+        <div className="grey-text" style={styles.wrapper}>
             <h2>Login</h2>
             <form>
                 <Grid container spacing={1} alignItems="flex-end">
@@ -79,9 +79,6 @@ const LoginForm = (props: any) => {
                 </Grid>
             </form>
 
-            <Button variant={"contained"} color="secondary" onClick={hideModal}>
-                Close
-            </Button>
             <Button variant={"contained"} onClick={handleSubmit} color="primary">
                 Login
             </Button>
@@ -90,3 +87,10 @@ const LoginForm = (props: any) => {
 };
 
 export default LoginForm;
+
+const styles = {
+    wrapper: {
+        display: "grid",
+        gridGap: "2em"
+    }
+};
