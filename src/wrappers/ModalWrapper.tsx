@@ -48,12 +48,24 @@ const ModalWrapper = (props: any) => {
             >
                 <Slide in={open} direction={"down"} timeout={200}>
                     <div className={classes.paper}>
+                        <div className={classes.closeDiv}>
+                            <Button
+                                className={classes.closeX}
+                                variant={"text"}
+                                onClick={hideModal} >
+                                &#x2716;
+                            </Button>
+                        </div>
 
-                        {/* provide modal state and state changers here */}
-                        <ModalContext.Provider value={modalHandler}>
-                            {props.children}
-                        </ModalContext.Provider>
-                        
+                        <div className={classes.content}>
+
+                            {/* provide modal state and state changers here */}
+                            <ModalContext.Provider value={modalHandler}>
+                                    {props.children}
+                            </ModalContext.Provider>
+
+                        </div>
+
                     </div>
                 </Slide>
 
@@ -67,7 +79,7 @@ export default ModalWrapper;
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         modal: {
-            display: 'flex',
+            display: 'grid',
             alignItems: 'center',
             justifyContent: 'center',
         },
@@ -76,6 +88,20 @@ const useStyles = makeStyles((theme: Theme) =>
             border: '2px solid #000',
             boxShadow: theme.shadows[5],
             padding: theme.spacing(2, 4, 3),
+
+            // define grid
+            display: "grid",
+            gridTemplateRows: "repeat(1fr, 2fr, 1fr)",
+            // gridTemplateColumns: "repeat(3, 1fr)",
+        },
+        closeDiv: {
+            gridRow: "1/2",
+        },
+        closeX: {
+            float: "right"
+        },
+        content: {
+            gridRow: "2/3",
         },
     }),
 );

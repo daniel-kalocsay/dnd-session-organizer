@@ -11,13 +11,12 @@ import CardActions from "@material-ui/core/CardActions";
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import Paper from "@material-ui/core/Paper"
+import ModalWrapper from "../../wrappers/ModalWrapper";
 
 const PlayerOptions = (props: any) => {
     return (
         <Card style={styles.mainWrapper}>
             <CardHeader title={"Players"} style={styles.title}/>
-
-
 
             {props.players.length === 0 ? ( <p>No players yet, add some!</p> ) : (
                 <Paper style={styles.scrollableWindow}>
@@ -27,7 +26,7 @@ const PlayerOptions = (props: any) => {
 
                                 <div style={styles.playerName}>{player.name}</div>
 
-                                <div style={styles.removeButton}>
+                                <CardActions style={styles.removeButton}>
                                     <Button
                                         color={"secondary"}
                                         variant={"outlined"}
@@ -37,7 +36,7 @@ const PlayerOptions = (props: any) => {
                                     >
                                         Remove
                                     </Button>
-                                </div>
+                                </CardActions>
                             </ListItem>
                         )) }
                     </List>
@@ -45,8 +44,10 @@ const PlayerOptions = (props: any) => {
             )}
 
             <div style={styles.addPlayerForm}>
-                <h3>Add player to the campaign:</h3>
-                <UserSearch />
+                <ModalWrapper buttonName={"Add player"} variant={"outlined"}>
+                    <h3>Add player to the campaign:</h3>
+                    <UserSearch />
+                </ModalWrapper>
             </div>
 
         </Card>
@@ -57,6 +58,8 @@ export default PlayerOptions;
 
 const styles = {
     mainWrapper: {
+        border: "1px solid black",
+
         // define grid
         display: "grid",
         gridTemplateColumns: "repeat(2, 1fr)",

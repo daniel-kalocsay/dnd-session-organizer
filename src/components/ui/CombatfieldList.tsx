@@ -88,7 +88,7 @@ const CombatfieldList = () => {
             </Paper>
 
             <div style={styles.addNewButton}>
-                <ModalWrapper buttonName={"Add new"} variant={"outlined"}>
+                <ModalWrapper buttonName={"Add combatfield"} variant={"outlined"}>
                     <NewCombatfield campaignId={campaignDetails!.campaignId} />
                 </ModalWrapper>
             </div>
@@ -101,6 +101,8 @@ export default CombatfieldList;
 
 const styles = {
     mainWrapper: {
+        border: "1px solid black",
+
         // define grid
         display: "grid",
         gridTemplateColumns: "repeat(2, 1fr)",
