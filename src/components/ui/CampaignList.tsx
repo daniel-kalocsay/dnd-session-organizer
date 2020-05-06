@@ -97,13 +97,18 @@ const CampaignList = () => {
         });
     };
 
-    //TODO delete combatfields collection as well
     const deleteCampaign = async (campaignId: string) => {
         let playersCol: QuerySnapshot = await campaignsRef
             .doc(campaignId)
             .collection("players")
             .get();
 
+        let combatfieldsCol: QuerySnapshot = await campaignsRef
+            .doc(campaignId)
+            .collection("combatfields")
+            .get();
+
+        //campaign deleted from users, then player delted from campaign
         playersCol.forEach((player: DocumentSnapshot) => {
             usersRef
                 .doc(player.id)
@@ -113,13 +118,17 @@ const CampaignList = () => {
             player.ref.delete();
         });
 
+        //combatfields deleted from campaign
+        combatfieldsCol.forEach((combatfield: DocumentSnapshot) => {
+            combatfield.ref.delete();
+        });
+
+        //campaign deleted
         campaignsRef.doc(campaignId).delete();
 
-        usersRef
-            .doc(user!.uid)
-            .collection("campaigns")
-            .doc(campaignId)
-            .delete();
+        //campaign deleted from user
+        let DMId = campaigns.find((c) => c.uid === campaignId)!.DMId;
+        usersRef.doc(DMId).collection("campaigns").doc(campaignId).delete();
 
         let updatedCampaigns = campaigns.filter(
             (campaign: CampaignPreviewData) => campaign.uid !== campaignId
