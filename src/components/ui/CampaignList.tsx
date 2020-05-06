@@ -97,11 +97,15 @@ const CampaignList = () => {
         });
     };
 
-    //TODO delete combatfields collection as well
     const deleteCampaign = async (campaignId: string) => {
         let playersCol: QuerySnapshot = await campaignsRef
             .doc(campaignId)
             .collection("players")
+            .get();
+
+        let combatfieldsCol: QuerySnapshot = await campaignsRef
+            .doc(campaignId)
+            .collection("combatfields")
             .get();
 
         playersCol.forEach((player: DocumentSnapshot) => {
@@ -111,6 +115,10 @@ const CampaignList = () => {
                 .doc(campaignId)
                 .delete();
             player.ref.delete();
+        });
+
+        combatfieldsCol.forEach((combatfield: DocumentSnapshot) => {
+            combatfield.ref.delete();
         });
 
         campaignsRef.doc(campaignId).delete();
