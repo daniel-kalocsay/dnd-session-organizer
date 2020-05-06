@@ -131,27 +131,8 @@ const RegisterForm = (props: any) => {
                         </FormControl>
                     </Grid>
                 </Grid>
-
-                {/*confirm password*/}
-                {/*<Grid container spacing={1} alignItems="flex-end">*/}
-                {/*    <Grid item>*/}
-                {/*        <Lock/>*/}
-                {/*    </Grid>*/}
-
-                {/*    <Grid item>*/}
-                {/*        <FormControl>*/}
-                {/*            <TextField id="register-confirm-pw"*/}
-                {/*                   name="password"*/}
-                {/*                   label="Confirm password"*/}
-                {/*                   type="password"*/}
-                {/*                   required*/}
-                {/*            />*/}
-                {/*        </FormControl>*/}
-                {/*    </Grid>*/}
-                {/*</Grid>*/}
-
             </form>
-            
+
             <Button variant={"contained"} onClick={handleSubmit} color="primary">
                 Register
             </Button>

@@ -12,6 +12,7 @@ import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import Paper from "@material-ui/core/Paper"
 import ModalWrapper from "../../wrappers/ModalWrapper";
+import NewCombatfield from "./NewCombatfield";
 
 const PlayerOptions = (props: any) => {
     return (
@@ -45,8 +46,10 @@ const PlayerOptions = (props: any) => {
 
             <div style={styles.addPlayerForm}>
                 <ModalWrapper buttonName={"Add player"} variant={"outlined"}>
-                    <h3>Add player to the campaign:</h3>
-                    <UserSearch />
+                    <div style={styles.userSearchModalWrapper}>
+                        <h3>Add player to the campaign:</h3>
+                        <UserSearch />
+                    </div>
                 </ModalWrapper>
             </div>
 
@@ -124,4 +127,8 @@ const styles = {
         // cell positioning
         gridColumn: "4/5"
     },
+    userSearchModalWrapper: {
+        display: "grid",
+        gridGap: "2em"
+    }
 };

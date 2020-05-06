@@ -92,7 +92,6 @@ const useStyles = makeStyles((theme: Theme) =>
             // define grid
             display: "grid",
             gridTemplateRows: "repeat(1fr, 2fr, 1fr)",
-            // gridTemplateColumns: "repeat(3, 1fr)",
         },
         closeDiv: {
             gridRow: "1/2",
