@@ -5,8 +5,6 @@ import GridSizeForm from "./GridSizeForm";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {ModalContext} from "../../wrappers/ModalWrapper";
 
-//TODO move component to a different directory, "combat" should only handle the combat itself
-
 const NewCombatfield = (props: any) => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
     const { hideModal } = useContext(ModalContext)!;
@@ -19,6 +17,8 @@ const NewCombatfield = (props: any) => {
 
     const createNewCombatfield = async (event: any) => {
         event.preventDefault();
+
+        //TODO handle empty combatfield names and duplicates
 
         let combatfieldName = event.target.combatfieldName.value;
         let grid = new Grid(combatfieldName, user!.uid, gridSize);

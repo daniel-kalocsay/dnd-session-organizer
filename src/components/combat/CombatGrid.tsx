@@ -139,8 +139,11 @@ const styles = {
         display: "grid",
         gridTemplateRows: `repeat(10, 1fr)`,
         gridTemplateColumns: `repeat(10, 1fr)`,
-        backgroundColor: "lightgreen",
         //TODO don't use this magic number
+
+        backgroundColor: "lightgreen",
+        //TODO properly handle bigger sizes
         // height: "30em",
+        // overflow: "auto",
     },
 };
