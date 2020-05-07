@@ -197,6 +197,7 @@ const CampaignList = () => {
                             </Link>
                         </CardContent>
                         <div style={styles.card.bottom}>
+
                             {campaign.DMId === user!.uid ?
                                 <Button
                                     onClick={() => {
@@ -208,7 +209,9 @@ const CampaignList = () => {
                                 >
                                     Delete
                                 </Button>
-                                : ""}
+                                : ""
+                            }
+
                         </div>
                     </Card>
                 </div>

@@ -16,6 +16,7 @@ import Paper from "@material-ui/core/Paper"
 import CombatfieldData from "../../model/CombatfieldData";
 import ModalWrapper from "../../wrappers/ModalWrapper";
 import NewCombatfield from "./NewCombatfield";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 const CombatfieldList = () => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
@@ -28,6 +29,9 @@ const CombatfieldList = () => {
             .doc(combatfieldId)
             .delete();
     };
+
+    const auth = useContext(FirebaseContext)!.auth;
+    const [user, initializing, authError] = useAuthState(auth);
 
     const sortCombatfieldList = () => {
         //TODO should sort by createdAt instead (which is something a CombatfieldData doesn't have atm)
@@ -69,6 +73,7 @@ const CombatfieldList = () => {
                                         {/*//TODO store size in db and in CombatfieldData model class */}
                                     </div>
 
+                                {campaignDetails!.DM.uid === user!.uid ?
                                     <CardActions style={styles.fieldDelete}>
                                         <Button
                                             color={"secondary"}
@@ -78,6 +83,8 @@ const CombatfieldList = () => {
                                             Delete
                                         </Button>
                                     </CardActions>
+                                    : ""
+                                }
 
                             </ListItem>
                         )
