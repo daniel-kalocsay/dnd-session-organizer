@@ -197,16 +197,18 @@ const CampaignList = () => {
                             </Link>
                         </CardContent>
                         <div style={styles.card.bottom}>
-                            <Button
-                                onClick={() => {
-                                    deleteCampaign(campaign.uid);
-                                }}
-                                color={"secondary"}
-                                variant={"outlined"}
-                                style={styles.button}
-                            >
-                                Delete
-                            </Button>
+                            {campaign.DMId === user!.uid ?
+                                <Button
+                                    onClick={() => {
+                                        deleteCampaign(campaign.uid);
+                                    }}
+                                    color={"secondary"}
+                                    variant={"outlined"}
+                                    style={styles.button}
+                                >
+                                    Delete
+                                </Button>
+                                : ""}
                         </div>
                     </Card>
                 </div>

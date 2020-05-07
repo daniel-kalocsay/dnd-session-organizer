@@ -13,7 +13,7 @@ const Menu = () => {
             },
             {
                 id: 2,
-                title: "ez itt a kert",
+                title: "Menu item 2",
             },
             {
                 id: 3,

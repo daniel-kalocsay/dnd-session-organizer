@@ -67,7 +67,6 @@ const CombatfieldList = () => {
 
                                     <div style={styles.fieldSize}>
                                         {/*//TODO store size in db and in CombatfieldData model class */}
-                                        Size: null :(
                                     </div>
 
                                     <CardActions style={styles.fieldDelete}>

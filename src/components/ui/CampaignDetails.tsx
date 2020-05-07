@@ -213,7 +213,7 @@ const CampaignDetails = () => {
     };
 
     return (
-        <Paper style={styles.mainWrapper}>
+        <div style={styles.mainWrapper}>
 
             {/*<Paper style={styles.combatfieldsWrapper}>*/}
             {/*    <CombatfieldList />*/}
@@ -253,7 +253,7 @@ const CampaignDetails = () => {
             >
                 Save changes
             </Button>
-        </Paper>
+        </div>
     );
 };
 
