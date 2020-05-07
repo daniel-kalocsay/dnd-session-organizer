@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 
 import UserSearch from "../user/UserSearch";
 import UserInfo from "../../model/UserInfo";
@@ -13,8 +13,17 @@ import ListItem from "@material-ui/core/ListItem"
 import Paper from "@material-ui/core/Paper"
 import ModalWrapper from "../../wrappers/ModalWrapper";
 import NewCombatfield from "./NewCombatfield";
+import {FirebaseContext} from "../contexts/FirebaseContext";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {SelectedCampaignContext} from "../contexts/SelectedCampaignContext";
 
 const PlayerOptions = (props: any) => {
+
+    const auth = useContext(FirebaseContext)!.auth;
+    const [user, initializing, authError] = useAuthState(auth);
+
+    const campaignDetails = useContext(SelectedCampaignContext);
+
     return (
         <Card style={styles.mainWrapper}>
             <CardHeader title={"Players"} style={styles.title}/>
@@ -27,17 +36,20 @@ const PlayerOptions = (props: any) => {
 
                                 <div style={styles.playerName}>{player.name}</div>
 
-                                <CardActions style={styles.removeButton}>
-                                    <Button
-                                        color={"secondary"}
-                                        variant={"outlined"}
-                                        onClick={() => {
-                                            props.deletePlayer(player.uid!);
-                                        }}
-                                    >
-                                        Remove
-                                    </Button>
-                                </CardActions>
+                                {user && campaignDetails!.DM.uid === user!.uid ?
+                                    <CardActions style={styles.removeButton}>
+                                        <Button
+                                            color={"secondary"}
+                                            variant={"outlined"}
+                                            onClick={() => {
+                                                props.deletePlayer(player.uid!);
+                                            }}
+                                        >
+                                            Remove
+                                        </Button>
+                                    </CardActions>
+                                    : "" }
+
                             </ListItem>
                         )) }
                     </List>

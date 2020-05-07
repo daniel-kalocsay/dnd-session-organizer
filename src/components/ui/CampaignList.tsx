@@ -197,8 +197,9 @@ const CampaignList = () => {
                             </Link>
                         </CardContent>
                         <div style={styles.card.bottom}>
+                            {/*//TODO fix this*/}
 
-                            {campaign.DMId === user!.uid ?
+                            {user && campaign.DMId === user!.uid ?
                                 <Button
                                     onClick={() => {
                                         deleteCampaign(campaign.uid);
