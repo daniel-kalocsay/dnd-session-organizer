@@ -107,7 +107,8 @@ export default CombatfieldList;
 
 const styles = {
     mainWrapper: {
-        border: "1px solid black",
+        // border: "1px solid black",
+        backgroundColor: "#f4f4f4",
 
         // define grid
         display: "grid",
@@ -134,8 +135,9 @@ const styles = {
         gridRow: "7/8",
     },
     scrollableWindow: {
-        border: "1px solid black",
-        backgroundColor: "#f4f4f4",
+        border: "1px solid",
+        borderColor: "#dadada",
+        backgroundColor: "#eaeaea",
 
         // cell positioning
         gridColumn: "1/3",

@@ -73,7 +73,8 @@ export default PlayerOptions;
 
 const styles = {
     mainWrapper: {
-        border: "1px solid black",
+        // border: "1px solid black",
+        backgroundColor: "#f4f4f4",
 
         // define grid
         display: "grid",
@@ -93,8 +94,9 @@ const styles = {
         justifySelf: "center"
     },
     scrollableWindow: {
-        border: "1px solid black",
-        backgroundColor: "#f4f4f4",
+        border: "1px solid",
+        borderColor: "#dadada",
+        backgroundColor: "#eaeaea",
 
         // cell positioning
         gridColumn: "1/3",

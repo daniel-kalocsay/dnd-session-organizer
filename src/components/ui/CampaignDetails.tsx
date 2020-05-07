@@ -14,6 +14,7 @@ import UserInfo from "../../model/UserInfo";
 
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
@@ -32,6 +33,9 @@ const CampaignDetails = () => {
     const [batch, setBatch] = useState(
         firebase.firestore().batch() as firestore.WriteBatch
     );
+
+    const auth = useContext(FirebaseContext)!.auth;
+    const [user, initializing, authError] = useAuthState(auth);
 
     //TODO use specialized hook for this
     useEffect(() => {
@@ -215,36 +219,37 @@ const CampaignDetails = () => {
     return (
         <div style={styles.mainWrapper}>
 
-            {/*<Paper style={styles.combatfieldsWrapper}>*/}
-            {/*    <CombatfieldList />*/}
-            {/*</Paper>*/}
-            {/*//TODO this maybe shouldn't be a Paper*/}
-
             <div style={styles.combatfieldsWrapper}>
                 <CombatfieldList />
             </div>
 
-            <Paper style={styles.campaignInfoWrapper}>
-                <span>
+            <div style={styles.campaignInfoWrapper}>
+                <span style={styles.campaignTitle}>
+
+                {user && campaignDetails!.DM.uid === user!.uid ?
                     <EditableText
                         saveText={campaignDetails!.setName}
                         initialText={campaignDetails!.campaignName}
                     />
+                    : <div style={{fontSize: "3em"}}>{campaignDetails!.campaignName}</div>
+                }
                 </span>
 
-                <p>(Click to edit)</p>
 
-                <p>Dungeon master: {state.campaign.DMName}</p>
-            </Paper>
+                {user && campaignDetails!.DM.uid === user!.uid ?
+                    <div style={styles.editPrompt}>(Click to edit)</div> : ""
+                }
+                {/*<div style={styles.editPrompt}>(Click to edit)</div>*/}
 
-            {/*<Paper style={styles.playersWrapper}>*/}
+                <div style={styles.dm}>Dungeon master: {state.campaign.DMName}</div>
+            </div>
+
             <div style={styles.playersWrapper}>
                 <PlayerOptions
                     players={campaignDetails!.players}
                     deletePlayer={deletePlayerFromState}
                 />
             </div>
-            {/*</Paper>*/}
 
             <Button
                 style={styles.saveChangesButton}
@@ -269,8 +274,16 @@ const styles = {
     },
     campaignInfoWrapper: {
         // cell positioning
-        gridColumn: "3/7",
+        gridColumn: "1/9",
         gridRow: "1/2",
+
+        // define grid
+        display: "grid",
+        gridTemplateRows: "repeat(1fr, 1fr, 0.5fr)",
+        gridTemplateColumns: "repeat(3, 1fr)",
+
+        // adjustments
+        justifyItems: "center"
     },
     combatfieldsWrapper: {
         // cell positioning
@@ -290,4 +303,28 @@ const styles = {
         gridColumn: "2/8",
         gridRow: "3/4",
     },
+    campaignTitle: {
+        // cell positioning
+        gridColumn: "2/3",
+        gridRow: "1/2",
+
+        // adjustments
+        // fontSize: "3em",
+        justifySelf: "center"
+    },
+    editPrompt: {
+        // cell positioning
+        gridColumn: "2/3",
+        gridRow: "2/3",
+    },
+    dm: {
+        // cell positioning
+        gridColumn: "1/2",
+        gridRow: "1/2",
+
+        // adjustments
+        fontSize: "2em",
+        justifySelf: "left",
+        marginLeft: "1em"
+    }
 };
