@@ -12,7 +12,6 @@ import { SelectedCampaignProvider } from "./components/contexts/SelectedCampaign
 import NewCombatfield from "./components/ui/NewCombatfield";
 
 const Layout = () => {
-    //TODO use react-swipeable views?
     return (
         <Router>
             <div style={styles.appWrapper}>

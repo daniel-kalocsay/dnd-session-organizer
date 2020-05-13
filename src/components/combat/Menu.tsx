@@ -13,7 +13,7 @@ const Menu = () => {
             },
             {
                 id: 2,
-                title: "ez itt a kert",
+                title: "Menu item 2",
             },
             {
                 id: 3,
@@ -48,13 +48,12 @@ const Menu = () => {
 
 export default Menu;
 
-//TODO repeat dynamically (e. g. something like this)
-let menuItemsCount: number = 4;
+
 
 const styles = {
     container: {
         display: "grid",
-        gridTemplateColumns: `repeat(${menuItemsCount}, 1fr)`,
+        gridTemplateColumns: "repeat(4, 1fr)",
         margin: "0.5em",
         gridGap: "0.5em",
     },

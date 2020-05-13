@@ -16,6 +16,7 @@ import Paper from "@material-ui/core/Paper"
 import CombatfieldData from "../../model/CombatfieldData";
 import ModalWrapper from "../../wrappers/ModalWrapper";
 import NewCombatfield from "./NewCombatfield";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 const CombatfieldList = () => {
     const campaignsRef = useContext(FirebaseContext)!.campaignsRef;
@@ -29,8 +30,11 @@ const CombatfieldList = () => {
             .delete();
     };
 
+    const auth = useContext(FirebaseContext)!.auth;
+    const [user, initializing, authError] = useAuthState(auth);
+
     const sortCombatfieldList = () => {
-        //TODO should sort by createdAt instead (which is something a CombatfieldData doesn't have atm)
+        // should sort by createdAt instead (which is something a CombatfieldData doesn't have atm)
         return campaignDetails!.combatfields.sort((a, b) => (a.name > b.name ? 1 : -1));
     };
 
@@ -67,9 +71,9 @@ const CombatfieldList = () => {
 
                                     <div style={styles.fieldSize}>
                                         {/*//TODO store size in db and in CombatfieldData model class */}
-                                        Size: null :(
                                     </div>
 
+                                {user && campaignDetails!.DM.uid === user!.uid ?
                                     <CardActions style={styles.fieldDelete}>
                                         <Button
                                             color={"secondary"}
@@ -79,6 +83,8 @@ const CombatfieldList = () => {
                                             Delete
                                         </Button>
                                     </CardActions>
+                                    : ""
+                                }
 
                             </ListItem>
                         )
@@ -101,7 +107,8 @@ export default CombatfieldList;
 
 const styles = {
     mainWrapper: {
-        border: "1px solid black",
+        // border: "1px solid black",
+        backgroundColor: "#f4f4f4",
 
         // define grid
         display: "grid",
@@ -128,8 +135,9 @@ const styles = {
         gridRow: "7/8",
     },
     scrollableWindow: {
-        border: "1px solid black",
-        backgroundColor: "#f4f4f4",
+        border: "1px solid",
+        borderColor: "#dadada",
+        backgroundColor: "#eaeaea",
 
         // cell positioning
         gridColumn: "1/3",

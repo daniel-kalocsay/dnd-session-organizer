@@ -18,7 +18,7 @@ const RegisterErrorReducer = (state: any, action: any) => {
                 case "auth/invalid-email":
                     return { ...state, emailError: true, emailErrorMessage: action.error.message };
                 case "auth/operation-not-allowed":
-                    //TODO do i need to cover this case?
+                    // do i need to cover this case?
                     return state;
                 case "auth/weak-password":
                     return { ...state, pwError: true, pwErrorMessage: action.error.message };

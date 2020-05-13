@@ -4,8 +4,6 @@ import { Link, Route } from "react-router-dom";
 import { MDBNavbar } from "mdbreact";
 import UserProfile from "../user/UserProfile";
 
-//TODO make navbar a grid, and with MUI components instead
-
 // import AppBar from "@material-ui/core/AppBar";
 // import Toolbar from "@material-ui/core/Toolbar";
 

@@ -57,6 +57,8 @@ const GridSizeForm = (props: any) => {
             <Button style={styles.button}
                     type={"submit"}
                     variant={"outlined"}
+                    color={"primary"}
+                    size={"medium"}
             >
                 Create New Combatfield
             </Button>

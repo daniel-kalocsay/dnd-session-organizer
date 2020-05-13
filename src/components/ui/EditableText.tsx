@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {useState, useEffect, useRef, CSSProperties} from "react";
 
 const EditableText = (props: any) => {
     const inputRef = useRef(null);
@@ -30,6 +30,7 @@ const EditableText = (props: any) => {
         <div>
             {inputVisible ? (
                 <input
+                    style={styles.input}
                     ref={inputRef}
                     value={props.initialText}
                     onChange={(e) => {
@@ -37,7 +38,9 @@ const EditableText = (props: any) => {
                     }}
                 />
             ) : (
-                <span onClick={() => setInputVisible(true)}>
+                <span
+                    style={styles.text}
+                    onClick={() => setInputVisible(true)} >
                     {props.initialText}
                 </span>
             )}
@@ -46,3 +49,13 @@ const EditableText = (props: any) => {
 };
 
 export default EditableText;
+
+const styles = {
+    text: {
+        fontSize: "3em"
+    },
+    input: {
+        fontSize: "2.75em",
+        textAlign: "center"
+    } as CSSProperties
+};
