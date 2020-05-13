@@ -1,19 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-
 import firebase, { firestore } from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
-
 import PlayerOptions from "./PlayerOptions";
 import EditableText from "./EditableText";
 import CombatfieldList from "./CombatfieldList";
-
 import CombatfieldData from "../../model/CombatfieldData";
 import UserInfo from "../../model/UserInfo";
-
 import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
@@ -35,9 +30,8 @@ const CampaignDetails = () => {
     );
 
     const auth = useContext(FirebaseContext)!.auth;
-    const [user, initializing, authError] = useAuthState(auth);
+    const [user] = useAuthState(auth);
 
-    //TODO use specialized hook for this
     useEffect(() => {
         let params = new URLSearchParams(window.location.search);
         let id = params.get("id");
@@ -49,7 +43,6 @@ const CampaignDetails = () => {
         campaignDetails!.setDM(DM);
     }, []);
 
-    //TODO when new campaign is created player fetch shouldnt occur
     useEffect(() => {
         if (campaignDetails!.campaignId) {
             fetchCombatfields();
@@ -100,7 +93,6 @@ const CampaignDetails = () => {
             });
     };
 
-    //TODO put into PlayersOptions
     const fetchPlayersWithId = (playerIds: string[]) => {
         playerIds.forEach(async (playerId) => {
             let userRecord: DocumentSnapshot = await usersRef
@@ -176,7 +168,6 @@ const CampaignDetails = () => {
 
     const prepareDatabaseBatch = () => {
         let result = compareOriginalAndRecentPlayers();
-        console.log(result);
 
         result.missing.forEach((p) => deleteUpdatedPlayers(p));
         result.plus.forEach((p) => saveUpdatedPlayers(p));
@@ -203,7 +194,6 @@ const CampaignDetails = () => {
         return { missing: missing, plus: plus };
     };
 
-    //TODO button doesn'change after first save -> update original players and name
     const hasCampaignDetailsChanged = () => {
         let playersResult = compareOriginalAndRecentPlayers();
         return (
