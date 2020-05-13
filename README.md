@@ -1,3 +1,4 @@
+![Image description](https://cdn.discordapp.com/attachments/553976548697571339/710074491581104158/unknown.png)
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
