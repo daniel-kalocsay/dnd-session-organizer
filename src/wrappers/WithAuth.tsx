@@ -10,7 +10,6 @@ const WithAuth = (props: any) => {
     const loadingMsg = props.loadingMsg ? props.loadingMsg : "Loading...";
     const errorMsg = props.errorMsg ? props.errorMsg : "An error has occurred";
     const unauthorizedMsg = props.unauthorizedMsg ? props.unauthorizedMsg : "";
-    //TODO is unauthorizedMsg really needed? could be provided from props.alternative anyway
 
     if (initializing) {
         return (
@@ -59,12 +58,12 @@ const styles = {
         alignItems: "center"
     },
     error: {
-        //TODO
+        // styling
     },
     alternative: {
-        //TODO
+        // styling
     },
     unauthorized: {
-        //TODO
+        // styling
     }
 };

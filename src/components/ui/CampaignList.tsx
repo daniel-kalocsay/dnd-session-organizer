@@ -197,7 +197,6 @@ const CampaignList = () => {
                             </Link>
                         </CardContent>
                         <div style={styles.card.bottom}>
-                            {/*//TODO fix this*/}
 
                             {user && campaign.DMId === user!.uid ?
                                 <Button

@@ -67,8 +67,6 @@ const CombatGrid = (props: any) => {
         }
 
         return () => unSubscribe();
-
-        //TODO detach realtime listener if combatgrid is deleted from db
     }, []);
 
     const getPlayerName = (tile: Tile) => {
@@ -138,11 +136,7 @@ const styles = {
         display: "grid",
         gridTemplateRows: `repeat(10, 1fr)`,
         gridTemplateColumns: `repeat(10, 1fr)`,
-        //TODO don't use this magic number
 
         backgroundColor: "lightgreen",
-        //TODO properly handle bigger sizes
-        // height: "30em",
-        // overflow: "auto",
     },
 };

@@ -34,7 +34,7 @@ const CombatfieldList = () => {
     const [user, initializing, authError] = useAuthState(auth);
 
     const sortCombatfieldList = () => {
-        //TODO should sort by createdAt instead (which is something a CombatfieldData doesn't have atm)
+        // should sort by createdAt instead (which is something a CombatfieldData doesn't have atm)
         return campaignDetails!.combatfields.sort((a, b) => (a.name > b.name ? 1 : -1));
     };
 

@@ -297,7 +297,6 @@ const styles = {
     },
     saveChangesButton: {
         border: "1px solid black",
-        //TODO make it clear that this only saves changes to the name and the players
 
         // cell positioning
         gridColumn: "2/8",
