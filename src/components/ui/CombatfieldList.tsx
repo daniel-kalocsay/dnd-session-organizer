@@ -72,18 +72,16 @@ const CombatfieldList = () => {
                                         {/*//TODO store size in db and in CombatfieldData model class */}
                                     </div>
 
-                                {user && campaignDetails!.DM.uid === user!.uid ?
                                     <CardActions style={styles.fieldDelete}>
                                         <Button
                                             color={"secondary"}
                                             variant={"outlined"}
+                                            disabled={!(user && campaignDetails!.DM.uid === user!.uid)}
                                             onClick={() => handleClick(combatfield.uid)}
                                         >
                                             Delete
                                         </Button>
                                     </CardActions>
-                                    : ""
-                                }
 
                             </ListItem>
                         )

@@ -40,12 +40,11 @@ const PlayerOptions = (props: any) => {
                                     {player.name}
                                 </div>
 
-                                {user &&
-                                campaignDetails!.DM.uid === user!.uid ? (
                                     <CardActions style={styles.removeButton}>
                                         <Button
                                             color={"secondary"}
                                             variant={"outlined"}
+                                            disabled={!(user && campaignDetails!.DM.uid === user!.uid)}
                                             onClick={() => {
                                                 props.deletePlayer(player.uid!);
                                             }}
@@ -53,9 +52,6 @@ const PlayerOptions = (props: any) => {
                                             Remove
                                         </Button>
                                     </CardActions>
-                                ) : (
-                                    ""
-                                )}
                             </ListItem>
                         ))}
                     </List>
