@@ -25,41 +25,42 @@ const NewCampaign = () => {
         usersRef.doc(user!.uid).collection("campaigns").doc(campaignId).set({});
     };
 
-    const addDMToCampaign = (previewData: any, campaign: Object) => {
+    const addDMToCampaign = (previewData: any) => {
+        let campaign = {
+            name: previewData.name,
+            created_at: firebase.firestore.FieldValue.serverTimestamp(),
+            created_by: user!.uid,
+        };
+
         campaignsRef.doc(previewData.id)
                     .set(Object.assign({}, campaign))
                     .then( () => redirectToCampaignDetails(previewData) );
     };
 
-    //TODO break into smaller methods
-    const createNewCampaign = async(event: any) => {
-        event.preventDefault();
-
-        let campaignName = event.target.campaignName.value;
-        let campaign = {
-            name: campaignName,
-            created_at: firebase.firestore.FieldValue.serverTimestamp(),
-            created_by: user!.uid,
-        };
-
-        let userSnap: DocumentSnapshot = await usersRef.doc(user!.uid).get();
-        let userData = userSnap.data();
+    const generatePreview = (campaignName: string, userSnap: DocumentSnapshot) => {
 
         let generatedCampaignId = userSnap.ref
             .collection("campaigns")
             .doc().id;
 
-        addCampaignIdToDM(generatedCampaignId);
-
-        let previewData = {
+        return {
             id: generatedCampaignId,
             name: campaignName,
             playerIds: [],
             DMId: userSnap.id,
-            DMName: userData!.username
+            DMName: userSnap.data()!.username
         };
 
-        addDMToCampaign(previewData, campaign);
+    };
+
+    const createNewCampaign = async(event: any) => {
+        event.preventDefault();
+
+        let userSnap: DocumentSnapshot = await usersRef.doc(user!.uid).get();
+        let previewDoc = generatePreview(event.target.campaignName.value, userSnap);
+
+        addCampaignIdToDM(previewDoc.id);
+        addDMToCampaign(previewDoc);
     };
 
     const redirectToCampaignDetails = (campaignData: any) => {
