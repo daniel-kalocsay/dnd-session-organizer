@@ -178,6 +178,7 @@ const CampaignDetails = () => {
         updateCampaignName();
     };
 
+    //TODO this can be done easier
     const compareOriginalAndRecentPlayers = () => {
         let missing = [...originalPlayers];
         let plus = [...campaignDetails!.players.map((player) => player.uid!)];
@@ -194,6 +195,7 @@ const CampaignDetails = () => {
         return { missing: missing, plus: plus };
     };
 
+    //TODO button doesn'change after first save -> update original players and name
     const hasCampaignDetailsChanged = () => {
         let playersResult = compareOriginalAndRecentPlayers();
         return (
@@ -203,18 +205,18 @@ const CampaignDetails = () => {
         );
     };
 
-    //TODO show result of commit
     const handleSubmit = () => {
         prepareDatabaseBatch();
         let result = batch.commit().then(() => {
             setBatch(firebase.firestore().batch());
         });
-        result ? console.log("done") : console.log("nope");
+        result
+            ? alert("Changes saved!")
+            : alert("Some problem occured, try again!");
     };
 
     return (
         <Paper style={styles.mainWrapper}>
-
             {/*<Paper style={styles.combatfieldsWrapper}>*/}
             {/*    <CombatfieldList />*/}
             {/*</Paper>*/}
