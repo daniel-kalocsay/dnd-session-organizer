@@ -1,20 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-
 import firebase, { firestore } from "firebase";
 import { FirebaseContext } from "../contexts/FirebaseContext";
 import { SelectedCampaignContext } from "../contexts/SelectedCampaignContext";
-
 import PlayerOptions from "./PlayerOptions";
 import EditableText from "./EditableText";
 import CombatfieldList from "./CombatfieldList";
-
 import CombatfieldData from "../../model/CombatfieldData";
 import UserInfo from "../../model/UserInfo";
-
 import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
-import {useAuthState} from "react-firebase-hooks/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 type QuerySnapshot = firebase.firestore.QuerySnapshot;
 type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
@@ -35,9 +30,8 @@ const CampaignDetails = () => {
     );
 
     const auth = useContext(FirebaseContext)!.auth;
-    const [user, initializing, authError] = useAuthState(auth);
+    const [user] = useAuthState(auth);
 
-    //TODO use specialized hook for this
     useEffect(() => {
         let params = new URLSearchParams(window.location.search);
         let id = params.get("id");
@@ -49,7 +43,6 @@ const CampaignDetails = () => {
         campaignDetails!.setDM(DM);
     }, []);
 
-    //TODO when new campaign is created player fetch shouldnt occur
     useEffect(() => {
         if (campaignDetails!.campaignId) {
             fetchCombatfields();
@@ -100,7 +93,6 @@ const CampaignDetails = () => {
             });
     };
 
-    //TODO put into PlayersOptions
     const fetchPlayersWithId = (playerIds: string[]) => {
         playerIds.forEach(async (playerId) => {
             let userRecord: DocumentSnapshot = await usersRef
@@ -183,16 +175,20 @@ const CampaignDetails = () => {
     };
 
     const compareOriginalAndRecentPlayers = () => {
-        let missing = [...originalPlayers];
-        let plus = [...campaignDetails!.players.map((player) => player.uid!)];
+        let originalPlayersSet = new Set([...originalPlayers]);
+        let updatedPlayersSet = new Set([
+            ...campaignDetails!.players.map((player) => player.uid!),
+        ]);
 
-        campaignDetails!.players.forEach((p: UserInfo) =>
-            originalPlayers.forEach((op: string) => {
-                if (p.uid === op) {
-                    missing = missing.filter((player) => player !== op);
-                    plus = plus.filter((player) => player !== op);
-                }
-            })
+        let plus = new Set(
+            [...Array.from(updatedPlayersSet)].filter(
+                (player) => !originalPlayersSet.has(player)
+            )
+        );
+        let missing = new Set(
+            [...Array.from(originalPlayersSet)].filter(
+                (player) => !updatedPlayersSet.has(player)
+            )
         );
 
         return { missing: missing, plus: plus };
@@ -201,47 +197,52 @@ const CampaignDetails = () => {
     const hasCampaignDetailsChanged = () => {
         let playersResult = compareOriginalAndRecentPlayers();
         return (
-            playersResult.missing.length === 0 &&
-            playersResult.plus.length === 0 &&
+            playersResult.missing.size === 0 &&
+            playersResult.plus.size === 0 &&
             originalCampaignName === campaignDetails!.campaignName
         );
     };
 
-    //TODO show result of commit
     const handleSubmit = () => {
         prepareDatabaseBatch();
         let result = batch.commit().then(() => {
             setBatch(firebase.firestore().batch());
         });
-        result ? console.log("done") : console.log("nope");
+        result
+            ? alert("Changes saved!")
+            : alert("Some problem occured, try again!");
     };
 
     return (
         <div style={styles.mainWrapper}>
-
             <div style={styles.combatfieldsWrapper}>
                 <CombatfieldList />
             </div>
 
             <div style={styles.campaignInfoWrapper}>
                 <span style={styles.campaignTitle}>
-
-                {user && campaignDetails!.DM.uid === user!.uid ?
-                    <EditableText
-                        saveText={campaignDetails!.setName}
-                        initialText={campaignDetails!.campaignName}
-                    />
-                    : <div style={{fontSize: "3em"}}>{campaignDetails!.campaignName}</div>
-                }
+                    {user && campaignDetails!.DM.uid === user!.uid ? (
+                        <EditableText
+                            saveText={campaignDetails!.setName}
+                            initialText={campaignDetails!.campaignName}
+                        />
+                    ) : (
+                        <div style={{ fontSize: "3em" }}>
+                            {campaignDetails!.campaignName}
+                        </div>
+                    )}
                 </span>
 
-
-                {user && campaignDetails!.DM.uid === user!.uid ?
-                    <div style={styles.editPrompt}>(Click to edit)</div> : ""
-                }
+                {user && campaignDetails!.DM.uid === user!.uid ? (
+                    <div style={styles.editPrompt}>(Click to edit)</div>
+                ) : (
+                    ""
+                )}
                 {/*<div style={styles.editPrompt}>(Click to edit)</div>*/}
 
-                <div style={styles.dm}>Dungeon master: {state.campaign.DMName}</div>
+                <div style={styles.dm}>
+                    Dungeon master: {state.campaign.DMName}
+                </div>
             </div>
 
             <div style={styles.playersWrapper}>
@@ -283,7 +284,7 @@ const styles = {
         gridTemplateColumns: "repeat(3, 1fr)",
 
         // adjustments
-        justifyItems: "center"
+        justifyItems: "center",
     },
     combatfieldsWrapper: {
         // cell positioning
@@ -309,7 +310,7 @@ const styles = {
 
         // adjustments
         // fontSize: "3em",
-        justifySelf: "center"
+        justifySelf: "center",
     },
     editPrompt: {
         // cell positioning
@@ -324,6 +325,6 @@ const styles = {
         // adjustments
         fontSize: "2em",
         justifySelf: "left",
-        marginLeft: "1em"
-    }
+        marginLeft: "1em",
+    },
 };
