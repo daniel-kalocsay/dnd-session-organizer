@@ -54,7 +54,6 @@ const CombatfieldList = () => {
                                             to={{
                                                 pathname: "/combat",
                                                 search: `?id=${combatfield.uid}`,
-                                                // TODO: use context?
                                                 state: {
                                                     campaignId: campaignDetails!.campaignId,
                                                     combatfieldData: combatfield,
